@@ -115,6 +115,11 @@
 
 ** grep-a-lot and grep+
 
+** org-bullets
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'org-bullet-mode)
+#+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
