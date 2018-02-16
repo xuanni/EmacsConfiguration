@@ -8,14 +8,14 @@
    
  
    #+BEGIN_SRC emacs-lisp
-     ;; (if (eq system-type 'windows-nt)
-     ;;     (custom-set-faces
-     ;;      '(default ((t (:family "Consolas"
-     ;;                     :foundry "unknown"
-     ;;                     :slant normal
-     ;;                     :weight normal
-     ;;                     :height 143
-     ;;                     :width normal))))))
+     (if (eq system-type 'windows-nt)
+         (custom-set-faces
+          '(default ((t (:family "Consolas"
+                         :foundry "unknown"
+                         :slant normal
+                         :weight normal
+                         :height 143
+                         :width normal))))))
    #+END_SRC
    
 ** Miscellaneous appearance and behavior
@@ -29,13 +29,13 @@
      (setq indent-tabs-mode nil)               ; use space instead of tabs
      (setq inhibit-startup-screen t)
      (setq large-file-warning-threshold 100000000)
-     (setq menu-bar-mode nil)
+     (menu-bar-mode -1)
      (setq org-startup-truncated nil)          ; tell org mode to wrap line instead of shift
      (setq scroll-bar-mode nil)
      (setq scroll-step 1)                      ; don't suddenly roll up a lot of lines
      (setq show-paren-mode t)                  ; highlight matching parenthese
      (setq tab-width 4)
-     (setq tool-bar-mode nil)                  
+     (tool-bar-mode -1)                  
      (setq visible-bell t)                     ; flash screen instead of audible ding
      (setq which-function-mode t)              ; display function name in modeline
      (setq window-numbering-mode t)
@@ -146,3 +146,4 @@
 
 
    
+
