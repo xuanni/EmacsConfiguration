@@ -6,13 +6,14 @@
 
 ** Font
 #+BEGIN_SRC emacs-lisp
-  (custom-set-faces '(default
-                       ((t (      :family "Consolas"
-                                  :foundry "unknown"
-                                  :slant normal
-                                  :weight normal
-                                  :height 143
-                                  :width normal)))))
+  (if (eq system-type 'windows-nt)
+      (custom-set-faces
+       '(default ((t (:family "Consolas"
+                      :foundry "unknown"
+                      :slant normal
+                      :weight normal
+                      :height 143
+                      :width normal))))))
 #+END_SRC
    
 ** Miscellaneous appearance and behavior
