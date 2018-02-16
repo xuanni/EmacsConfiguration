@@ -126,7 +126,7 @@
    #+begin_src emacs-lisp :tangle yes
      ;; (require 'yasnippet)
      ;; (yas-reload-all)
-     ;; (add-hook 'org-mode-hook #'yas-minor-mode)
+     (add-hook 'org-mode-hook #'yas-minor-mode)
    #+end_src
 * Self-defined Commands
 
