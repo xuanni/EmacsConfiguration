@@ -1,0 +1,132 @@
+#+TITLE: Emacs Configurations
+#+AUTHOR: Sean Ni
+#+DATE: <2018-02-15 Thu>
+
+* Emacs built-in
+
+** Font
+#+BEGIN_SRC emacs-lisp
+  (custom-set-faces '(default
+                       ((t (      :family "Consolas"
+                                  :foundry "unknown"
+                                  :slant normal
+                                  :weight normal
+                                  :height 143
+                                  :width normal)))))
+#+END_SRC
+   
+** Miscellaneous appearance and behavior
+#+BEGIN_SRC emacs-lisp
+  (prefer-coding-system 'utf-8-unix)
+  (setq initial-scratch-message "")
+  (setq inhibit-startup-message nil)
+   (custom-set-variables
+    '(blink-cursor-mode nil)
+    '(column-number-mode t)               ; display column number in modeline
+    '(display-time-mode t)                
+    '(indent-tabs-mode nil)               ; use space instead of tabs
+    '(inhibit-startup-screen t)
+    '(large-file-warning-threshold 100000000)
+    '(menu-bar-mode nil)
+    '(org-startup-truncated nil)          ; tell org mode to wrap line instead of shift
+    '(scroll-bar-mode nil)
+    '(scroll-step 1)                      ; don't suddenly roll up a lot of lines
+    '(show-paren-mode t)                  ; highlight matching parenthese
+    '(tab-width 4)
+    '(tool-bar-mode nil)                  
+    '(visible-bell t)                     ; flash screen instead of audible ding
+    '(which-function-mode t)              ; display function name in modeline
+    '(window-numbering-mode t))
+  (fset 'yes-or-no-p 'y-or-n-p)           ; simplify this
+#+END_SRC
+
+** Backup files
+#+BEGIN_SRC emacs-lisp
+  ;; Remove all backup files
+  ;; (setq make-backup-files nil)
+  ;; (setq backup-inhibited t)
+  ;; (setq auto-save-default nil)
+  ;; or alternatively
+  (setq backup-directory-alist '(("." . "~/.saves")))
+#+END_SRC
+
+** Language Settings
+
+*** C
+#+BEGIN_SRC emacs-lisp
+  (setq-default c-default-style "linux")
+  (setq-default c-basic-offset 4)
+
+#+END_SRC
+
+* Packages
+
+** helm
+#+BEGIN_SRC emacs-lisp
+  (require 'helm-config)
+
+  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+  ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-x b") 'helm-mini)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-x k") 'kill-buffer)
+
+  ;; make helm open at bottom with full frame width
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*helm" (* not-newline) "*" eos)
+                 (display-buffer-in-side-window)
+                 (inhibit-same-window . t)
+                 (window-height . 0.4)))
+  ;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+  ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+  ;; (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+#+END_SRC
+
+** window-number
+#+BEGIN_SRC emacs-lisp
+  (window-numbering-mode 1)
+#+END_SRC
+
+** Version Control
+*** magit
+
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'windows-nt)
+      (setq magit-git-executable "c:\\Program Files\\Git\\bin\\git.exe")
+    )
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+#+END_SRC
+
+*** p4
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+
+** gtags
+
+** projectile
+
+** grep-a-lot and grep+
+
+* Self-defined Commands
+
+** insert-date
+#+BEGIN_SRC emacs-lisp
+  (defun insert-date (prefix)
+    "Insert the current date. With prefix-argument, use ISO format. With
+     two prefix arguments, write out the day and month name."
+    (interactive "P")
+    (let ((format (cond
+                   ;; ((not prefix) "%d.%m.%Y")
+                   ;; ((equal prefix '(4)) "%Y-%m-%d")
+                   ((not prefix) "%b. %d, %Y")))
+          (system-time-locale "en_US"))
+      (insert (format-time-string format))))
+#+END_SRC
