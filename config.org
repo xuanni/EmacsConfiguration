@@ -31,7 +31,7 @@
      (setq large-file-warning-threshold 100000000)
      (menu-bar-mode -1)
      (setq org-startup-truncated nil)          ; tell org mode to wrap line instead of shift
-     (setq scroll-bar-mode nil)
+     (scroll-bar-mode -1)
      (setq scroll-step 1)                      ; don't suddenly roll up a lot of lines
      (setq show-paren-mode t)                  ; highlight matching parenthese
      (setq tab-width 4)
