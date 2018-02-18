@@ -29,25 +29,24 @@
 ** Miscellaneous appearance and behavior
    #+BEGIN_SRC emacs-lisp
      (prefer-coding-system 'utf-8-unix)
-     (setq initial-scratch-message "")
+     (blink-cursor-mode -1)
+     (column-number-mode 1)                  ; display column number in modeline
+     (display-time-mode 1)                
+     (indent-tabs-mode -1)                   ; use space instead of tabs
+     (menu-bar-mode -1)
+     (scroll-bar-mode -1)
+     (show-paren-mode 1)                     ; highlight matching parenthese
+     (tool-bar-mode -1)                  
+     (which-function-mode 1)                 ; display function name in modeline
+     (fset 'yes-or-no-p 'y-or-n-p)           ; simplify this
+     (setq initial-scratch-message "Put your mess here")
      (setq inhibit-startup-message nil)
-     (setq blink-cursor-mode nil)
-     (setq column-number-mode t)               ; display column number in modeline
-     (setq display-time-mode t)                
-     (setq indent-tabs-mode nil)               ; use space instead of tabs
      (setq inhibit-startup-screen t)
      (setq large-file-warning-threshold 100000000)
-     (menu-bar-mode -1)
-     (setq org-startup-truncated nil)          ; tell org mode to wrap line instead of shift
-     (scroll-bar-mode -1)
-     (setq scroll-step 1)                      ; don't suddenly roll up a lot of lines
-     (show-paren-mode 1)                  ; highlight matching parenthese
+     (setq org-startup-truncated nil)        ; tell org mode to wrap line instead of shift
+     (setq scroll-step 1)                    ; don't suddenly roll up a lot of lines
      (setq tab-width 4)
-     (tool-bar-mode -1)                  
-     (setq visible-bell t)                     ; flash screen instead of audible ding
-     (setq which-function-mode t)              ; display function name in modeline
-     (setq window-numbering-mode t)
-     (fset 'yes-or-no-p 'y-or-n-p)             ; simplify this
+     (setq visible-bell t)                   ; flash screen instead of audible ding
      (if (eq system-type 'darwin)
          (progn
            (setq ns-command-modifier (quote control))
