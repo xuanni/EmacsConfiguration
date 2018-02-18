@@ -6,9 +6,8 @@
 
 ** Font
    
- 
    #+BEGIN_SRC emacs-lisp
-     (if (eq system-type 'windows-nt)
+     (cond ((eq system-type 'windows-nt)
          (custom-set-faces
           '(default ((t (:family "Consolas"
                          :foundry "unknown"
@@ -16,6 +15,15 @@
                          :weight normal
                          :height 143
                          :width normal))))))
+         ((eq system-type 'darwin)
+         (custom-set-faces
+          '(default ((t (:family "Monaco"
+                         :foundry "unknown"
+                         :slant normal
+                         :weight normal
+                         :height 143
+                         :width normal)))))))
+
    #+END_SRC
    
 ** Miscellaneous appearance and behavior
@@ -33,13 +41,17 @@
      (setq org-startup-truncated nil)          ; tell org mode to wrap line instead of shift
      (scroll-bar-mode -1)
      (setq scroll-step 1)                      ; don't suddenly roll up a lot of lines
-     (setq show-paren-mode t)                  ; highlight matching parenthese
+     (show-paren-mode 1)                  ; highlight matching parenthese
      (setq tab-width 4)
      (tool-bar-mode -1)                  
      (setq visible-bell t)                     ; flash screen instead of audible ding
      (setq which-function-mode t)              ; display function name in modeline
      (setq window-numbering-mode t)
      (fset 'yes-or-no-p 'y-or-n-p)             ; simplify this
+     (if (eq system-type 'darwin)
+         (progn
+           (setq ns-command-modifier (quote control))
+           (setq ns-right-command-modifier (quote meta))))
    #+END_SRC
 
 ** Backup files
