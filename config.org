@@ -139,6 +139,14 @@
      ;; (yas-reload-all)
      (add-hook 'org-mode-hook #'yas-minor-mode)
    #+end_src
+
+** notmuch-emacs
+
+   frontend for notmuch
+
+   #+BEGIN_SRC emacs-lisp
+     (setq notmuch-search-oldest-first nil)   
+   #+END_SRC
 * Self-defined Commands
 
 ** insert-date

@@ -16,3 +16,9 @@
 (org-babel-load-file
  (expand-file-name "config.org"
                    user-emacs-directory))
+
+
+;; ----------------------------------------------------------------
+;; Idealy there should be nothing below this line
+;; as long as there is no `customize.el' used in the configuration
+;; ----------------------------------------------------------------
