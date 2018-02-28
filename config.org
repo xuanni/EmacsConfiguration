@@ -1,3 +1,4 @@
+
 #+TITLE: Emacs Configurations
 #+AUTHOR: Sean Ni
 #+DATE: <2018-02-15 Thu>
@@ -21,9 +22,8 @@
                          :foundry "unknown"
                          :slant normal
                          :weight normal
-                         :height 143
+                         :height 161
                          :width normal)))))))
-
    #+END_SRC
    
 ** Miscellaneous appearance and behavior
@@ -39,7 +39,7 @@
      (which-function-mode 1)                 ; display function name in modeline
      (fset 'yes-or-no-p 'y-or-n-p)           ; simplify this
      (setq indent-tabs-mode nil)             ; use space instead of tabs
-     (setq initial-scratch-message "Put your mess here")
+     (setq initial-scratch-message ";; Put your mess here\n\n")
      (setq inhibit-startup-message nil)
      (setq inhibit-startup-screen t)
      (setq large-file-warning-threshold 100000000)
