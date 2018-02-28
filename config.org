@@ -72,6 +72,12 @@
       (setq-default c-basic-offset 4)
     #+END_SRC
 
+** dired copy
+   With this option on, Emacs automatically copies marked files to another opened dired in another window 
+   #+BEGIN_SRC emacs-lisp
+     (setq dired-dwim-target t)
+   #+END_SRC
+
 * Packages
 
 ** helm
