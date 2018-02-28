@@ -153,6 +153,12 @@
    #+BEGIN_SRC emacs-lisp
      (setq notmuch-search-oldest-first nil)   
    #+END_SRC
+
+** company mode
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'after-init-hook 'global-company-mode)
+   #+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
