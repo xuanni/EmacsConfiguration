@@ -1,7 +1,7 @@
 ;; melpa (from melpa.org get started)
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
+		    (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
@@ -15,7 +15,7 @@
 (require 'org)
 (org-babel-load-file
  (expand-file-name "config.org"
-                   user-emacs-directory))
+		   user-emacs-directory))
 
 
 ;; ----------------------------------------------------------------

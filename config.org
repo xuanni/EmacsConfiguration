@@ -89,6 +89,14 @@
      (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
    #+END_SRC
 
+** recentf location
+   use local disk instead of network drive
+   #+BEGIN_SRC emacs-lisp
+     ;; (setq recentf-save-file "/local/mnt/workspace/.recentf")
+   #+END_SRC
+
+   History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
+
 * Packages
 
 ** helm
@@ -106,7 +114,7 @@
      (global-set-key (kbd "M-y") 'helm-show-kill-ring)
      (global-set-key (kbd "C-x b") 'helm-mini)
      (global-set-key (kbd "C-x C-f") 'helm-find-files)
-     (global-set-key (kbd "C-x k") 'kill-buffer)
+     ;; (global-set-key (kbd "C-x k") 'kill-buffer)
 
      ;; make helm open at bottom with full frame width
      (add-to-list 'display-buffer-alist
@@ -117,6 +125,20 @@
      ;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
      ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
      ;; (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
+
+     (when (executable-find "curl")
+       (setq helm-google-suggest-use-curl-p t)) ;not sure what this is for
+
+     (setq
+      ;; helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+	   ;; helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+	   helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+	   helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+	   ;; helm-ff-file-name-history-use-recentf t
+	   )
+
+     (helm-mode 1)                           ; turn on helm mode for kill buffer etc
+
    #+END_SRC
 
 ** window-numbering
@@ -167,7 +189,7 @@
      ;; (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
      ;; (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
      ;; (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-     (define-key helm-gtags-mode-map (kbd "C-x k") 'kill-buffer)
+     ;; (define-key helm-gtags-mode-map (kbd "C-x k") 'kill-buffer)
      (provide 'setup-helm-gtags)
    #+END_SRC
 
