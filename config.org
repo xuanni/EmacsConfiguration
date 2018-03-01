@@ -1,4 +1,3 @@
-
 #+TITLE: Emacs Configurations
 #+AUTHOR: Sean Ni
 #+DATE: <2018-02-15 Thu>
@@ -6,36 +5,36 @@
 * Emacs built-in
 
 ** Font
-   
-   #+BEGIN_SRC emacs-lisp
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-         (custom-set-faces
-          '(default ((t (:family "Consolas"
-                         :foundry "unknown"
-                         :slant normal
-                         :weight normal
-                         :height 143
-                         :width normal))))))
-         ((eq system-type 'darwin)
-         (custom-set-faces
-          '(default ((t (:family "Monaco"
-                         :foundry "unknown"
-                         :slant normal
-                         :weight normal
-                         :height 161
-                         :width normal)))))))
+	 (custom-set-faces
+	  '(default ((t (:family "Consolas"
+			 :foundry "unknown"
+			 :slant normal
+			 :weight normal
+			 :height 143
+			 :width normal))))))
+	 ((eq system-type 'darwin)
+	 (custom-set-faces
+	  '(default ((t (:family "Monaco"
+			 :foundry "unknown"
+			 :slant normal
+			 :weight normal
+			 :height 161
+			 :width normal)))))))
    #+END_SRC
-   
+
 ** Miscellaneous appearance and behavior
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (prefer-coding-system 'utf-8-unix)
      (blink-cursor-mode -1)
      (column-number-mode 1)                  ; display column number in modeline
-     (display-time-mode 1)                
+     (display-time-mode 1)
      (menu-bar-mode -1)
      (scroll-bar-mode -1)
      (show-paren-mode 1)                     ; highlight matching parenthese
-     (tool-bar-mode -1)                  
+     (tool-bar-mode -1)
      (which-function-mode 1)                 ; display function name in modeline
      (fset 'yes-or-no-p 'y-or-n-p)           ; simplify this
      (setq indent-tabs-mode nil)             ; use space instead of tabs
@@ -48,13 +47,13 @@
      (setq tab-width 4)
      (setq visible-bell t)                   ; flash screen instead of audible ding
      (if (eq system-type 'darwin)
-         (progn
-           (setq ns-command-modifier (quote control))
-           (setq ns-right-command-modifier (quote meta))))
+	 (progn
+	   (setq ns-command-modifier (quote control))
+	   (setq ns-right-command-modifier (quote meta))))
    #+END_SRC
 
 ** Backup files
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      ;; Remove all backup files
      ;; (setq make-backup-files nil)
      ;; (setq backup-inhibited t)
@@ -66,29 +65,35 @@
 ** Language Settings
 
 *** C
-    
-    #+BEGIN_SRC emacs-lisp
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (setq-default c-default-style "linux")
       (setq-default c-basic-offset 4)
       (c-set-offset 'case-label '+)           ; fix case index
     #+END_SRC
 
 ** dired copy
-   With this option on, Emacs automatically copies marked files to another opened dired in another window 
-   #+BEGIN_SRC emacs-lisp
+   With this option on, Emacs automatically copies marked files to another opened dired in another window
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (setq dired-dwim-target t)
    #+END_SRC
 
 ** XML completion
-   #+BEGIN_SRC emacs-lisp
-     (setq nxml-slash-auto-complete-flag t)   
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq nxml-slash-auto-complete-flag t)
    #+END_SRC
 
+** whitespace cleanup
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'before-save-hook 'whitespace-cleanup)
+     (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
+   #+END_SRC
 
 * Packages
 
 ** helm
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'helm)
      (require 'helm-config)
 
      ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
@@ -105,35 +110,36 @@
 
      ;; make helm open at bottom with full frame width
      (add-to-list 'display-buffer-alist
-                  `(,(rx bos "*helm" (* not-newline) "*" eos)
-                    (display-buffer-in-side-window)
-                    (inhibit-same-window . t)
-                    (window-height . 0.4)))
+		  `(,(rx bos "*helm" (* not-newline) "*" eos)
+		    (display-buffer-in-side-window)
+		    (inhibit-same-window . t)
+		    (window-height . 0.4)))
      ;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
      ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-     ;; (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+     ;; (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
    #+END_SRC
 
-** window-number
-   #+BEGIN_SRC emacs-lisp
+** window-numbering
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (window-numbering-mode 1)
    #+END_SRC
 
 ** Version Control
 *** magit
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (if (eq system-type 'windows-nt)
-          (setq magit-git-executable "c:\\Program Files\\Git\\bin\\git.exe")
-        )
+	  (setq magit-git-executable "c:\\Program Files\\Git\\bin\\git.exe")
+	)
       (global-set-key (kbd "C-x g") 'magit-status)
       (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
     #+END_SRC
 
 *** p4
-    
+
 ** helm-gtags
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'helm-gtags)
      (add-hook 'dired-mode-hook 'helm-gtags-mode)
      (add-hook 'eshell-mode-hook 'helm-gtags-mode)
      (add-hook 'c-mode-hook 'helm-gtags-mode)
@@ -147,36 +153,49 @@
      ;; key bindings
      (eval-after-load "helm-gtags"
        '(progn
-          (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-          (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-          (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-          (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-          (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-          (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-          (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
+	  (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+	  (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+	  (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+	  (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+	  ;; (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+	  (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+	  (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+	  (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
 
      ;; key bindings (old)
      ;; (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
      ;; (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
      ;; (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
      ;; (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-     ;; (define-key helm-gtags-mode-map (kbd "C-x k") 'kill-buffer)
-
+     (define-key helm-gtags-mode-map (kbd "C-x k") 'kill-buffer)
+     (provide 'setup-helm-gtags)
    #+END_SRC
 
-** projectile
-
+** helm-projectile
+   #+BEGIN_SRC emacs-lisp
+     (setq projectile-enable-caching t)
+     (setq projectile-globally-ignored-directories
+      (quote
+       (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Debug*")))
+     (setq projectile-globally-ignored-file-suffixes
+      (quote
+       ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
+     (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
+     (projectile-global-mode t)
+     (setq projectile-completion-system 'helm)
+     (helm-projectile-on)
+   #+END_SRC
 ** grep-a-lot and grep+
 
 ** org-bullets
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
    #+END_SRC
 
-** yasnippet 
-   
+** yasnippet
+
    only enable yas-minor-mode for certain major modes
-   
+
    #+begin_src emacs-lisp :tangle yes
      ;; (require 'yasnippet)
      ;; (yas-reload-all)
@@ -187,31 +206,27 @@
 
    frontend for notmuch
 
-   #+BEGIN_SRC emacs-lisp
-     (setq notmuch-search-oldest-first nil)   
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq notmuch-search-oldest-first nil)
    #+END_SRC
 
 ** company mode
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (add-hook 'after-init-hook 'global-company-mode)
    #+END_SRC
 
 * Self-defined Commands
 
 ** insert-date
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (defun insert-date (prefix)
        "Insert the current date. With prefix-argument, use ISO format. With
-        two prefix arguments, write out the day and month name."
+	two prefix arguments, write out the day and month name."
        (interactive "P")
        (let ((format (cond
-                      ;; ((not prefix) "%d.%m.%Y")
-                      ;; ((equal prefix '(4)) "%Y-%m-%d")
-                      ((not prefix) "%b. %d, %Y")))
-             (system-time-locale "en_US"))
-         (insert (format-time-string format))))
+		      ;; ((not prefix) "%d.%m.%Y")
+		      ;; ((equal prefix '(4)) "%Y-%m-%d")
+		      ((not prefix) "%b. %d, %Y")))
+	     (system-time-locale "en_US"))
+	 (insert (format-time-string format))))
    #+END_SRC
-
-
-   
-
