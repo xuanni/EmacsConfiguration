@@ -239,6 +239,11 @@
      (setq mail-specify-envelope-from (quote header))
      (setq message-sendmail-envelope-from (quote header))
      (setq send-mail-function (quote sendmail-send-it))
+     (setq message-cite-function (quote message-cite-original))
+     (setq message-cite-style (quote message-cite-style-outlook))
+     (setq message-yank-cited-prefix "")
+     (setq message-yank-empty-prefix "")
+     (setq message-yank-prefix "")
 
    #+END_SRC
 
