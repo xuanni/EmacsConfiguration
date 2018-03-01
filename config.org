@@ -219,9 +219,12 @@
    only enable yas-minor-mode for certain major modes
 
    #+begin_src emacs-lisp :tangle yes
-     ;; (require 'yasnippet)
-     ;; (yas-reload-all)
+     (require 'yasnippet)
+     (yas-reload-all)
      (add-hook 'org-mode-hook #'yas-minor-mode)
+     (add-hook 'c-mode-hook #'yas-minor-mode)
+     (add-hook 'c++-mode-hook #'yas-minor-mode)
+
    #+end_src
 
 ** notmuch-emacs
@@ -229,7 +232,14 @@
    frontend for notmuch
 
    #+BEGIN_SRC emacs-lisp :tangle yes
+     (autoload 'notmuch "notmuch" "notmuch mail" t)
+     ;; (require 'notmuch)  ;; always load when start emacs
      (setq notmuch-search-oldest-first nil)
+     (setq mail-specify-envelope-from t)
+     (setq mail-specify-envelope-from (quote header))
+     (setq message-sendmail-envelope-from (quote header))
+     (setq send-mail-function (quote sendmail-send-it))
+
    #+END_SRC
 
 ** company mode
