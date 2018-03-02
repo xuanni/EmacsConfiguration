@@ -258,3 +258,20 @@
 	     (system-time-locale "en_US"))
 	 (insert (format-time-string format))))
    #+END_SRC
+
+* special workaround
+
+** font setting got overwritten
+   see https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25228 for discussion
+
+   problem is even if I use =set-face-attribute= in my init file, the setting is overwritten later (I can see the font increased then descreased again back to original). From the analysis, it has something to do with the gtk
+
+   my other linux machine (work) doesn't have this issue. so this is a special fix locally only.
+
+   #+BEGIN_SRC emacs-lisp
+     ;; use this one
+     ;; (defalias 'dynamic-setting-handle-config-changed-event 'ignore)
+     ;; or this one
+     (define-key special-event-map [config-changed-event] 'ignore)
+
+   #+END_SRC
