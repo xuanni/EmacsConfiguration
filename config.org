@@ -149,6 +149,9 @@
     #+END_SRC
 
 *** p4
+    #+BEGIN_SRC emacs-lisp
+      (load-library "p4")
+    #+END_SRC
 
 ** helm-gtags
    #+BEGIN_SRC emacs-lisp :tangle yes
