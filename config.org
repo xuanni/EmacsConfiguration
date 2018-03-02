@@ -262,7 +262,7 @@
 * special workaround
 
 ** font setting got overwritten
-   see https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25228 for discussion
+   see [[https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25228][this thread]] for discussion
 
    problem is even if I use =set-face-attribute= in my init file, the setting is overwritten later (I can see the font increased then descreased again back to original). From the analysis, it has something to do with the gtk
 
