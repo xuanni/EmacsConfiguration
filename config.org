@@ -11,7 +11,7 @@
 	    (set-face-attribute 'default nil :font "Courier New" :height 181))
 	   ((eq system-type 'darwin)
 	    (set-face-attribute 'default nil :font "Monaco" :height 181))
-	   (t (set-face-attribute 'default nil :height 161)) ; t for default case
+	   (t (set-face-attribute 'default nil :height 181)) ; t for default case
 	   ;; looks like gnu/linux is not working in system-type
 	   )
    #+END_SRC
