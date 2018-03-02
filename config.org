@@ -8,21 +8,12 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-	 (custom-set-faces
-	  '(default ((t (:family "Consolas"
-			 :foundry "unknown"
-			 :slant normal
-			 :weight normal
-			 :height 143
-			 :width normal))))))
-	 ((eq system-type 'darwin)
-	 (custom-set-faces
-	  '(default ((t (:family "Monaco"
-			 :foundry "unknown"
-			 :slant normal
-			 :weight normal
-			 :height 161
-			 :width normal)))))))
+	    (set-face-attribute 'default nil :font "Courier New" :height 181))
+	   ((eq system-type 'darwin)
+	    (set-face-attribute 'default nil :font "Monaco" :height 181))
+	   (t (set-face-attribute 'default nil :height 161)) ; t for default case
+	   ;; looks like gnu/linux is not working in system-type
+	   )
    #+END_SRC
 
 ** Miscellaneous appearance and behavior
