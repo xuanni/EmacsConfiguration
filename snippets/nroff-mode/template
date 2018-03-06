@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: template
+# key: temp
+# group: man page
+# --
+.TH ${1:command} ${2:1}
+.SH NAME
+$1 \- ${3:short description of the command}
+.SH SYNOPSIS
+.B $1
+[OPTIONs]
+.IR ${4:file} ...
+.SH DESCRIPTION
+.B $1
+${5:long description of the command}
+.SH OPTIONS
+.TP
+.BR \-n ", "\-\-bits =\fIBITS\fR
+Set the number of bits to modify.
+Default is one bit.
+.SH SEE ALSO
