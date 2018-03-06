@@ -92,6 +92,15 @@
 
    History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
 
+** miscellaneous
+
+   Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+   #+END_SRC
+
+
 * Packages
 
 ** helm
