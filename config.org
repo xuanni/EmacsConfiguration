@@ -63,6 +63,10 @@
       (c-set-offset 'case-label '+)           ; fix case index
     #+END_SRC
 
+*** python
+    #+BEGIN_SRC emacs-lisp
+      (setq python-indent-offset 4)
+    #+END_SRC
 ** dired copy
    With this option on, Emacs automatically copies marked files to another opened dired in another window
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -87,6 +91,15 @@
    #+END_SRC
 
    History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
+
+** miscellaneous
+
+   Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+   #+END_SRC
+
 
 * Packages
 
@@ -149,6 +162,9 @@
     #+END_SRC
 
 *** p4
+    #+BEGIN_SRC emacs-lisp
+      (load-library "p4")
+    #+END_SRC
 
 ** helm-gtags
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -167,9 +183,9 @@
      (eval-after-load "helm-gtags"
        '(progn
 	  (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-	  (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-	  (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-	  (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+	  ;; (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+	  ;; (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+	  ;; (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
 	  ;; (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
 	  (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 	  (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
@@ -215,7 +231,9 @@
      (add-hook 'org-mode-hook #'yas-minor-mode)
      (add-hook 'c-mode-hook #'yas-minor-mode)
      (add-hook 'c++-mode-hook #'yas-minor-mode)
-
+     (add-hook 'python-mode-hook #'yas-minor-mode)
+     (add-hook 'sh-mode-hook #'yas-minor-mode)
+     (add-hook 'nroff-mode-hook #'yas-minor-mode)
    #+end_src
 
 ** notmuch-emacs
