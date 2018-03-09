@@ -8,12 +8,12 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-	    (set-face-attribute 'default nil :font "Courier New" :height 181))
-	   ((eq system-type 'darwin)
-	    (set-face-attribute 'default nil :font "Monaco" :height 181))
-	   (t (set-face-attribute 'default nil :height 181)) ; t for default case
-	   ;; looks like gnu/linux is not working in system-type
-	   )
+            (set-face-attribute 'default nil :font "Courier New" :height 181))
+           ((eq system-type 'darwin)
+            (set-face-attribute 'default nil :font "Monaco" :height 181))
+           (t (set-face-attribute 'default nil :height 181)) ; t for default case
+           ;; looks like gnu/linux is not working in system-type
+           )
    #+END_SRC
 
 ** Miscellaneous appearance and behavior
@@ -28,7 +28,7 @@
      (tool-bar-mode -1)
      (which-function-mode 1)                 ; display function name in modeline
      (fset 'yes-or-no-p 'y-or-n-p)           ; simplify this
-     (setq indent-tabs-mode nil)             ; use space instead of tabs
+     (setq-default indent-tabs-mode nil)     ; use space instead of tabs (setq: buffer local var, setq-default global)
      (setq initial-scratch-message ";; Put your mess here\n\n")
      (setq inhibit-startup-message nil)
      (setq inhibit-startup-screen t)
@@ -38,9 +38,9 @@
      (setq tab-width 4)
      (setq visible-bell t)                   ; flash screen instead of audible ding
      (if (eq system-type 'darwin)
-	 (progn
-	   (setq ns-command-modifier (quote control))
-	   (setq ns-right-command-modifier (quote meta))))
+         (progn
+           (setq ns-command-modifier (quote control))
+           (setq ns-right-command-modifier (quote meta))))
    #+END_SRC
 
 ** Backup files
@@ -122,10 +122,10 @@
 
      ;; make helm open at bottom with full frame width
      (add-to-list 'display-buffer-alist
-		  `(,(rx bos "*helm" (* not-newline) "*" eos)
-		    (display-buffer-in-side-window)
-		    (inhibit-same-window . t)
-		    (window-height . 0.4)))
+                  `(,(rx bos "*helm" (* not-newline) "*" eos)
+                    (display-buffer-in-side-window)
+                    (inhibit-same-window . t)
+                    (window-height . 0.4)))
      ;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
      ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
      ;; (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
@@ -135,11 +135,11 @@
 
      (setq
       ;; helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-	   ;; helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-	   helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-	   helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-	   ;; helm-ff-file-name-history-use-recentf t
-	   )
+           ;; helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+           helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+           helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+           ;; helm-ff-file-name-history-use-recentf t
+           )
 
      (helm-mode 1)                           ; turn on helm mode for kill buffer etc
 
@@ -155,8 +155,8 @@
 
     #+BEGIN_SRC emacs-lisp :tangle yes
       (if (eq system-type 'windows-nt)
-	  (setq magit-git-executable "c:\\Program Files\\Git\\bin\\git.exe")
-	)
+          (setq magit-git-executable "c:\\Program Files\\Git\\bin\\git.exe")
+        )
       (global-set-key (kbd "C-x g") 'magit-status)
       (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
     #+END_SRC
@@ -169,12 +169,13 @@
 ** helm-gtags
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'helm-gtags)
-     (add-hook 'dired-mode-hook 'helm-gtags-mode)
-     (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+     ;; (add-hook 'dired-mode-hook 'helm-gtags-mode)
+     ;; (add-hook 'eshell-mode-hook 'helm-gtags-mode)
      (add-hook 'c-mode-hook 'helm-gtags-mode)
      (add-hook 'c++-mode-hook 'helm-gtags-mode)
      (add-hook 'java-mode-hook 'helm-gtags-mode)
      (add-hook 'asm-mode-hook 'helm-gtags-mode)
+     (add-hook 'python-mode-hook 'helm-gtags-mode)
 
      (setq helm-gtags-auto-update t)
      (setq helm-gtags-suggested-key-mapping t)
@@ -182,14 +183,14 @@
      ;; key bindings
      (eval-after-load "helm-gtags"
        '(progn
-	  (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-	  ;; (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-	  ;; (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-	  ;; (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-	  ;; (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-	  (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-	  (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-	  (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
+          (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+          ;; (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+          ;; (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+          ;; (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+          ;; (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+          (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+          (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+          (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
 
      ;; key bindings (old)
      ;; (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
@@ -257,8 +258,17 @@
    #+END_SRC
 
 ** company mode
+   global mode will slow down eshell even hang it.
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (add-hook 'after-init-hook 'global-company-mode)
+     ;; (add-hook 'after-init-hook 'global-company-mode)
+     (add-hook 'c-mode-hook 'company-mode)
+     (add-hook 'c++-mode-hook 'company-mode)
+     (add-hook 'text-mode-hook 'company-mode)
+     (add-hook 'sh-mode-hook 'company-mode)
+     (add-hook 'python-mode-hook 'company-mode)
+     (add-hook 'emacs-lisp-mode-hook 'company-mode)
+     (add-hook 'org-mode-hook 'company-mode)
+     (add-hook 'lisp-mode-hook 'company-mode)
    #+END_SRC
 
 * Self-defined Commands
@@ -267,12 +277,12 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (defun insert-date (prefix)
        "Insert the current date. With prefix-argument, use ISO format. With
-	two prefix arguments, write out the day and month name."
+        two prefix arguments, write out the day and month name."
        (interactive "P")
        (let ((format (cond
-		      ;; ((not prefix) "%d.%m.%Y")
-		      ;; ((equal prefix '(4)) "%Y-%m-%d")
-		      ((not prefix) "%b. %d, %Y")))
-	     (system-time-locale "en_US"))
-	 (insert (format-time-string format))))
+                      ;; ((not prefix) "%d.%m.%Y")
+                      ;; ((equal prefix '(4)) "%Y-%m-%d")
+                      ((not prefix) "%b. %d, %Y")))
+             (system-time-locale "en_US"))
+         (insert (format-time-string format))))
    #+END_SRC
