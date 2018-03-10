@@ -64,7 +64,7 @@
     #+END_SRC
 
 *** python
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (setq python-indent-offset 4)
     #+END_SRC
 ** dired copy
@@ -79,14 +79,14 @@
    #+END_SRC
 
 ** whitespace cleanup
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (add-hook 'before-save-hook 'whitespace-cleanup)
      (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
    #+END_SRC
 
 ** recentf location
    use local disk instead of network drive
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      ;; (setq recentf-save-file "/local/mnt/workspace/.recentf")
    #+END_SRC
 
@@ -96,7 +96,7 @@
 
    Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
    #+END_SRC
 
@@ -162,7 +162,7 @@
     #+END_SRC
 
 *** p4
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (load-library "p4")
     #+END_SRC
 
@@ -202,7 +202,7 @@
    #+END_SRC
 
 ** helm-projectile
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (setq projectile-enable-caching t)
      (setq projectile-globally-ignored-directories
       (quote
