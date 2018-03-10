@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: title
+# key: tit_
+# --
+#+TITLE: ${1:Title}
+#+AUTHOR: Xuan Ni
+#+DATE: ${2:}
+
+$0
