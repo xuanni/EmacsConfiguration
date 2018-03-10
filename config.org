@@ -296,7 +296,7 @@
 
    my other linux machine (work) doesn't have this issue. so this is a special fix locally only.
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      ;; use this one
      ;; (defalias 'dynamic-setting-handle-config-changed-event 'ignore)
      ;; or this one
