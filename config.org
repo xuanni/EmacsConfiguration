@@ -16,7 +16,7 @@
            )
    #+END_SRC
 
-** Miscellaneous appearance and behavior
+** Appearance and behavior
    #+BEGIN_SRC emacs-lisp :tangle yes
      (prefer-coding-system 'utf-8-unix)
      (blink-cursor-mode -1)
@@ -33,7 +33,6 @@
      (setq inhibit-startup-message nil)
      (setq inhibit-startup-screen t)
      (setq large-file-warning-threshold 100000000)
-     (setq org-startup-truncated nil)        ; tell org mode to wrap line instead of shift
      (setq scroll-step 1)                    ; don't suddenly roll up a lot of lines
      (setq tab-width 4)
      (setq visible-bell t)                   ; flash screen instead of audible ding
@@ -41,6 +40,12 @@
          (progn
            (setq ns-command-modifier (quote control))
            (setq ns-right-command-modifier (quote meta))))
+   #+END_SRC
+
+** org-mode
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq org-startup-truncated nil)        ; tell org mode to wrap line instead of shift
+     (setq org-use-speed-commands t)         ; use single key to navigate
    #+END_SRC
 
 ** Backup files
