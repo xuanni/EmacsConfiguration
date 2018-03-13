@@ -43,9 +43,28 @@
    #+END_SRC
 
 ** org-mode
+   use line wrap and speed commands
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq org-startup-truncated nil)        ; tell org mode to wrap line instead of shift
      (setq org-use-speed-commands t)         ; use single key to navigate
+   #+END_SRC
+
+   global keys to activate org capture and agenda
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (global-set-key (kbd "C-c l") 'org-store-link)
+     (global-set-key (kbd "C-c a") 'org-agenda)
+     (global-set-key (kbd "C-c c") 'org-capture)
+     (global-set-key (kbd "C-c b") 'org-switchb)
+   #+END_SRC
+
+   org capture and agenda settings
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq org-agenda-files (quote ("~/Documents/agenda.org")))
+     (setq org-capture-templates
+           (quote
+            (("t" "To Do Item" entry (file+headline "~/Documents/agenda.org" "To Do Tasks")
+              "** TODO %? %^G\n\t%T\n\t%a")
+             )))
    #+END_SRC
 
 ** Backup files
