@@ -59,11 +59,19 @@
 
    org capture and agenda settings
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq org-agenda-files (quote ("~/Documents/agenda.org")))
+     (setq org-agenda-files (list "~/Documents/agenda.org"
+                                  "~/Documents/notes.org"))
      (setq org-capture-templates
            (quote
             (("t" "To Do Item" entry (file+headline "~/Documents/agenda.org" "To Do Tasks")
-              "** TODO %? %^G\n\t%T\n\t%a")
+              "** TODO %^{Title} %^G\n\t%T\n\t%a\n\t%?")
+             ("n" "Notes")
+             ("nc" "Computer Notes" entry (file+headline "~/Documents/notes.org" "Computer")
+              "** %^{Title} %^G\n\t%T\n\t%a\n\t%x\n\t%c\n\t%?")
+             ("nf" "Finance Notes" entry (file+headline "~/Documents/notes.org" "Finance")
+              "** %^{Title} %^G\n\t%T\n\t%a\n\t%x\n\t%c\n\t%?")
+             ("nw" "Work Notes" entry (file+headline "~/Documents/notes.org" "Work")
+              "** %^{Title} %^G\n\t%T\n\t%a\n\t%x\n\t%c\n\t%?")
              )))
    #+END_SRC
 
