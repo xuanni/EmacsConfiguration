@@ -1,7 +1,7 @@
 ;; melpa (from melpa.org get started)
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-		    (not (gnutls-available-p))))
+                    (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
@@ -11,14 +11,32 @@
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
+;; enable this and disable next snippet to update org
+;; (require 'package)
+;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+
 ;; load my configuration
 (require 'org)
 (org-babel-load-file
  (expand-file-name "config.org"
-		   user-emacs-directory))
+                user-emacs-directory))
 
 
 ;; ----------------------------------------------------------------
 ;; Idealy there should be nothing below this line
 ;; as long as there is no `customize.el' used in the configuration
 ;; ----------------------------------------------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yasnippet window-numbering p4 org-bullets notmuch magit htmlize helm-projectile helm-gtags company))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
