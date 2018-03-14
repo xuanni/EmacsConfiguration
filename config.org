@@ -67,11 +67,11 @@
               "** TODO %^{Title} %^G\n\t%T\n\t%a\n\t%?")
              ("n" "Notes")
              ("nc" "Computer Notes" entry (file+headline "~/Documents/notes.org" "Computer")
-              "** %^{Title} %^G\n\t%T\n\t%a\n\t%x\n\t%c\n\t%?")
+              "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
              ("nf" "Finance Notes" entry (file+headline "~/Documents/notes.org" "Finance")
-              "** %^{Title} %^G\n\t%T\n\t%a\n\t%x\n\t%c\n\t%?")
+              "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
              ("nw" "Work Notes" entry (file+headline "~/Documents/notes.org" "Work")
-              "** %^{Title} %^G\n\t%T\n\t%a\n\t%x\n\t%c\n\t%?")
+              "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
              )))
    #+END_SRC
 
