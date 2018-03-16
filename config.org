@@ -80,6 +80,11 @@
       (setq org-agenda-include-diary t)
     #+END_SRC
 
+*** closing todo items
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (setq org-log-done 'time)
+    #+END_SRC
+
 ** Backup files
    #+BEGIN_SRC emacs-lisp :tangle yes
      ;; Remove all backup files
