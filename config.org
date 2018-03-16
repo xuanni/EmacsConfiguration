@@ -313,6 +313,18 @@
      (add-hook 'lisp-mode-hook 'company-mode)
    #+END_SRC
 
+** diminish
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'diminish)
+     (diminish 'helm-mode)
+     (diminish 'abbrev-mode)
+     (diminish 'projectile-mode)
+     (diminish 'company-mode "")
+     (diminish 'yas-minor-mode)
+     (diminish 'helm-gtags-mode)
+     (diminish 'org-src-mode)
+   #+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
