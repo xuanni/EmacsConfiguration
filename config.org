@@ -43,6 +43,13 @@
    #+END_SRC
 
 ** org-mode
+
+*** install latest org mode
+    stock emacs comes with very old version of org-mode, to upgrade org-mode, first =emacs -q=, then =eval-region= below code, then package list, find org (and possibly org-plus-contrib) and install it. sometimes direct =package-install= command won't work so you have resort to the =package-list= method.
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (require 'package)
+      (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+    #+END_SRC
 *** use line wrap and speed commands
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq org-startup-truncated nil)        ; tell org mode to wrap line instead of shift
@@ -62,17 +69,19 @@
      (setq org-agenda-files (list "~/Documents/agenda.org"
                                   "~/Documents/notes.org"))
      (setq org-capture-templates
-           (quote
-            (("t" "To Do Item" entry (file+headline "~/Documents/agenda.org" "To Do Tasks")
-              "** TODO %^{Title} %^G\n\t%T\n\t%a\n\t%?")
-             ("n" "Notes")
-             ("nc" "Computer Notes" entry (file+headline "~/Documents/notes.org" "Computer")
-              "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
-             ("nf" "Finance Notes" entry (file+headline "~/Documents/notes.org" "Finance")
-              "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
-             ("nw" "Work Notes" entry (file+headline "~/Documents/notes.org" "Work")
-              "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
-             )))
+           (quote (
+                   ("t" "To Do Item" entry (file+headline "~/Documents/agenda.org" "To Do Tasks")
+                    "** TODO %^{Title} %^G\n\tINCEPTION: %T\n\t%a\n\t%?")
+                   ("b" "Bug Item" entry (file+headline "~/Documents/agenda.org" "Bugs")
+                    "** BUG %^{Title} %^G\n\tINCEPTION: %T\n\t%a\n\t%?")
+                   ("n" "Notes")
+                   ("nc" "Computer Notes" entry (file+headline "~/Documents/notes.org" "Computer")
+                    "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
+                   ("nf" "Finance Notes" entry (file+headline "~/Documents/notes.org" "Finance")
+                    "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
+                   ("nw" "Work Notes" entry (file+headline "~/Documents/notes.org" "Work")
+                    "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
+                   )))
    #+END_SRC
 
 *** calendar and diary
@@ -85,6 +94,13 @@
       (setq org-log-done 'time)
     #+END_SRC
 
+*** customize todo keywords
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (setq org-todo-keywords '(
+                                (sequence "TODO" "WAIT" "|" "DONE") ; for normal stuff
+                                (sequence "BUG" "VERIFY" "|" "FIXED") ; for bug
+                                ))
+    #+END_SRC
 ** Backup files
    #+BEGIN_SRC emacs-lisp :tangle yes
      ;; Remove all backup files
@@ -296,7 +312,8 @@
      (setq message-yank-cited-prefix "")
      (setq message-yank-empty-prefix "")
      (setq message-yank-prefix "")
-
+     (setq notmuch-show-all-tags-list t)     ; show all tags in hello screen
+     (require 'org-notmuch)                  ; store links in notmuch buffers
    #+END_SRC
 
 ** company mode
