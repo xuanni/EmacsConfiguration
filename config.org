@@ -125,6 +125,12 @@
     #+BEGIN_SRC emacs-lisp :tangle yes
       (setq python-indent-offset 4)
     #+END_SRC
+
+*** Scons
+    #+BEGIN_SRC emacs-lisp :tangel yes
+      (add-to-list 'auto-mode-alist '("\\.scons\\'" . python-mode))
+      (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
+    #+END_SRC
 ** dired copy
    With this option on, Emacs automatically copies marked files to another opened dired in another window
    #+BEGIN_SRC emacs-lisp :tangle yes
