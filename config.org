@@ -127,7 +127,7 @@
     #+END_SRC
 
 *** Scons
-    #+BEGIN_SRC emacs-lisp :tangel yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (add-to-list 'auto-mode-alist '("\\.scons\\'" . python-mode))
       (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
     #+END_SRC
@@ -163,7 +163,6 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
    #+END_SRC
-
 
 * Packages
 
