@@ -298,6 +298,7 @@
      (add-hook 'python-mode-hook #'yas-minor-mode)
      (add-hook 'sh-mode-hook #'yas-minor-mode)
      (add-hook 'nroff-mode-hook #'yas-minor-mode)
+     (add-hook 'LaTeX-mode-hook #'yas-minor-mode)
    #+end_src
 
 ** notmuch-emacs
