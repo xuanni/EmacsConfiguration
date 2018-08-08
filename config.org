@@ -363,3 +363,8 @@
              (system-time-locale "en_US"))
          (insert (format-time-string format))))
    #+END_SRC
+
+* bug fix for linux font size
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (define-key special-event-map [config-changed-event] #'ignore)
+  #+END_SRC
