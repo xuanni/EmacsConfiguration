@@ -305,7 +305,7 @@
 
    frontend for notmuch
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (autoload 'notmuch "notmuch" "notmuch mail" t)
      ;; (require 'notmuch)  ;; always load when start emacs
      (setq notmuch-search-oldest-first nil)
