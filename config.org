@@ -305,7 +305,7 @@
 
    frontend for notmuch
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (autoload 'notmuch "notmuch" "notmuch mail" t)
      ;; (require 'notmuch)  ;; always load when start emacs
      (setq notmuch-search-oldest-first nil)
@@ -391,3 +391,8 @@
              (system-time-locale "en_US"))
          (insert (format-time-string format))))
    #+END_SRC
+
+* bug fix for linux font size
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (define-key special-event-map [config-changed-event] #'ignore)
+  #+END_SRC
