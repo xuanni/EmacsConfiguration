@@ -8,10 +8,10 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-            (set-face-attribute 'default nil :font "Courier New" :height 181))
+            (set-face-attribute 'default nil :font "Courier New" :height 141))
            ((eq system-type 'darwin)
-            (set-face-attribute 'default nil :font "Monaco" :height 181))
-           (t (set-face-attribute 'default nil :height 181)) ; t for default case
+            (set-face-attribute 'default nil :font "Monaco" :height 141))
+           (t (set-face-attribute 'default nil :height 141)) ; t for default case
            ;; looks like gnu/linux is not working in system-type
            )
    #+END_SRC
@@ -40,6 +40,7 @@
          (progn
            (setq ns-command-modifier (quote control))
            (setq ns-right-command-modifier (quote meta))))
+     (put 'narrow-to-region 'disabled nil)
    #+END_SRC
 
 ** org-mode
@@ -278,8 +279,11 @@
      (setq projectile-completion-system 'helm)
      (helm-projectile-on)
    #+END_SRC
-** grep-a-lot and grep+
-
+** grep-a-lot
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'grep-a-lot)
+     (grep-a-lot-setup-keys)
+   #+END_SRC
 ** org-bullets
    #+BEGIN_SRC emacs-lisp :tangle yes
      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -305,7 +309,7 @@
 
    frontend for notmuch
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (autoload 'notmuch "notmuch" "notmuch mail" t)
      ;; (require 'notmuch)  ;; always load when start emacs
      (setq notmuch-search-oldest-first nil)
@@ -336,6 +340,19 @@
      (add-hook 'lisp-mode-hook 'company-mode)
    #+END_SRC
 
+** company-irony
+   use this as backend instead of company-clang for C/C++/Objective-C
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (eval-after-load 'company
+       '(add-to-list 'company-backends 'company-irony))
+   #+END_SRC
+
+** company-emacs-eclim
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (require 'company-emacs-eclim)
+     (company-emacs-eclim-setup)
+   #+END_SRC
+
 ** diminish
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'diminish)
@@ -354,6 +371,23 @@
      (cond ((eq system-type 'darwin)
             (exec-path-from-shell-initialize)))
    #+END_SRC
+
+** bm
+   visual bookmarks
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'bm)
+     (global-set-key (kbd "<C-f2>") 'bm-toggle)
+     (global-set-key (kbd "<f2>")   'bm-next)
+     (global-set-key (kbd "<S-f2>") 'bm-show-all)
+     ;; (global-set-key (kbd "<S-f2>") 'bm-previous)
+     ;; Click on fringe to toggle bookmarks, and use mouse wheel to move between them.
+     (global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
+     (global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
+     (global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
+     ;; If you would like to cycle through bookmarks in all open buffers, add the following line:
+     (setq bm-cycle-all-buffers t)
+   #+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
@@ -369,3 +403,8 @@
              (system-time-locale "en_US"))
          (insert (format-time-string format))))
    #+END_SRC
+
+* bug fix for linux font size
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (define-key special-event-map [config-changed-event] #'ignore)
+  #+END_SRC
