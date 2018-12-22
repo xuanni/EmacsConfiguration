@@ -348,6 +348,12 @@
      (diminish 'org-src-mode)
    #+END_SRC
 
+** exec path
+   this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (cond ((eq system-type 'darwin)
+            (exec-path-from-shell-initialize)))
+   #+END_SRC
 * Self-defined Commands
 
 ** insert-date
