@@ -8,7 +8,8 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-            (set-face-attribute 'default nil :font "Courier New" :height 141))
+            ;; (set-face-attribute 'default nil :font "Courier New" :height 141))
+            (set-face-attribute 'default nil :font "Consolas" :height 141))
            ((eq system-type 'darwin)
             (set-face-attribute 'default nil :font "Monaco" :height 141))
            (t (set-face-attribute 'default nil :height 141)) ; t for default case
@@ -41,6 +42,7 @@
            (setq ns-command-modifier (quote control))
            (setq ns-right-command-modifier (quote meta))))
      (put 'narrow-to-region 'disabled nil)
+     (global-auto-revert-mode 1)             ;could be more traffic/network
    #+END_SRC
 
 ** org-mode
