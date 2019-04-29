@@ -387,13 +387,15 @@
    auto save when compile
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq TeX-save-query nil)
-     (setq TeX-view-program-list
-           '(("Sumatra PDF"
-              ("\"c:/Program Files/SumatraPDF/SumatraPDF.exe\" -reuse-instance"
-               (mode-io-correlate " -forward-search \"%b\" %n ") " %o"))))
-     (setq TeX-view-program-selection
-           '(((output-dvi style-pstricks) "dvips and start") (output-dvi "Yap")
-            (output-pdf "Sumatra PDF") (output-html "start")))
+     (cond ((eq system-type 'windows-nt)
+            (setq TeX-view-program-list
+                  '(("Sumatra PDF"
+                     ("\"c:/Program Files/SumatraPDF/SumatraPDF.exe\" -reuse-instance"
+                      (mode-io-correlate " -forward-search \"%b\" %n ") " %o"))))
+            (setq TeX-view-program-selection
+                  '(((output-dvi style-pstricks) "dvips and start") (output-dvi "Yap")
+                    (output-pdf "Sumatra PDF") (output-html "start"))))
+           )
    #+END_SRC
 * Self-defined Commands
 
