@@ -8,7 +8,8 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-            (set-face-attribute 'default nil :font "Courier New" :height 141))
+            ;; (set-face-attribute 'default nil :font "Courier New" :height 141))
+            (set-face-attribute 'default nil :font "Consolas" :height 141))
            ((eq system-type 'darwin)
             (set-face-attribute 'default nil :font "Monaco" :height 141))
            (t (set-face-attribute 'default nil :font "Ubuntu Mono" :height 141)) ; t for default case
@@ -42,6 +43,7 @@
            (setq ns-right-command-modifier (quote meta))))
      (put 'narrow-to-region 'disabled nil)
      (put 'downcase-region 'disabled nil)
+     (global-auto-revert-mode 1)             ;could be more traffic/network
    #+END_SRC
 
 ** org-mode
@@ -361,6 +363,13 @@
      (diminish 'org-src-mode)
    #+END_SRC
 
+** exec path
+   this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (cond ((eq system-type 'darwin)
+            (exec-path-from-shell-initialize)))
+   #+END_SRC
+
 ** bm
    visual bookmarks
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -376,6 +385,22 @@
      ;; If you would like to cycle through bookmarks in all open buffers, add the following line:
      (setq bm-cycle-all-buffers t)
    #+END_SRC
+
+** AucTeX
+   auto save when compile
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq TeX-save-query nil)
+     (cond ((eq system-type 'windows-nt)
+            (setq TeX-view-program-list
+                  '(("Sumatra PDF"
+                     ("\"c:/Program Files/SumatraPDF/SumatraPDF.exe\" -reuse-instance"
+                      (mode-io-correlate " -forward-search \"%b\" %n ") " %o"))))
+            (setq TeX-view-program-selection
+                  '(((output-dvi style-pstricks) "dvips and start") (output-dvi "Yap")
+                    (output-pdf "Sumatra PDF") (output-html "start"))))
+           )
+   #+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
