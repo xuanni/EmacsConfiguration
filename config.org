@@ -349,12 +349,6 @@
        '(add-to-list 'company-backends 'company-irony))
    #+END_SRC
 
-** company-emacs-eclim
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (require 'company-emacs-eclim)
-     (company-emacs-eclim-setup)
-   #+END_SRC
-
 ** diminish
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'diminish)
