@@ -67,23 +67,49 @@
      (global-set-key (kbd "C-c b") 'org-switchb)
    #+END_SRC
 
+*** org refile
+    Check this [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Blog post]] for the first 4 ~setq~ down below for some tricks when doing ~org-refile~
+    #+BEGIN_SRC emacs-lisp :tangle yes
+     ;; refile across files, otherwise can only refile within the same file
+     (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+     ;; refile as the top heading, otherwise can only refile as the child of existing headings
+     (setq org-refile-use-outline-path 'file)
+     ;; refile list all possibilities at once, not the default step by step, for helm
+     (setq org-outline-path-complete-in-steps nil)
+     ;; refile can create new parent, must add "/New Heading" at the end
+     (setq org-refile-allow-creating-parent-nodes 'confirm)
+
+    #+END_SRC
+
 *** org capture and agenda settings
+
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq org-agenda-files (list "~/Documents/agenda.org"
-                                  "~/Documents/notes.org"))
+     (cond
+      ((string-equal system-type "windows-nt")
+       (setq org-agenda-path "z:/venus12/users/xni/org-agenda/"))
+      (t
+       (setq org-agenda-path "/prj/video_fw/venus12/users/xni/org-agenda/")))
+
+     (setq org-todo-file (concat org-agenda-path "todo.org"))
+     (setq org-cr-file (concat org-agenda-path "cr.org"))
+     (setq org-notes-file (concat org-agenda-path "notes.org"))
+
      (setq org-capture-templates
            (quote (
-                   ("t" "To Do Item" entry (file+headline "~/Documents/agenda.org" "To Do Tasks")
-                    "** TODO %^{Title} %^G\n\tINCEPTION: %T\n\t%a\n\t%?")
-                   ("b" "Bug Item" entry (file+headline "~/Documents/agenda.org" "Bugs")
-                    "** BUG %^{Title} %^G\n\tINCEPTION: %T\n\t%a\n\t%?")
-                   ("n" "Notes")
-                   ("nc" "Computer Notes" entry (file+headline "~/Documents/notes.org" "Computer")
-                    "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
-                   ("nf" "Finance Notes" entry (file+headline "~/Documents/notes.org" "Finance")
-                    "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
-                   ("nw" "Work Notes" entry (file+headline "~/Documents/notes.org" "Work")
-                    "** %^{Title} %^G\n\t%U\n\t%a\n\t%x\n\t%c\n\t%?")
+                   ("t" "TODO" entry (file org-todo-file)
+                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?")
+
+                   ("c" "Customer Issue")
+                   ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
+                    "** CR %^{CR Title} %^G\nINCEPTION: %T\n%c\n%?")
+                   ("cd" "Droid Bug" entry (file+headline org-cr-file "Droid Bug")
+                    "** DB %^{DB Title} %^G\nINCEPTION: %T\n%c\n%?")
+
+                   ("n" "Notes & Questions")
+                   ("nn" "Notes" entry (file+headline org-notes-file "Notes")
+                   "** %^{Title} %^G\nINCEPTION: %U\n%a\n%c\n%?")
+                   ("nq" "Questions" entry (file+headline org-notes-file "Questions")
+                   "** QUESTION %^{Title} %^G\nINCEPTION: %T\n%a\n*Question* %?\n\n*Answer* ")
                    )))
    #+END_SRC
 
@@ -100,8 +126,9 @@
 *** customize todo keywords
     #+BEGIN_SRC emacs-lisp :tangle yes
       (setq org-todo-keywords '(
-                                (sequence "TODO" "WAIT" "|" "DONE") ; for normal stuff
-                                (sequence "BUG" "VERIFY" "|" "FIXED") ; for bug
+                                (sequence "TODO" "|" "DONE" "POSTPONE" "ABANDONED") ; for normal stuff
+                                (sequence "CR" "|" "FIXED" "NOT-A-BUG") ; for bug
+                                (sequence "QUESTION" "|" "ANSWERED" "UNKNOWN") ; for bug
                                 ))
     #+END_SRC
 ** Backup files
