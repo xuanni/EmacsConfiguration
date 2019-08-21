@@ -95,10 +95,16 @@
      (setq org-cr-file (concat org-agenda-path "cr.org"))
      (setq org-notes-file (concat org-agenda-path "notes.org"))
 
+     (setq org-agenda-files (list
+                             org-todo-file
+                             org-cr-file
+                             org-notes-file
+                             ))
+
      (setq org-capture-templates
            (quote (
                    ("t" "TODO" entry (file org-todo-file)
-                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?")
+                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend)
 
                    ("c" "Customer Issue")
                    ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
