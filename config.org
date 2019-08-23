@@ -112,11 +112,8 @@
                    ("cd" "Droid Bug" entry (file+headline org-cr-file "Droid Bug")
                     "** DB %^{DB Title} %^G\nINCEPTION: %T\n%c\n%?")
 
-                   ("n" "Notes & Questions")
-                   ("nn" "Notes" entry (file+headline org-notes-file "Notes")
-                   "** %^{Title} %^G\nINCEPTION: %U\n%a\n%c\n%?")
-                   ("nq" "Questions" entry (file+headline org-notes-file "Questions")
-                   "** QUESTION %^{Title} %^G\nINCEPTION: %T\n%a\n*Question* %?\n\n*Answer* ")
+                   ("n" "Notes" entry (file org-notes-file)
+                   "* %^{Title} %^G\nINCEPTION: %U\n%a\n%c\n%?")
                    )))
    #+END_SRC
 
@@ -135,7 +132,6 @@
       (setq org-todo-keywords '(
                                 (sequence "TODO" "|" "DONE" "POSTPONE" "ABANDONED") ; for normal stuff
                                 (sequence "CR" "|" "FIXED" "NOT-A-BUG") ; for bug
-                                (sequence "QUESTION" "|" "ANSWERED" "UNKNOWN") ; for bug
                                 ))
     #+END_SRC
 ** Backup files
