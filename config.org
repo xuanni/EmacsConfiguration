@@ -373,11 +373,17 @@
      (add-hook 'lisp-mode-hook 'company-mode)
    #+END_SRC
 
+** irony-mode
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (add-hook 'c-mode-hook 'irony-mode)
+     (add-hook 'c++-mode-hook 'irony-mode)
+   #+END_SRC
 ** company-irony
    use this as backend instead of company-clang for C/C++/Objective-C
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (eval-after-load 'company
-       '(add-to-list 'company-backends 'company-irony))
+       '(add-to-list 'company-backends '(company-irony-c-headers company-irony))
+     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
    #+END_SRC
 
 ** diminish
