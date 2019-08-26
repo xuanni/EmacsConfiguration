@@ -311,6 +311,8 @@
      (projectile-global-mode t)
      (setq projectile-completion-system 'helm)
      (helm-projectile-on)
+     ;; after upgrade packages need to add this
+     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
    #+END_SRC
 ** grep-a-lot
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -382,7 +384,7 @@
    use this as backend instead of company-clang for C/C++/Objective-C
    #+BEGIN_SRC emacs-lisp :tangle yes
      (eval-after-load 'company
-       '(add-to-list 'company-backends '(company-irony-c-headers company-irony))
+       '(add-to-list 'company-backends '(company-irony-c-headers company-irony)))
      (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
    #+END_SRC
 
