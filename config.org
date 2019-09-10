@@ -451,6 +451,11 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
    #+BEGIN_SRC emacs-lisp :tangle yes
      (advice-add 'python-mode :before 'elpy-enable)
    #+END_SRC
+
+** which-key
+#+begin_src emacs-lisp :tangle yes
+  (which-key-mode)
+#+end_src
 * Self-defined Commands
 
 ** insert-date
