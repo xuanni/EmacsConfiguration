@@ -108,7 +108,7 @@
 
                    ("c" "Customer Issue")
                    ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
-                    "** CR %^{CR Title} %^G\nINCEPTION: %T\n%c\n%?")
+                    "** CR %^{CR Title} %^G\n:PROPERTIES:\n:CR_NUMBER: %^{CR#}\n:END:\nINCEPTION: %T\n%c\n%?")
                    ("cd" "Droid Bug" entry (file+headline org-cr-file "Droid Bug")
                     "** DB %^{DB Title} %^G\nINCEPTION: %T\n%c\n%?")
 
@@ -164,7 +164,11 @@
       (add-to-list 'auto-mode-alist '("\\.scons\\'" . python-mode))
       (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
     #+END_SRC
-** dired copy
+** dired
+   load dired key bindings (C-x C-j to go to file location in dired mode)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'dired-x)
+   #+END_SRC
    With this option on, Emacs automatically copies marked files to another opened dired in another window
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq dired-dwim-target t)
@@ -444,6 +448,12 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (advice-add 'python-mode :before 'elpy-enable)
    #+END_SRC
+** wgrep-helm
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'wgrep)
+   #+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
@@ -491,3 +501,7 @@
   #+BEGIN_SRC emacs-lisp :tangle yes
     (define-key special-event-map [config-changed-event] #'ignore)
   #+END_SRC
+* server
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (server-start)
+#+END_SRC
