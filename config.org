@@ -453,7 +453,12 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'wgrep)
    #+END_SRC
-
+** which-key
+#+BEGIN_SRC emacs-lisp :tangle yes
+(which-key-mode)
+#+END_SRC
+** helm-ag
+TODO add some shortcut for ag
 * Self-defined Commands
 
 ** insert-date
