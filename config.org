@@ -12,7 +12,7 @@
             (set-face-attribute 'default nil :font "Consolas" :height 141))
            ((eq system-type 'darwin)
             (set-face-attribute 'default nil :font "Monaco" :height 141))
-           (t (set-face-attribute 'default nil :font "Ubuntu Mono" :height 141)) ; t for default case
+           (t (set-face-attribute 'default nil :font "Ubuntu Mono" :height 143)) ; t for default case
            ;; looks like gnu/linux is not working in system-type
            )
    #+END_SRC
@@ -134,6 +134,13 @@
                                 (sequence "CR" "|" "FIXED" "NOT-A-BUG") ; for bug
                                 ))
     #+END_SRC
+
+*** dropped easy template
+from v9.2, org mode got rid of easy template (<s thing), you can get it back by
+#+begin_src emacs-lisp :tangle no
+(require 'org-tempo)
+#+end_src
+but the new replacement is good too. C-c C-, and choose from the pop up list
 ** Backup files
    #+BEGIN_SRC emacs-lisp :tangle yes
      ;; Remove all backup files
@@ -506,7 +513,8 @@ TODO add some shortcut for ag
   #+BEGIN_SRC emacs-lisp :tangle yes
     (define-key special-event-map [config-changed-event] #'ignore)
   #+END_SRC
-* server
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (server-start)
-#+END_SRC
+
+* Emacs server
+#+begin_src emacs-lisp :tangle yes
+(server-start)
+#+end_src
