@@ -466,6 +466,11 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 #+END_SRC
 ** helm-ag
 TODO add some shortcut for ag
+** undo-tree
+#+BEGIN_SRC emacs-lisp :tangle yes
+(require 'undo-tree)
+(global-undo-tree-mode)
+#+END_SRC
 * Self-defined Commands
 
 ** insert-date
