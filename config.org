@@ -405,10 +405,12 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
      (diminish 'helm-mode)
      (diminish 'abbrev-mode)
      (diminish 'projectile-mode)
-     (diminish 'company-mode "")
+     (diminish 'company-mode)
      (diminish 'yas-minor-mode)
      (diminish 'helm-gtags-mode)
      (diminish 'org-src-mode)
+     (diminish 'which-key-mode)
+     (diminish 'undo-tree-mode)
    #+END_SRC
 
 ** exec path
