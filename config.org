@@ -399,20 +399,6 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
      (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
    #+END_SRC
 
-** diminish
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'diminish)
-     (diminish 'helm-mode)
-     (diminish 'abbrev-mode)
-     (diminish 'projectile-mode)
-     (diminish 'company-mode)
-     (diminish 'yas-minor-mode)
-     (diminish 'helm-gtags-mode)
-     (diminish 'org-src-mode)
-     (diminish 'which-key-mode)
-     (diminish 'undo-tree-mode)
-   #+END_SRC
-
 ** exec path
    this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -476,6 +462,21 @@ add key bindings
 (require 'undo-tree)
 (global-undo-tree-mode)
 #+END_SRC
+** diminish
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'diminish)
+     (diminish 'helm-mode)
+     (diminish 'abbrev-mode)
+     (diminish 'projectile-mode)
+     (diminish 'company-mode)
+     (diminish 'irony-mode)
+     (diminish 'yas-minor-mode)
+     (diminish 'helm-gtags-mode)
+     (diminish 'org-src-mode)
+     (diminish 'which-key-mode)
+     (diminish 'undo-tree-mode)
+   #+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
