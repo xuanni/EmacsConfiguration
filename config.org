@@ -525,17 +525,20 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
    #+BEGIN_SRC emacs-lisp :tangle yes
      (advice-add 'python-mode :before 'elpy-enable)
    #+END_SRC
-** wgrep-helm
 
+** wgrep-helm
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'wgrep)
    #+END_SRC
+
 ** which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
 (which-key-mode)
 #+END_SRC
-** helm-ag
-TODO add some shortcut for ag
+
+** TODO helm-ag
+add key bindings
+
 ** undo-tree
 #+BEGIN_SRC emacs-lisp :tangle yes
 (require 'undo-tree)
