@@ -200,6 +200,76 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 
    History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
 
+** ibuffer
+
+=from emacs wiki=
+
+ - ‘M-s a C-s’ - Do incremental search in the marked buffers.
+ - ‘M-s a C-M-s’ - Isearch for regexp in the marked buffers.
+ - ‘U’ - Replace by regexp in each of the marked buffers.
+ - ‘Q’ - Query replace in each of the marked buffers.
+ - ‘I’ - As above, with a regular expression.
+ - ‘0’ - Run occur on the marked buffers.
+
+*** view subset of buffers
+Also try ibuffer’s “limiting” feature (‘/’), which allows you to just view a subset of your buffers.
+*** Diff
+Ibuffer can show you the differences between an unsaved buffer and the file on disk with `=’.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+
+
+  ;; (add-to-list 'ibuffer-never-show-regexps "^\\*")
+
+  ;; Gnus-style grouping
+
+  (setq ibuffer-saved-filter-groups
+        (quote (("work"
+                 ("dired" (mode . dired-mode))
+                 ("org" (mode. org-mode))
+                 ;; ("c" (mode . c-mode))
+                 ;; ("c++" (mode . c++-mode))
+                 ;; ("python" (mode . python-mode))
+                 ;; ("perl" (mode . cperl-mode))
+                 ;; ("shell" (or
+                 ;;           (mode . shell-script-mode)
+                 ;;           (mode . sh-mode)))
+                 ;; ("xml" (mode . nxml-mode))
+                 ;; ("erc" (mode . erc-mode))
+                 ;; ("journal" (filename . "/personal/journal/"))
+                 ;; ("planner" (or
+                 ;;             (name . "^\\*Calendar\\*$")
+                 ;;             (name . "^diary$")
+                 ;;             (mode . muse-mode)))
+                 ("emacs" (or
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")))
+                 ;; ("gnus" (or
+                 ;;          (mode . message-mode)
+                 ;;          (mode . bbdb-mode)
+                 ;;          (mode . mail-mode)
+                 ;;          (mode . gnus-group-mode)
+                 ;;          (mode . gnus-summary-mode)
+                 ;;          (mode . gnus-article-mode)
+                 ;;          (name . "^\\.bbdb$")
+                 ;;          (name . "^\\.newsrc-dribble")))))))
+                 ))))
+
+  (add-hook 'ibuffer-mode-hook
+            '(lambda ()
+               ;; (ibuffer-auto-mode 1)      ;auto update ibuffer
+               (ibuffer-switch-to-saved-filter-groups "work")))
+
+  ;; ibuffer-expert
+  ;; don't ask for confirmation when deleting buffers
+  (setq ibuffer-expert t)
+
+  ;; don't show empty groups
+
+  ;; (setq ibuffer-show-empty-filter-groups nil)
+#+END_SRC
+
 ** miscellaneous
 
    Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
@@ -471,6 +541,20 @@ TODO add some shortcut for ag
 (require 'undo-tree)
 (global-undo-tree-mode)
 #+END_SRC
+** smartparens
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'smartparens-config)
+
+  (add-hook 'c-mode-hook 'smartparens-strict-mode)
+  (add-hook 'c++-mode-hook 'smartparens-strict-mode)
+  (add-hook 'text-mode-hook 'smartparens-strict-mode)
+  (add-hook 'sh-mode-hook 'smartparens-strict-mode)
+  (add-hook 'python-mode-hook 'smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'org-mode-hook 'smartparens-strict-mode)
+  ;; (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'nxml-mode-hook 'smartparens-strict-mode)
+#+END_SRC
 * Self-defined Commands
 
 ** insert-date
@@ -523,3 +607,11 @@ TODO add some shortcut for ag
 #+begin_src emacs-lisp :tangle yes
 (server-start)
 #+end_src
+
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defun enable-gtags-imenu()
+    (setq-local imenu-create-index-function #'ggtags-build-imenu-index))
+
+  (add-hook 'c-mode-hook #'enable-gtags-imenu)
+#+END_SRC
