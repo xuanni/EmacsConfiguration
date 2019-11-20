@@ -280,6 +280,11 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
 
 * Packages
 
+** auto remove old packages
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq auto-package-update-delete-old-version t)
+#+END_SRC
+
 ** helm
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'helm)
