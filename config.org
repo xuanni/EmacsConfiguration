@@ -553,15 +553,19 @@ add key bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'smartparens-config)
 
-  (add-hook 'c-mode-hook 'smartparens-strict-mode)
-  (add-hook 'c++-mode-hook 'smartparens-strict-mode)
-  (add-hook 'text-mode-hook 'smartparens-strict-mode)
-  (add-hook 'sh-mode-hook 'smartparens-strict-mode)
-  (add-hook 'python-mode-hook 'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'org-mode-hook 'smartparens-strict-mode)
-  ;; (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'nxml-mode-hook 'smartparens-strict-mode)
+  (add-hook 'c-mode-hook 'smartparens-mode)
+  (add-hook 'c++-mode-hook 'smartparens-mode)
+  (add-hook 'text-mode-hook 'smartparens-mode)
+  (add-hook 'sh-mode-hook 'smartparens-mode)
+  (add-hook 'python-mode-hook 'smartparens-mode)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+  (add-hook 'org-mode-hook 'smartparens-mode)
+  ;; (add-hook 'lisp-mode-hook 'smartparens-mode)
+  (add-hook 'nxml-mode-hook 'smartparens-mode)
+#+END_SRC
+** crux
+#+BEGIN_SRC emacs-lisp :tangle yes
+(global-set-key (kbd "C-c t") 'crux-visit-term-buffer)
 #+END_SRC
 * Self-defined Commands
 
