@@ -104,7 +104,7 @@
      (setq org-capture-templates
            (quote (
                    ("t" "TODO" entry (file org-todo-file)
-                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend)
+                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend t)
 
                    ("c" "Customer Issue")
                    ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
