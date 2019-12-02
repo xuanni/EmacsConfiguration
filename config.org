@@ -104,7 +104,7 @@
      (setq org-capture-templates
            (quote (
                    ("t" "TODO" entry (file org-todo-file)
-                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend)
+                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend t)
 
                    ("c" "Customer Issue")
                    ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
@@ -480,10 +480,15 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
      (diminish 'helm-mode)
      (diminish 'abbrev-mode)
      (diminish 'projectile-mode)
-     (diminish 'company-mode "")
+     (diminish 'company-mode "c")
+     (diminish 'irony-mode)
      (diminish 'yas-minor-mode)
      (diminish 'helm-gtags-mode)
      (diminish 'org-src-mode)
+     (diminish 'smartparens-mode)
+     (diminish 'undo-tree-mode)
+     (diminish 'which-key-mode)
+
    #+END_SRC
 
 ** exec path
