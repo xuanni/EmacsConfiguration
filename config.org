@@ -477,19 +477,68 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
    #+END_SRC
 
 ** diminish
-   #+BEGIN_SRC emacs-lisp :tangle yes
+NOTE mode must be diminished after it's loaded (eval-after-load)
+
+   #+BEGIN_SRC emacs-lisp :tangle no
      (require 'diminish)
-     (diminish 'helm-mode)
-     (diminish 'abbrev-mode)
-     (diminish 'projectile-mode)
-     (diminish 'company-mode "c")
-     (diminish 'irony-mode)
-     (diminish 'yas-minor-mode)
-     (diminish 'helm-gtags-mode)
-     (diminish 'org-src-mode)
-     (diminish 'smartparens-mode)
-     (diminish 'undo-tree-mode)
-     (diminish 'which-key-mode)
+     ;; (diminish 'helm-mode)
+     ;; (diminish 'abbrev-mode)
+     ;; (diminish 'projectile-mode)
+     ;; (diminish 'company-mode)
+     ;; (diminish 'irony-mode)
+     ;; (diminish 'yas-minor-mode)
+     ;; (diminish 'helm-gtags-mode)
+     ;; (diminish 'org-src-mode)
+     ;; (diminish 'smartparens-mode)
+     ;; (diminish 'undo-tree-mode)
+     ;; (diminish 'which-key-mode)
+     ;; (diminish 'eldoc-mode)
+     (eval-after-load "filladapt" '(diminish 'helm-mode))
+     (eval-after-load "filladapt" '(diminish 'abbrev-mode))
+     (eval-after-load "filladapt" '(diminish 'projectile-mode))
+     (eval-after-load "filladapt" '(diminish 'company-mode))
+     (eval-after-load "filladapt" '(diminish 'irony-mode))
+     (eval-after-load "filladapt" '(diminish 'yas-minor-mode))
+     (eval-after-load "filladapt" '(diminish 'helm-gtags-mode))
+     (eval-after-load "filladapt" '(diminish 'org-src-mode))
+     (eval-after-load "filladapt" '(diminish 'smartparens-mode))
+     (eval-after-load "filladapt" '(diminish 'undo-tree-mode))
+     (eval-after-load "filladapt" '(diminish 'which-key-mode))
+     (eval-after-load "filladapt" '(diminish 'eldoc-mode))
+   #+END_SRC
+
+   #+RESULTS:
+   |   |
+
+** delight
+NOTE mode must be diminished after it's loaded (eval-after-load)
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'delight)
+     ;; (delight 'helm-mode)
+     ;; (delight 'abbrev-mode)
+     ;; (delight 'projectile-mode)
+     ;; (delight 'company-mode)
+     ;; (delight 'irony-mode)
+     ;; (delight 'yas-minor-mode)
+     ;; (delight 'helm-gtags-mode)
+     ;; (delight 'org-src-mode)
+     ;; (delight 'smartparens-mode)
+     ;; (delight 'undo-tree-mode)
+     ;; (delight 'which-key-mode)
+     ;; (delight 'eldoc-mode')
+     (delight '((helm-mode nil helm)
+                (abbrev-mode nil abbrev)
+                (projectile-mode nil projectile)
+                (company-mode nil company)
+                (irony-mode nil irony)
+                (yas-minor-mode nil yasnippet)
+                (helm-gtags-mode nil helm-gtags)
+                (org-src-mode nil org-src)
+                (smartparens-mode nil smartparens)
+                (undo-tree-mode nil undo-tree)
+                (which-key-mode nil which-key)
+                (eldoc-mode nil eldoc)))
 
    #+END_SRC
 
