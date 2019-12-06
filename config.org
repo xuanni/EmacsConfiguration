@@ -172,10 +172,12 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
       (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
     #+END_SRC
 ** dired
+*** dired-jump
    load dired key bindings (C-x C-j to go to file location in dired mode)
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'dired-x)
    #+END_SRC
+*** dired copy files
    With this option on, Emacs automatically copies marked files to another opened dired in another window
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq dired-dwim-target t)
@@ -572,6 +574,14 @@ add key bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
 (global-set-key (kbd "C-c t") 'crux-visit-term-buffer)
 #+END_SRC
+** dired-narrow
+This belongs to dired-hack, a larger collection of dired enhancements
+
+Here I will bind "/" to dired-narrow
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (define-key dired-mode-map (kbd "/") 'dired-narrow)
+#+END_SRC
+
 * Self-defined Commands
 
 ** insert-date
