@@ -1,0 +1,15 @@
+*~
+.cache/
+*.cache
+*.eld
+semanticdb/
+auto-save-list/
+\#*\#
+bookmarks
+server/
+*.html
+recentf
+request/
+transient/
+eshell/
+ele-projects.el

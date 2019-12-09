@@ -507,9 +507,6 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
      (eval-after-load "filladapt" '(diminish 'eldoc-mode))
    #+END_SRC
 
-   #+RESULTS:
-   |   |
-
 ** delight
 NOTE mode must be diminished after it's loaded (eval-after-load)
 
