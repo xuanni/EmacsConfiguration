@@ -12,4 +12,6 @@ recentf
 request/
 transient/
 eshell/
-ele-projects.el
+ede-projects.el
+.nfs*
+irony/
