@@ -401,7 +401,13 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
      (helm-projectile-on)
      ;; after upgrade packages need to add this
      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+     ;; change projectile indexing method for Windows
+     (cond ((eq system-type 'windows-nt)
+            (setq projectile-indexing-method 'alien)))
+
    #+END_SRC
+
 ** grep-a-lot
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'grep-a-lot)
