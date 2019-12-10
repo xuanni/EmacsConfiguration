@@ -215,9 +215,11 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 
 *** view subset of buffers
 Also try ibuffer’s “limiting” feature (‘/’), which allows you to just view a subset of your buffers.
+
 *** Diff
 Ibuffer can show you the differences between an unsaved buffer and the file on disk with `=’.
 
+*** Grouping
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-x C-b") 'ibuffer)
 
@@ -226,10 +228,10 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
 
   ;; Gnus-style grouping
 
-  (setq ibuffer-saved-filter-groups
-        (quote (("work"
-                 ("dired" (mode . dired-mode))
-                 ("org" (mode. org-mode))
+  ;; (setq ibuffer-saved-filter-groups
+  ;;       (quote (("work"
+  ;;                ("dired" (mode . dired-mode))
+  ;;                ("org" (mode. org-mode))
                  ;; ("c" (mode . c-mode))
                  ;; ("c++" (mode . c++-mode))
                  ;; ("python" (mode . python-mode))
@@ -244,9 +246,9 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
                  ;;             (name . "^\\*Calendar\\*$")
                  ;;             (name . "^diary$")
                  ;;             (mode . muse-mode)))
-                 ("emacs" (or
-                           (name . "^\\*scratch\\*$")
-                           (name . "^\\*Messages\\*$")))
+                 ;; ("emacs" (or
+                 ;;           (name . "^\\*scratch\\*$")
+                 ;;           (name . "^\\*Messages\\*$")))
                  ;; ("gnus" (or
                  ;;          (mode . message-mode)
                  ;;          (mode . bbdb-mode)
@@ -256,12 +258,12 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
                  ;;          (mode . gnus-article-mode)
                  ;;          (name . "^\\.bbdb$")
                  ;;          (name . "^\\.newsrc-dribble")))))))
-                 ))))
+  ;;                ))))
 
-  (add-hook 'ibuffer-mode-hook
-            '(lambda ()
+  ;; (add-hook 'ibuffer-mode-hook
+  ;;           '(lambda ()
                ;; (ibuffer-auto-mode 1)      ;auto update ibuffer
-               (ibuffer-switch-to-saved-filter-groups "work")))
+               ;; (ibuffer-switch-to-saved-filter-groups "work")))
 
   ;; ibuffer-expert
   ;; don't ask for confirmation when deleting buffers
@@ -642,6 +644,30 @@ Here I will bind "/" to dired-narrow
 #+BEGIN_SRC emacs-lisp :tangle yes
   (define-key dired-mode-map (kbd "/") 'dired-narrow)
 #+END_SRC
+** ibuffer-projectile
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (add-hook 'ibuffer-hook
+      (lambda ()
+        (ibuffer-projectile-set-filter-groups)
+        (unless (eq ibuffer-sorting-mode 'alphabetic)
+          (ibuffer-do-sort-by-alphabetic))))
+
+
+  ;; (setq ibuffer-formats
+  ;;       '((mark modified read-only " "
+  ;;               (name 18 18 :left :elide)
+  ;;               " "
+  ;;               (size 9 -1 :right)
+  ;;               " "
+  ;;               (mode 16 16 :left :elide)
+  ;;               " "
+  ;;               project-relative-file)))
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (ibuffer-projectile-set-filter-groups) | (unless (eq ibuffer-sorting-mode (quote alphabetic)) (ibuffer-do-sort-by-alphabetic)) |
 
 * Self-defined Commands
 
