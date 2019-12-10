@@ -104,7 +104,7 @@
      (setq org-capture-templates
            (quote (
                    ("t" "TODO" entry (file org-todo-file)
-                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend)
+                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend t)
 
                    ("c" "Customer Issue")
                    ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
@@ -172,10 +172,12 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
       (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
     #+END_SRC
 ** dired
+*** dired-jump
    load dired key bindings (C-x C-j to go to file location in dired mode)
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'dired-x)
    #+END_SRC
+*** dired copy files
    With this option on, Emacs automatically copies marked files to another opened dired in another window
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq dired-dwim-target t)
@@ -200,6 +202,76 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 
    History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
 
+** ibuffer
+
+=from emacs wiki=
+
+ - ‘M-s a C-s’ - Do incremental search in the marked buffers.
+ - ‘M-s a C-M-s’ - Isearch for regexp in the marked buffers.
+ - ‘U’ - Replace by regexp in each of the marked buffers.
+ - ‘Q’ - Query replace in each of the marked buffers.
+ - ‘I’ - As above, with a regular expression.
+ - ‘0’ - Run occur on the marked buffers.
+
+*** view subset of buffers
+Also try ibuffer’s “limiting” feature (‘/’), which allows you to just view a subset of your buffers.
+*** Diff
+Ibuffer can show you the differences between an unsaved buffer and the file on disk with `=’.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+
+
+  ;; (add-to-list 'ibuffer-never-show-regexps "^\\*")
+
+  ;; Gnus-style grouping
+
+  (setq ibuffer-saved-filter-groups
+        (quote (("work"
+                 ("dired" (mode . dired-mode))
+                 ("org" (mode. org-mode))
+                 ;; ("c" (mode . c-mode))
+                 ;; ("c++" (mode . c++-mode))
+                 ;; ("python" (mode . python-mode))
+                 ;; ("perl" (mode . cperl-mode))
+                 ;; ("shell" (or
+                 ;;           (mode . shell-script-mode)
+                 ;;           (mode . sh-mode)))
+                 ;; ("xml" (mode . nxml-mode))
+                 ;; ("erc" (mode . erc-mode))
+                 ;; ("journal" (filename . "/personal/journal/"))
+                 ;; ("planner" (or
+                 ;;             (name . "^\\*Calendar\\*$")
+                 ;;             (name . "^diary$")
+                 ;;             (mode . muse-mode)))
+                 ("emacs" (or
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")))
+                 ;; ("gnus" (or
+                 ;;          (mode . message-mode)
+                 ;;          (mode . bbdb-mode)
+                 ;;          (mode . mail-mode)
+                 ;;          (mode . gnus-group-mode)
+                 ;;          (mode . gnus-summary-mode)
+                 ;;          (mode . gnus-article-mode)
+                 ;;          (name . "^\\.bbdb$")
+                 ;;          (name . "^\\.newsrc-dribble")))))))
+                 ))))
+
+  (add-hook 'ibuffer-mode-hook
+            '(lambda ()
+               ;; (ibuffer-auto-mode 1)      ;auto update ibuffer
+               (ibuffer-switch-to-saved-filter-groups "work")))
+
+  ;; ibuffer-expert
+  ;; don't ask for confirmation when deleting buffers
+  (setq ibuffer-expert t)
+
+  ;; don't show empty groups
+
+  ;; (setq ibuffer-show-empty-filter-groups nil)
+#+END_SRC
+
 ** miscellaneous
 
    Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
@@ -209,6 +281,11 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
    #+END_SRC
 
 * Packages
+
+** auto remove old packages
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq auto-package-update-delete-old-version t)
+#+END_SRC
 
 ** helm
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -324,7 +401,13 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
      (helm-projectile-on)
      ;; after upgrade packages need to add this
      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+     ;; change projectile indexing method for Windows
+     (cond ((eq system-type 'windows-nt)
+            (setq projectile-indexing-method 'alien)))
+
    #+END_SRC
+
 ** grep-a-lot
    #+BEGIN_SRC emacs-lisp :tangle yes
      (require 'grep-a-lot)
@@ -399,6 +482,69 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
      (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
    #+END_SRC
 
+** diminish
+NOTE mode must be diminished after it's loaded (eval-after-load)
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (require 'diminish)
+     ;; (diminish 'helm-mode)
+     ;; (diminish 'abbrev-mode)
+     ;; (diminish 'projectile-mode)
+     ;; (diminish 'company-mode)
+     ;; (diminish 'irony-mode)
+     ;; (diminish 'yas-minor-mode)
+     ;; (diminish 'helm-gtags-mode)
+     ;; (diminish 'org-src-mode)
+     ;; (diminish 'smartparens-mode)
+     ;; (diminish 'undo-tree-mode)
+     ;; (diminish 'which-key-mode)
+     ;; (diminish 'eldoc-mode)
+     (eval-after-load "filladapt" '(diminish 'helm-mode))
+     (eval-after-load "filladapt" '(diminish 'abbrev-mode))
+     (eval-after-load "filladapt" '(diminish 'projectile-mode))
+     (eval-after-load "filladapt" '(diminish 'company-mode))
+     (eval-after-load "filladapt" '(diminish 'irony-mode))
+     (eval-after-load "filladapt" '(diminish 'yas-minor-mode))
+     (eval-after-load "filladapt" '(diminish 'helm-gtags-mode))
+     (eval-after-load "filladapt" '(diminish 'org-src-mode))
+     (eval-after-load "filladapt" '(diminish 'smartparens-mode))
+     (eval-after-load "filladapt" '(diminish 'undo-tree-mode))
+     (eval-after-load "filladapt" '(diminish 'which-key-mode))
+     (eval-after-load "filladapt" '(diminish 'eldoc-mode))
+   #+END_SRC
+
+** delight
+NOTE mode must be diminished after it's loaded (eval-after-load)
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'delight)
+     ;; (delight 'helm-mode)
+     ;; (delight 'abbrev-mode)
+     ;; (delight 'projectile-mode)
+     ;; (delight 'company-mode)
+     ;; (delight 'irony-mode)
+     ;; (delight 'yas-minor-mode)
+     ;; (delight 'helm-gtags-mode)
+     ;; (delight 'org-src-mode)
+     ;; (delight 'smartparens-mode)
+     ;; (delight 'undo-tree-mode)
+     ;; (delight 'which-key-mode)
+     ;; (delight 'eldoc-mode')
+     (delight '((helm-mode nil helm)
+                (abbrev-mode nil abbrev)
+                (projectile-mode nil projectile)
+                (company-mode nil company)
+                (irony-mode nil irony)
+                (yas-minor-mode nil yasnippet)
+                (helm-gtags-mode nil helm-gtags)
+                (org-src-mode nil org-src)
+                (smartparens-mode nil smartparens)
+                (undo-tree-mode nil undo-tree)
+                (which-key-mode nil which-key)
+                (eldoc-mode nil eldoc)))
+
+   #+END_SRC
+
 ** exec path
    this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -462,20 +608,32 @@ add key bindings
 (require 'undo-tree)
 (global-undo-tree-mode)
 #+END_SRC
-** diminish
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'diminish)
-     (diminish 'helm-mode)
-     (diminish 'abbrev-mode)
-     (diminish 'projectile-mode)
-     (diminish 'company-mode)
-     (diminish 'irony-mode)
-     (diminish 'yas-minor-mode)
-     (diminish 'helm-gtags-mode)
-     (diminish 'org-src-mode)
-     (diminish 'which-key-mode)
-     (diminish 'undo-tree-mode)
-   #+END_SRC
+
+** smartparens
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'smartparens-config)
+
+  (add-hook 'c-mode-hook 'smartparens-mode)
+  (add-hook 'c++-mode-hook 'smartparens-mode)
+  (add-hook 'text-mode-hook 'smartparens-mode)
+  (add-hook 'sh-mode-hook 'smartparens-mode)
+  (add-hook 'python-mode-hook 'smartparens-mode)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+  (add-hook 'org-mode-hook 'smartparens-mode)
+  ;; (add-hook 'lisp-mode-hook 'smartparens-mode)
+  (add-hook 'nxml-mode-hook 'smartparens-mode)
+#+END_SRC
+** crux
+#+BEGIN_SRC emacs-lisp :tangle yes
+(global-set-key (kbd "C-c t") 'crux-visit-term-buffer)
+#+END_SRC
+** dired-narrow
+This belongs to dired-hack, a larger collection of dired enhancements
+
+Here I will bind "/" to dired-narrow
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (define-key dired-mode-map (kbd "/") 'dired-narrow)
+#+END_SRC
 
 * Self-defined Commands
 
@@ -529,3 +687,11 @@ add key bindings
 #+begin_src emacs-lisp :tangle yes
 (server-start)
 #+end_src
+
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defun enable-gtags-imenu()
+    (setq-local imenu-create-index-function #'ggtags-build-imenu-index))
+
+  (add-hook 'c-mode-hook #'enable-gtags-imenu)
+#+END_SRC
