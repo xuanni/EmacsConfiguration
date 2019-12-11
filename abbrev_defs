@@ -3,9 +3,7 @@
 
 (define-abbrev-table 'Info-edit-mode-abbrev-table '())
 
-(define-abbrev-table 'awk-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'awk-mode-abbrev-table '())
 
 (define-abbrev-table 'bibtex-mode-abbrev-table '())
 
@@ -13,15 +11,13 @@
 
 (define-abbrev-table 'bookmark-edit-annotation-mode-abbrev-table '())
 
-(define-abbrev-table 'c++-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'c++-mode-abbrev-table '())
 
-(define-abbrev-table 'c-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'c-mode-abbrev-table '())
 
 (define-abbrev-table 'calendar-mode-abbrev-table '())
+
+(define-abbrev-table 'captain-mode-abbrev-table '())
 
 (define-abbrev-table 'change-log-mode-abbrev-table '())
 
@@ -49,6 +45,8 @@
 
 (define-abbrev-table 'fundamental-mode-abbrev-table '())
 
+(define-abbrev-table 'git-commit-elisp-text-mode-abbrev-table '())
+
 (define-abbrev-table 'global-abbrev-table '())
 
 (define-abbrev-table 'gnus-group-mode-abbrev-table '())
@@ -67,19 +65,49 @@
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
 
-(define-abbrev-table 'java-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'java-mode-abbrev-table '())
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
+
+(define-abbrev-table 'log-edit-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-cherry-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-diff-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-log-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-log-select-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-merge-preview-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-popup-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-process-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-reflog-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-refs-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-repolist-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-revision-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-stash-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-stashes-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-status-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-submodule-list-mode-abbrev-table '())
 
 (define-abbrev-table 'message-mode-abbrev-table '())
 
 (define-abbrev-table 'messages-buffer-mode-abbrev-table '())
 
-(define-abbrev-table 'objc-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'objc-mode-abbrev-table '())
 
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
 
@@ -87,9 +115,10 @@
 
 (define-abbrev-table 'org-mode-abbrev-table
   '(
-    ("FW" "Firmware" nil 0)
+    ("bc" "because" nil 0)
     ("bg" "background" nil 1)
-    ("elisp" "emacs-lisp" nil 2)
+    ("elp" "emacs-lisp" nil 2)
+    ("fw" "firmware" nil 0)
    ))
 
 (define-abbrev-table 'outline-mode-abbrev-table '())
@@ -118,9 +147,7 @@
 
 (define-abbrev-table 'package-menu-mode-abbrev-table '())
 
-(define-abbrev-table 'pike-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'pike-mode-abbrev-table '())
 
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
