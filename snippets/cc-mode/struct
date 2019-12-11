@@ -1,5 +1,5 @@
 #name : struct ... { ... }
-# key: struct
+# key: st
 # --
 struct ${1:name}
 {

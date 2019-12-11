@@ -274,6 +274,15 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
   ;; (setq ibuffer-show-empty-filter-groups nil)
 #+END_SRC
 
+** Abbrev mode
+turn on abbrev minor mode for some major modes
+
+M-x edit-abbrevs to edit the tables C-x C-s to save it
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'org-mode-hook 'abbrev-mode)
+  (add-hook 'shell-mode 'abbrev-mode)
+#+END_SRC
 ** miscellaneous
 
    Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
