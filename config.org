@@ -8,7 +8,6 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-            ;; (set-face-attribute 'default nil :font "Courier New" :height 141))
             (set-face-attribute 'default nil :font "Consolas" :height 141))
            ((eq system-type 'darwin)
             (set-face-attribute 'default nil :font "Monaco" :height 141))
@@ -677,6 +676,38 @@ Here I will bind "/" to dired-narrow
 
 #+RESULTS:
 | lambda | nil | (ibuffer-projectile-set-filter-groups) | (unless (eq ibuffer-sorting-mode (quote alphabetic)) (ibuffer-do-sort-by-alphabetic)) |
+** captain
+
+Auto capitalize words
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (global-captain-mode t)
+
+  ;; don't capitalize in programming modes. Only in comment
+  ;; Now I still have a problem, which is in comment, the first
+  ;; word is not capitalized. Second sentence is fine.
+  (add-hook 'prog-mode-hook
+     (lambda ()
+       (setq captain-predicate
+             (lambda () (nth 8 (syntax-ppss (point)))))))
+
+  ;; Or for text modes, work all the time:
+  (add-hook 'text-mode-hook
+            (lambda ()
+              (setq captain-predicate (lambda () t))))
+
+  ;; Or don't work in source blocks in Org mode:
+  (add-hook
+   'org-mode-hook
+   (lambda ()
+     (setq captain-predicate
+           (lambda () (not (org-in-src-block-p))))))
+
+
+  (setq sentence-end-double-space nil)
+#+END_SRC
+
+#+RESULTS:
 
 * Self-defined Commands
 
