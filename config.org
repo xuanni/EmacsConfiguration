@@ -8,7 +8,6 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-            ;; (set-face-attribute 'default nil :font "Courier New" :height 141))
             (set-face-attribute 'default nil :font "Consolas" :height 141))
            ((eq system-type 'darwin)
             (set-face-attribute 'default nil :font "Monaco" :height 141))
@@ -215,9 +214,11 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 
 *** view subset of buffers
 Also try ibuffer’s “limiting” feature (‘/’), which allows you to just view a subset of your buffers.
+
 *** Diff
 Ibuffer can show you the differences between an unsaved buffer and the file on disk with `=’.
 
+*** Grouping
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-x C-b") 'ibuffer)
 
@@ -226,10 +227,10 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
 
   ;; Gnus-style grouping
 
-  (setq ibuffer-saved-filter-groups
-        (quote (("work"
-                 ("dired" (mode . dired-mode))
-                 ("org" (mode. org-mode))
+  ;; (setq ibuffer-saved-filter-groups
+  ;;       (quote (("work"
+  ;;                ("dired" (mode . dired-mode))
+  ;;                ("org" (mode. org-mode))
                  ;; ("c" (mode . c-mode))
                  ;; ("c++" (mode . c++-mode))
                  ;; ("python" (mode . python-mode))
@@ -244,9 +245,9 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
                  ;;             (name . "^\\*Calendar\\*$")
                  ;;             (name . "^diary$")
                  ;;             (mode . muse-mode)))
-                 ("emacs" (or
-                           (name . "^\\*scratch\\*$")
-                           (name . "^\\*Messages\\*$")))
+                 ;; ("emacs" (or
+                 ;;           (name . "^\\*scratch\\*$")
+                 ;;           (name . "^\\*Messages\\*$")))
                  ;; ("gnus" (or
                  ;;          (mode . message-mode)
                  ;;          (mode . bbdb-mode)
@@ -256,12 +257,12 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
                  ;;          (mode . gnus-article-mode)
                  ;;          (name . "^\\.bbdb$")
                  ;;          (name . "^\\.newsrc-dribble")))))))
-                 ))))
+  ;;                ))))
 
-  (add-hook 'ibuffer-mode-hook
-            '(lambda ()
+  ;; (add-hook 'ibuffer-mode-hook
+  ;;           '(lambda ()
                ;; (ibuffer-auto-mode 1)      ;auto update ibuffer
-               (ibuffer-switch-to-saved-filter-groups "work")))
+               ;; (ibuffer-switch-to-saved-filter-groups "work")))
 
   ;; ibuffer-expert
   ;; don't ask for confirmation when deleting buffers
@@ -272,6 +273,15 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
   ;; (setq ibuffer-show-empty-filter-groups nil)
 #+END_SRC
 
+** Abbrev mode
+turn on abbrev minor mode for some major modes
+
+M-x edit-abbrevs to edit the tables C-x C-s to save it
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'org-mode-hook 'abbrev-mode)
+  (add-hook 'shell-mode 'abbrev-mode)
+#+END_SRC
 ** miscellaneous
 
    Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
@@ -473,7 +483,16 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
    #+BEGIN_SRC emacs-lisp :tangle yes
      (add-hook 'c-mode-hook 'irony-mode)
      (add-hook 'c++-mode-hook 'irony-mode)
+
+     ;; Windows performance tweaks
+     ;;
+     (when (boundp 'w32-pipe-read-delay)
+       (setq w32-pipe-read-delay 0))
+     ;; Set the buffer size to 64K on Windows (from the original 4K)
+     (when (boundp 'w32-pipe-buffer-size)
+       (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
    #+END_SRC
+
 ** company-irony
    use this as backend instead of company-clang for C/C++/Objective-C
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -634,6 +653,62 @@ Here I will bind "/" to dired-narrow
 #+BEGIN_SRC emacs-lisp :tangle yes
   (define-key dired-mode-map (kbd "/") 'dired-narrow)
 #+END_SRC
+** ibuffer-projectile
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (add-hook 'ibuffer-hook
+      (lambda ()
+        (ibuffer-projectile-set-filter-groups)
+        (unless (eq ibuffer-sorting-mode 'alphabetic)
+          (ibuffer-do-sort-by-alphabetic))))
+
+
+  ;; (setq ibuffer-formats
+  ;;       '((mark modified read-only " "
+  ;;               (name 18 18 :left :elide)
+  ;;               " "
+  ;;               (size 9 -1 :right)
+  ;;               " "
+  ;;               (mode 16 16 :left :elide)
+  ;;               " "
+  ;;               project-relative-file)))
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (ibuffer-projectile-set-filter-groups) | (unless (eq ibuffer-sorting-mode (quote alphabetic)) (ibuffer-do-sort-by-alphabetic)) |
+** captain
+
+Auto capitalize words
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (global-captain-mode t)
+
+  ;; don't capitalize in programming modes. Only in comment
+  ;; Now I still have a problem, which is in comment, the first
+  ;; word is not capitalized. Second sentence is fine.
+  (add-hook 'prog-mode-hook
+     (lambda ()
+       (setq captain-predicate
+             (lambda () (nth 8 (syntax-ppss (point)))))))
+
+  ;; Or for text modes, work all the time:
+  (add-hook 'text-mode-hook
+            (lambda ()
+              (setq captain-predicate (lambda () t))))
+
+  ;; Or don't work in source blocks in Org mode:
+  (add-hook
+   'org-mode-hook
+   (lambda ()
+     (setq captain-predicate
+           (lambda () (not (org-in-src-block-p))))))
+
+
+  (setq sentence-end-double-space nil)
+#+END_SRC
+
+#+RESULTS:
 
 * Self-defined Commands
 
