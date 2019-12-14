@@ -560,7 +560,9 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
                 (smartparens-mode nil smartparens)
                 (undo-tree-mode nil undo-tree)
                 (which-key-mode nil which-key)
-                (eldoc-mode nil eldoc)))
+                (eldoc-mode nil eldoc)
+                (captain-mode nil captain)
+                ))
 
    #+END_SRC
 
