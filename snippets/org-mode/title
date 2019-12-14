@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: title
-# key: tit_
+# key: title
 # --
 #+TITLE: ${1:Title}
 #+AUTHOR: Xuan Ni
