@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: elisp
-# key: elisp_
+# key: elisp
 # --
 #+BEGIN_SRC emacs-lisp :tangle yes
 $0
