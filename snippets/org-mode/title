@@ -1,9 +1,10 @@
 # -*- mode: snippet -*-
-# name: title
+# name: title_
 # key: title
 # --
 #+TITLE: ${1:Title}
 #+AUTHOR: Xuan Ni
 #+DATE: ${2:}
+#+STARTUP: indent
 
 $0

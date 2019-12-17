@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: img
+# name: img_
 # key: img
 # --
 <img src="$1"
