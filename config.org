@@ -86,24 +86,29 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond
       ((string-equal system-type "windows-nt")
-       (setq org-agenda-path "z:/venus12/users/xni/org-agenda/"))
+       (setq org-agenda-path "c:/users/xni/Documents/org-agenda/"))
       (t
        (setq org-agenda-path "/prj/video_fw/venus12/users/xni/org-agenda/")))
 
      (setq org-todo-file (concat org-agenda-path "todo.org"))
      (setq org-cr-file (concat org-agenda-path "cr.org"))
      (setq org-notes-file (concat org-agenda-path "notes.org"))
+     (setq org-log-file (concat org-agenda-path "log.org"))
 
      (setq org-agenda-files (list
                              org-todo-file
                              org-cr-file
                              org-notes-file
+                             org-log-file
                              ))
 
      (setq org-capture-templates
            (quote (
                    ("t" "TODO" entry (file org-todo-file)
                     "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend t)
+
+                   ("l" "Work Log" entry (file org-log-file)
+                    "* Week %t \t:worklog:\n%?")
 
                    ("c" "Customer Issue")
                    ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
@@ -115,6 +120,9 @@
                    "* %^{Title} %^G\nINCEPTION: %U\n%a\n%c\n%?")
                    )))
    #+END_SRC
+
+   #+RESULTS:
+   | t | TODO | entry | (file org-todo-file) | * TODO %^{Title} %^G |
 
 *** calendar and diary
     #+BEGIN_SRC emacs-lisp :tangle yes
