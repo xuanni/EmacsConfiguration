@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: latexexport
+# key: latexex
+# --
+#+LATEX_CLASS: ${1:article}
+#+LATEX_CLASS_OPTIONS: [${2:letterpaper,11pt}]
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+$0
