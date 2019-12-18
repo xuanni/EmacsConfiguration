@@ -86,9 +86,9 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond
       ((string-equal system-type "windows-nt")
-       (setq org-agenda-path "c:/users/xni/Documents/org-agenda/"))
+       (setq org-agenda-path "y:/Documents/org/")) ; this is Windows map of /usr2/xni
       (t
-       (setq org-agenda-path "/prj/video_fw/venus12/users/xni/org-agenda/")))
+       (setq org-agenda-path "~/Documents/org/")))
 
      (setq org-todo-file (concat org-agenda-path "todo.org"))
      (setq org-cr-file (concat org-agenda-path "cr.org"))
