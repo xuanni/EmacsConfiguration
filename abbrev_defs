@@ -3,7 +3,9 @@
 
 (define-abbrev-table 'Info-edit-mode-abbrev-table '())
 
-(define-abbrev-table 'awk-mode-abbrev-table '())
+(define-abbrev-table 'awk-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'bibtex-mode-abbrev-table '())
 
@@ -11,9 +13,13 @@
 
 (define-abbrev-table 'bookmark-edit-annotation-mode-abbrev-table '())
 
-(define-abbrev-table 'c++-mode-abbrev-table '())
+(define-abbrev-table 'c++-mode-abbrev-table
+  '(
+   ))
 
-(define-abbrev-table 'c-mode-abbrev-table '())
+(define-abbrev-table 'c-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'calendar-mode-abbrev-table '())
 
@@ -53,6 +59,8 @@
 
 (define-abbrev-table 'grep-mode-abbrev-table '())
 
+(define-abbrev-table 'helm-ag-mode-abbrev-table '())
+
 (define-abbrev-table 'helm-grep-mode-abbrev-table '())
 
 (define-abbrev-table 'helm-major-mode-abbrev-table '())
@@ -65,7 +73,9 @@
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
 
-(define-abbrev-table 'java-mode-abbrev-table '())
+(define-abbrev-table 'java-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
 
@@ -107,7 +117,9 @@
 
 (define-abbrev-table 'messages-buffer-mode-abbrev-table '())
 
-(define-abbrev-table 'objc-mode-abbrev-table '())
+(define-abbrev-table 'objc-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
 
@@ -117,8 +129,10 @@
   '(
     ("bc" "because" nil 0)
     ("bg" "background" nil 1)
+    ("eg" "e.g.," nil 0)
     ("elp" "emacs-lisp" nil 2)
     ("fw" "firmware" nil 0)
+    ("ie" "i.e.," nil 0)
    ))
 
 (define-abbrev-table 'outline-mode-abbrev-table '())
@@ -147,13 +161,17 @@
 
 (define-abbrev-table 'package-menu-mode-abbrev-table '())
 
-(define-abbrev-table 'pike-mode-abbrev-table '())
+(define-abbrev-table 'pike-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
 (define-abbrev-table 'prog-mode-abbrev-table '())
 
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
+
+(define-abbrev-table 'sh-mode-abbrev-table '())
 
 (define-abbrev-table 'shell-mode-abbrev-table '())
 

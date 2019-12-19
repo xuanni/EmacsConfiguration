@@ -737,6 +737,7 @@ Auto capitalize words
    #+END_SRC
 
 ** Toggle window split directions
+
    #+BEGIN_SRC emacs-lisp :tangle yes
      (defun toggle-window-split ()
        (interactive)
@@ -762,6 +763,23 @@ Auto capitalize words
                (set-window-buffer (next-window) next-win-buffer)
                (select-window first-win)
                (if this-win-2nd (other-window 1))))))
+   #+END_SRC
+
+** handle large files
+
+   Found this code via stack overflow, comment out the set buffer read only part.
+
+   Notice this is setting the =fundamental-mode=, so later on I can manually set to any mode so that the syntax highlighting will be enabled, e.g., =asm-mode= for lst files.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun my-find-file-check-make-large-file-read-only-hook ()
+       "If a file is over a given size, make the buffer read only."
+       (when (> (buffer-size) (* 1024 1024)) ; 1M size
+         ;; (setq buffer-read-only t)
+         (buffer-disable-undo)
+         (fundamental-mode)))
+
+     (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
    #+END_SRC
 * bug fix for linux font size
   #+BEGIN_SRC emacs-lisp :tangle yes
