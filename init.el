@@ -19,7 +19,7 @@
 (require 'org)
 (org-babel-load-file
  (expand-file-name "config.org"
-                user-emacs-directory))
+                   user-emacs-directory))
 
 ;; load custom.el for themes
 (load "~/.emacs.d/custom.el")

@@ -8,9 +8,9 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
-            (set-face-attribute 'default nil :font "Consolas" :height 141))
+            (set-face-attribute 'default nil :font "Consolas" :height 143))
            ((eq system-type 'darwin)
-            (set-face-attribute 'default nil :font "Monaco" :height 141))
+            (set-face-attribute 'default nil :font "Monaco" :height 143))
            (t (set-face-attribute 'default nil :font "Ubuntu Mono" :height 143)) ; t for default case
            ;; looks like gnu/linux is not working in system-type
            )
@@ -312,7 +312,6 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
 
 ** helm
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'helm)
      (require 'helm-config)
 
      ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
@@ -411,6 +410,8 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
 
 ** helm-projectile
    #+BEGIN_SRC emacs-lisp :tangle yes
+     (helm-projectile-on)
+     (projectile-mode t)
      (setq projectile-enable-caching t)
      (setq projectile-globally-ignored-directories
       (quote
@@ -419,9 +420,8 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
       (quote
        ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
      (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
-     (projectile-global-mode t)
+
      (setq projectile-completion-system 'helm)
-     (helm-projectile-on)
      ;; after upgrade packages need to add this
      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
