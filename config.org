@@ -47,6 +47,11 @@
 
 ** org-mode
 
+*** org indent mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+END_SRC
+
 *** install latest org mode
     stock emacs comes with very old version of org-mode, to upgrade org-mode, first =emacs -q=, then =eval-region= below code, then package list, find org (and possibly org-plus-contrib) and install it. sometimes direct =package-install= command won't work so you have resort to the =package-list= method.
     #+BEGIN_SRC emacs-lisp :tangle no
@@ -570,6 +575,7 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
                 (which-key-mode nil which-key)
                 (eldoc-mode nil eldoc)
                 (captain-mode nil captain)
+                (org-indent-mode nil org-indent)
                 ))
 
    #+END_SRC
