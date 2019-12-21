@@ -637,6 +637,13 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 
 ** TODO helm-ag
 add key bindings
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-c h g") 'helm-ag)
+  (global-set-key (kbd "C-c h d") 'helm-do-ag)
+#+END_SRC
+
+#+RESULTS:
+: helm-do-ag
 
 ** undo-tree
 #+BEGIN_SRC emacs-lisp :tangle yes
