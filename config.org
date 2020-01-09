@@ -337,8 +337,8 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
      ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
      ;; (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
 
-     (when (executable-find "curl")
-       (setq helm-google-suggest-use-curl-p t)) ;not sure what this is for
+     ;; (when (executable-find "curl")
+     ;;   (setq helm-google-suggest-use-curl-p t)) ;not sure what this is for
 
      (setq
       ;; helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
@@ -348,7 +348,7 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
            ;; helm-ff-file-name-history-use-recentf t
            )
 
-     (helm-mode 1)                           ; turn on helm mode for kill buffer etc
+     ;; (helm-mode 1)                           ; turn on helm mode for kill buffer etc
 
    #+END_SRC
 
@@ -432,7 +432,7 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
    #+END_SRC
 
 ** grep-a-lot
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (require 'grep-a-lot)
      (grep-a-lot-setup-keys)
    #+END_SRC
@@ -447,7 +447,7 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
 
    #+begin_src emacs-lisp :tangle yes
      (require 'yasnippet)
-     (yas-reload-all)
+     ;; (yas-reload-all)
      (add-hook 'org-mode-hook #'yas-minor-mode)
      (add-hook 'c-mode-hook #'yas-minor-mode)
      (add-hook 'c++-mode-hook #'yas-minor-mode)
@@ -621,7 +621,7 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 ** elpy
    python IDE like
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (advice-add 'python-mode :before 'elpy-enable)
    #+END_SRC
 
@@ -635,7 +635,7 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 (which-key-mode)
 #+END_SRC
 
-** TODO helm-ag
+** helm-ag
 add key bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-c h g") 'helm-ag)
@@ -666,7 +666,7 @@ add key bindings
   (add-hook 'nxml-mode-hook 'smartparens-mode)
 #+END_SRC
 ** crux
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 (global-set-key (kbd "C-c t") 'crux-visit-term-buffer)
 #+END_SRC
 ** dired-narrow
