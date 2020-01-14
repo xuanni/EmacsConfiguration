@@ -16,10 +16,26 @@
 ;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
 ;; load my configuration
-(require 'org)
-(org-babel-load-file
- (expand-file-name "config.org"
-                   user-emacs-directory))
+;; (require 'org)
+;; (org-babel-load-file
+;;  (expand-file-name "config.org"
+;;                    user-emacs-directory))
+;; (load "~/.emacs.d/config.el")
+
+;; dynamically determine whether to babel org file
+(defun file-last-mod-time (file)
+  (interactive)
+  (format-time-string "%Y-%m-%d %T"
+                      (nth 5 (file-attributes file))))
+
+(defun recent-file (file1 file2)
+  (string< (file-last-mod-time file1) (file-last-mod-time file2)))
+
+(if (recent-file "~/.emacs.d/config.org" "~/.emacs.d/config.el")
+    (load "~/.emacs.d/config.el")
+  (org-babel-load-file
+   (expand-file-name "config.org"
+                     user-emacs-directory)))
 
 ;; load custom.el for themes
 (load "~/.emacs.d/custom.el")
