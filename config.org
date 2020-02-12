@@ -325,7 +325,7 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
      (global-set-key (kbd "C-x b") 'helm-mini)
      (global-set-key (kbd "C-x C-f") 'helm-find-files)
      ;; (global-set-key (kbd "C-x k") 'kill-buffer)
-     (global-set-key (kbd "M-s o") 'helm-occur)
+     (global-set-key (kbd "C-c h o") 'helm-occur)
 
      ;; make helm open at bottom with full frame width
      (add-to-list 'display-buffer-alist
@@ -348,7 +348,7 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
            ;; helm-ff-file-name-history-use-recentf t
            )
 
-     ;; (helm-mode 1)                           ; turn on helm mode for kill buffer etc
+     (helm-mode 1)                           ; turn on helm mode for kill buffer etc
 
    #+END_SRC
 
@@ -447,7 +447,7 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
 
    #+begin_src emacs-lisp :tangle yes
      (require 'yasnippet)
-     ;; (yas-reload-all)
+     (yas-reload-all)
      (add-hook 'org-mode-hook #'yas-minor-mode)
      (add-hook 'c-mode-hook #'yas-minor-mode)
      (add-hook 'c++-mode-hook #'yas-minor-mode)
