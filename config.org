@@ -96,13 +96,11 @@
        (setq org-agenda-path "~/Documents/org/")))
 
      (setq org-todo-file (concat org-agenda-path "todo.org"))
-     (setq org-cr-file (concat org-agenda-path "cr.org"))
      (setq org-notes-file (concat org-agenda-path "notes.org"))
      (setq org-log-file (concat org-agenda-path "log.org"))
 
      (setq org-agenda-files (list
                              org-todo-file
-                             org-cr-file
                              org-notes-file
                              org-log-file
                              ))
@@ -115,11 +113,11 @@
                    ("l" "Work Log" entry (file org-log-file)
                     "* Week %t \t:worklog:\n%?")
 
-                   ("c" "Customer Issue")
-                   ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
-                    "** CR %^{CR Title} %^G\n:PROPERTIES:\n:CR_NUMBER: %^{CR#}\n:END:\nINCEPTION: %T\n%c\n%?")
-                   ("cd" "Droid Bug" entry (file+headline org-cr-file "Droid Bug")
-                    "** DB %^{DB Title} %^G\nINCEPTION: %T\n%c\n%?")
+                   ;; ("c" "Customer Issue")
+                   ;; ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
+                   ;;  "** CR %^{CR Title} %^G\n:PROPERTIES:\n:CR_NUMBER: %^{CR#}\n:END:\nINCEPTION: %T\n%c\n%?")
+                   ;; ("cd" "Droid Bug" entry (file+headline org-cr-file "Droid Bug")
+                   ;;  "** DB %^{DB Title} %^G\nINCEPTION: %T\n%c\n%?")
 
                    ("n" "Notes" entry (file org-notes-file)
                    "* %^{Title} %^G\nINCEPTION: %U\n%a\n%c\n%?")
@@ -302,7 +300,12 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
    #+END_SRC
+** global key bindings
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-x t") 'eshell)
+  (global-set-key (kbd "C-x y") 'shell)
 
+#+END_SRC
 * Packages
 
 ** auto remove old packages
