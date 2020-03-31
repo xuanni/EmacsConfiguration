@@ -11,7 +11,7 @@
             (set-face-attribute 'default nil :font "Consolas" :height 143))
            ((eq system-type 'darwin)
             (set-face-attribute 'default nil :font "Monaco" :height 143))
-           (t (set-face-attribute 'default nil :font "Ubuntu Mono" :height 143)) ; t for default case
+           (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
            ;; looks like gnu/linux is not working in system-type
            )
    #+END_SRC
@@ -385,7 +385,8 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
      (add-hook 'c++-mode-hook 'helm-gtags-mode)
      (add-hook 'java-mode-hook 'helm-gtags-mode)
      (add-hook 'asm-mode-hook 'helm-gtags-mode)
-     (add-hook 'python-mode-hook 'helm-gtags-mode)
+     ;; for python, use elpy-goto-definition (same key)
+     ;; (add-hook 'python-mode-hook 'helm-gtags-mode)
 
      (setq helm-gtags-auto-update t)
      (setq helm-gtags-suggested-key-mapping t)
@@ -624,8 +625,12 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 ** elpy
    python IDE like
 
-   #+BEGIN_SRC emacs-lisp :tangle no
+*NOTE* elpy-config is different on different machines, mainly because of python difference
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (advice-add 'python-mode :before 'elpy-enable)
+     (add-hook 'elpy-mode
+               '(lambda () (local-set-key "M-." 'elpy-goto-definition)))
    #+END_SRC
 
 ** wgrep-helm
