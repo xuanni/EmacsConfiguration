@@ -369,6 +369,11 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
         )
       (global-set-key (kbd "C-x g") 'magit-status)
       (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+      ;; turn off diff when doing commit, use C-c C-d to see the diff manually
+      ;; if not turned off, for large commits, it will be very slow, alternative
+      ;; way is to C-g to cancel diff when committing, but will end up with an
+      ;; broken diff buffer
+      (remove-hook 'server-switch-hook 'magit-commit-diff)
     #+END_SRC
 
 *** p4
