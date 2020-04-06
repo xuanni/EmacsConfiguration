@@ -91,7 +91,7 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond
       ((string-equal system-type "windows-nt")
-       (setq org-agenda-path "y:/Documents/org/")) ; this is Windows map of /usr2/xni
+       (setq org-agenda-path "u:/Documents/org/")) ; this is Windows map of /usr2/xni
       (t
        (setq org-agenda-path "~/Documents/org/")))
 
@@ -310,8 +310,8 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
 Increase the limits for reading logs and many line flushes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq undo-limit 100000000)             ; 100M
-  (setq undo-outer-limit 200000000)       ; 200M
-  (setq undo-strong-limit 150000000)      ; 150M
+  (setq undo-outer-limit 150000000)       ; 150M
+  (setq undo-strong-limit 200000000)      ; 200M
 #+END_SRC
 * Packages
 
