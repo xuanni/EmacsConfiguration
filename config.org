@@ -213,7 +213,7 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
    History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
 
 ** ibuffer
-
+Disable this due to slow performance
 =from emacs wiki=
 
  - ‘M-s a C-s’ - Do incremental search in the marked buffers.
@@ -231,6 +231,13 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
 
 *** Grouping
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-x C-b") 'buffer-menu) ; not use default list-buffers because it will not focus on the buffer list
+#+END_SRC
+
+#+RESULTS:
+: buffer-menu
+
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 
