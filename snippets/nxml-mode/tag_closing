@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # contributor : Anders Bach Nielsen <abachn@abachn.net>
 # name: <tag.../>
-# key: tc
+# key: <c
 # --
-<$1 $2 />$0
+<$1$2/>$0
