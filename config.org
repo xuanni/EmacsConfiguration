@@ -154,21 +154,21 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 
 *** org babel
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (org-babel-load-languages
-     (quote
-      ((emacs-lisp . t)
-       (shell . t)
-       (python . t)
-       (awk . t)
-       (C . t)
-       (java . t)
-       (latex . t)
-       (makefile . t)
-       (octave . t))))
+  (setq org-babel-load-languages
+        (quote
+         ((emacs-lisp . t)
+          (shell . t)
+          (python . t)
+          (awk . t)
+          (C . t)
+          (java . t)
+          (latex . t)
+          (makefile . t)
+          (octave . t))))
   #+END_SRC
 *** org export
 #+BEGIN_SRC emacs-lisp :tangle yes
-(org-export-backends (quote (ascii html latex man md odt groff)))
+  (setq org-export-backends (quote (ascii html latex man md odt groff)))
 #+END_SRC
 ** Backup files
    #+BEGIN_SRC emacs-lisp :tangle yes
