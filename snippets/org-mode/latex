@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: latex_
-# key: latex
+# key: <lat
 # --
 #+BEGIN_LaTeX
 $0
