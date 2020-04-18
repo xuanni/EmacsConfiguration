@@ -108,7 +108,7 @@
      (setq org-capture-templates
            (quote (
                    ("t" "TODO" entry (file org-todo-file)
-                    "* TODO %^{Title} %^G\nINCEPTION: %T\n%a\n%?" :prepend t)
+                    "* TODO %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %T\n:END:\n%?" :prepend t)
 
                    ("l" "Work Log" entry (file org-log-file)
                     "* Week %t \t:worklog:\n%?")
@@ -120,7 +120,7 @@
                    ;;  "** DB %^{DB Title} %^G\nINCEPTION: %T\n%c\n%?")
 
                    ("n" "Notes" entry (file org-notes-file)
-                   "* %^{Title} %^G\nINCEPTION: %U\n%a\n%c\n%?")
+                   "* %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %U\n:END:\n%?")
                    )))
    #+END_SRC
 
