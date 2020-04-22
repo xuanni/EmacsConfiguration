@@ -48,6 +48,7 @@
 ** org-mode
 
 *** org indent mode
+Either this or add =#+STARTUP: indent= to the file
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-hook 'org-mode-hook 'org-indent-mode)
 #+END_SRC
@@ -169,6 +170,11 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 *** org export
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq org-export-backends (quote (ascii html latex man md odt groff)))
+#+END_SRC
+*** org keys
+When you use =C-c C-o= to follow links, if the link is within the document, you can use this command to go back. There is another command =org-mark-ring-push=, which was originally bind to this key.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (define-key org-mode-map (kbd "C-c %") 'org-mark-ring-goto)
 #+END_SRC
 ** Backup files
    #+BEGIN_SRC emacs-lisp :tangle yes
