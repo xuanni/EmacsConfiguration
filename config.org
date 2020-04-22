@@ -174,6 +174,7 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
 *** org keys
 When you use =C-c C-o= to follow links, if the link is within the document, you can use this command to go back. There is another command =org-mark-ring-push=, which was originally bind to this key.
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'org)
   (define-key org-mode-map (kbd "C-c %") 'org-mark-ring-goto)
 #+END_SRC
 ** Backup files
