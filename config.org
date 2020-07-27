@@ -341,7 +341,7 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
 #+END_SRC
 ** undo limit
 Increase the limits for reading logs and many line flushes
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq undo-limit 100000000)             ; 100M
   (setq undo-outer-limit 150000000)       ; 150M
   (setq undo-strong-limit 200000000)      ; 200M
