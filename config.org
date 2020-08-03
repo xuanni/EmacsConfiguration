@@ -715,7 +715,7 @@ add key bindings
 
   (add-hook 'c-mode-hook 'smartparens-mode)
   (add-hook 'c++-mode-hook 'smartparens-mode)
-  (add-hook 'text-mode-hook 'smartparens-mode)
+  ;; (add-hook 'text-mode-hook 'smartparens-mode)
   (add-hook 'sh-mode-hook 'smartparens-mode)
   (add-hook 'python-mode-hook 'smartparens-mode)
   (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
