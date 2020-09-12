@@ -368,7 +368,7 @@ Increase the limits for reading logs and many line flushes
      (global-set-key (kbd "C-x b") 'helm-mini)
      (global-set-key (kbd "C-x C-f") 'helm-find-files)
      ;; (global-set-key (kbd "C-x k") 'kill-buffer)
-     (global-set-key (kbd "C-c h o") 'helm-occur)
+     (global-set-key (kbd "C-s") 'helm-occur)
 
      ;; make helm open at bottom with full frame width
      (add-to-list 'display-buffer-alist
