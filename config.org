@@ -369,6 +369,10 @@ Increase the limits for reading logs and many line flushes
      (global-set-key (kbd "C-x C-f") 'helm-find-files)
      ;; (global-set-key (kbd "C-x k") 'kill-buffer)
      (global-set-key (kbd "C-s") 'helm-occur)
+     ;; replacing isearch-forward with helm-occur will make keyboard macro hard
+     ;; to work with, now bind another key to isearch-forward, note that M-s w
+     ;; is isearch-forward-word
+     (global-set-key (kbd "M-s f") 'isearch-forward)
 
      ;; make helm open at bottom with full frame width
      (add-to-list 'display-buffer-alist
