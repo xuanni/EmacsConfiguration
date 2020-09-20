@@ -11,7 +11,7 @@
             (set-face-attribute 'default nil :font "Consolas" :height 143))
            ((eq system-type 'darwin)
             (set-face-attribute 'default nil :font "Monaco" :height 143))
-           (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
+           (t (set-face-attribute 'default nil :font "Noto Mono" :height 136)) ; t for default case
            ;; looks like gnu/linux is not working in system-type
            )
    #+END_SRC
@@ -364,6 +364,11 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
   (setq ivy-use-virtual-buffers t)        ;
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-initial-inputs-alist nil)     ;remove ^
+
+  (setq ivy-height-alist
+        '((t
+           lambda (_caller)
+           (/ (* (frame-height) 2) 5))))
 
   (global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
@@ -759,6 +764,8 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
                 (eldoc-mode nil eldoc)
                 (captain-mode nil captain)
                 (org-indent-mode nil org-indent)
+                (counsel-mode nil counsel)
+                (ivy-mode nil ivy)
                 ))
 
    #+END_SRC
