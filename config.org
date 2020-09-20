@@ -348,9 +348,70 @@ Increase the limits for reading logs and many line flushes
 #+END_SRC
 * Packages
 
-** auto remove old packages
-#+BEGIN_SRC emacs-lisp :tangle yes
-(setq auto-package-update-delete-old-version t)
+** ivy, counsel, swiper
+
+How to use *Nuclear weapon of multi-editing* in Ivy?
+In helm, you can use helm-ag to search and C-c C-e to open results in another window, and then edit them, and then C-c C-c to commit.
+In Ivy, you use counsel-ag to search and C-c C-o (Ivy-occur) to open results in another window, and then C-x C-q (ivy-wgrep-change-to-wgrep-mode, this simply just enable edit mode) to enable editing, and make changes, and C-x C-s to save changes. (Files not saved, though). One more step but acceptable
+
+*Helm-multi-occur*
+In helm, C-x b open buffer list, C-spc to mark buffers, C-s to search within marked buffers
+
+This seems to be missing in Ivy
+
+#+begin_src emacs-lisp :tangle no
+
+  (setq ivy-use-virtual-buffers t)        ;
+  (setq ivy-count-format "(%d/%d) ")
+  (setq ivy-initial-inputs-alist nil)     ;remove ^
+
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-c h g") 'counsel-ag)
+
+  (ivy-mode 1)
+  (counsel-mode 1)
+  (ivy-prescient-mode)
+  ;; this must be after counsel is loaded
+  (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
+#+end_src
+** counsel-gtags
+#+BEGIN_SRC emacs-lisp :tangle no
+  (add-hook 'c-mode-hook 'counsel-gtags-mode)
+  (add-hook 'c++-mode-hook 'counsel-gtags-mode)
+  (add-hook 'java-mode-hook 'counsel-gtags-mode)
+  (add-hook 'asm-mode-hook 'counsel-gtags-mode)
+  ;; use elpy-goto-definition instead
+  ;; (add-hook 'python-mode-hook 'counsel-gtags-mode)
+
+  (with-eval-after-load 'counsel-gtags
+    (define-key counsel-gtags-mode-map (kbd "M-.") 'counsel-gtags-dwim)
+    ;; (define-key counsel-gtags-mode-map (kbd "M-t") 'counsel-gtags-find-definition)
+    ;; (define-key counsel-gtags-mode-map (kbd "M-r") 'counsel-gtags-find-reference)
+    ;; (define-key counsel-gtags-mode-map (kbd "M-s") 'counsel-gtags-find-symbol)
+    (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
+     #+END_SRC
+
+** counsel-projectile
+#+BEGIN_SRC emacs-lisp :tangle no
+  (counsel-projectile-mode)
+  (projectile-mode t)
+
+  ;; after upgrade packages need to add this
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (setq projectile-enable-caching t)
+  (setq projectile-globally-ignored-directories
+        (quote
+         (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Debug*")))
+  (setq projectile-globally-ignored-file-suffixes
+        (quote
+         ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
+  (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
+  (setq projectile-completion-system 'ivy)
+
+  ;; change projectile indexing method for Windows
+  (cond ((eq system-type 'windows-nt)
+         (setq projectile-indexing-method 'alien)))
 #+END_SRC
 
 ** helm
@@ -513,6 +574,19 @@ Increase the limits for reading logs and many line flushes
   ;; (helm-migemo-mode 1)
 
 #+END_SRC
+** helm-ag
+add key bindings
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-c h g") 'helm-ag)
+  (global-set-key (kbd "C-c h d") 'helm-do-ag)
+#+END_SRC
+
+#+RESULTS:
+: helm-do-ag
+** auto remove old packages
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq auto-package-update-delete-old-version t)
+#+END_SRC
 ** window-numbering
    #+BEGIN_SRC emacs-lisp :tangle yes
      (window-numbering-mode 1)
@@ -535,7 +609,7 @@ Increase the limits for reading logs and many line flushes
     #+END_SRC
 
 *** p4
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle no
       (load-library "p4")
     #+END_SRC
 
@@ -743,7 +817,7 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
    #+END_SRC
 
 ** wgrep-helm
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (require 'wgrep)
    #+END_SRC
 
@@ -751,16 +825,6 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 #+BEGIN_SRC emacs-lisp :tangle yes
 (which-key-mode)
 #+END_SRC
-
-** helm-ag
-add key bindings
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (global-set-key (kbd "C-c h g") 'helm-ag)
-  (global-set-key (kbd "C-c h d") 'helm-do-ag)
-#+END_SRC
-
-#+RESULTS:
-: helm-do-ag
 
 ** undo-tree
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -795,7 +859,7 @@ Here I will bind "/" to dired-narrow
 #+END_SRC
 ** ibuffer-projectile
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (add-hook 'ibuffer-hook
       (lambda ()
