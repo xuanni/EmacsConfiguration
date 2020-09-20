@@ -376,7 +376,9 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
 
   (ivy-mode 1)
   (counsel-mode 1)
-  (ivy-prescient-mode)
+  ;; use amx instead, ivy-prescient will alter ag results as well, not wanted.
+  ;; amx must be installed, it will be auto-picked by ivy, amx is forked from smex, which stays at 2015 release (old)
+  ;; (ivy-prescient-mode)
   ;; this must be after counsel is loaded
   (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
 #+end_src
