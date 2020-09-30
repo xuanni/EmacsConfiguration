@@ -434,6 +434,11 @@ This seems to be missing in Ivy
      ;; for read only helm-occur (C-c h M-s o), I bind it to replace occur (M-s o)
      (global-set-key (kbd "M-s o") 'helm-occur)
      ;; for multi editing search, use helm-swoop (M-i) see below section
+     ;; no more, helm-swoop is slow for large files, helm-occur is much faster
+     ;; swiper is in between in terms of performance
+     ;; this is to enable edit mode automatically (could bind it to C-x C-q to manually
+     ;; use it) see https://github.com/emacs-helm/helm/issues/2146
+     (add-hook 'helm-occur-mode-hook 'wgrep-change-to-wgrep-mode t)
 
      ;; make helm open at bottom with full frame width
      (add-to-list 'display-buffer-alist
@@ -519,7 +524,7 @@ This seems to be missing in Ivy
    #+END_SRC
 
 ** helm-swoop
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; helm from https://github.com/emacs-helm/helm
   (require 'helm)
 
