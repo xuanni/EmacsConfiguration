@@ -10,7 +10,7 @@
      (cond ((eq system-type 'windows-nt)
             (set-face-attribute 'default nil :font "Consolas" :height 143))
            ((eq system-type 'darwin)
-            (set-face-attribute 'default nil :font "Monaco" :height 143))
+            (set-face-attribute 'default nil :font "Menlo" :height 143))
            ;; (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
            ;; looks like gnu/linux is not working in system-type
            (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 136)) ; t for default case
@@ -208,6 +208,11 @@ When you use =C-c C-o= to follow links, if the link is within the document, you 
       (add-to-list 'auto-mode-alist '("\\.scons\\'" . python-mode))
       (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
     #+END_SRC
+
+*** makefile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-to-list 'auto-mode-alist '("\\.mak\\'" . makefile-mode))
+#+END_SRC
 ** dired
 *** dired-jump
    load dired key bindings (C-x C-j to go to file location in dired mode)
