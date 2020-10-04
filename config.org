@@ -100,12 +100,16 @@ Either this or add =#+STARTUP: indent= to the file
      (setq org-todo-file (concat org-agenda-path "todo.org"))
      (setq org-notes-file (concat org-agenda-path "notes.org"))
      (setq org-log-file (concat org-agenda-path "log.org"))
+     (setq org-finance-file (concat org-agenda-path "finance.org"))
+     (setq org-travel-file (concat org-agenda-path "travel.org"))
 
-     (setq org-agenda-files (list
-                             org-todo-file
-                             org-notes-file
-                             org-log-file
-                             ))
+     ;; (setq org-agenda-files (list
+     ;;                         org-todo-file
+     ;;                         org-notes-file
+     ;;                         org-log-file
+     ;;                         ))
+
+     (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
 
      (setq org-capture-templates
            (quote (
@@ -114,12 +118,6 @@ Either this or add =#+STARTUP: indent= to the file
 
                    ("l" "Work Log" entry (file org-log-file)
                     "* Week %t \t:worklog:\n%?")
-
-                   ;; ("c" "Customer Issue")
-                   ;; ("cc" "Change Request" entry (file+headline org-cr-file "Change Request")
-                   ;;  "** CR %^{CR Title} %^G\n:PROPERTIES:\n:CR_NUMBER: %^{CR#}\n:END:\nINCEPTION: %T\n%c\n%?")
-                   ;; ("cd" "Droid Bug" entry (file+headline org-cr-file "Droid Bug")
-                   ;;  "** DB %^{DB Title} %^G\nINCEPTION: %T\n%c\n%?")
 
                    ("n" "Notes" entry (file org-notes-file)
                    "* %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %U\n:END:\n%?")
@@ -141,10 +139,20 @@ Either this or add =#+STARTUP: indent= to the file
 
 *** customize todo keywords
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq org-todo-keywords '(
-                                (sequence "TODO" "|" "DONE" "POSTPONE" "ABANDONED") ; for normal stuff
-                                (sequence "CR" "|" "FIXED" "NOT-A-BUG") ; for bug
-                                ))
+      ;; (setq org-todo-keywords '(
+      ;;                           (sequence "TODO" "|" "DONE" "POSTPONE" "ABANDONED") ; for normal stuff
+      ;;                           (sequence "CR" "|" "FIXED" "NOT-A-BUG") ; for bug
+      ;;                           ))
+      (setq org-todo-keywords
+            '(;; Sequence for TASKS
+              ;; TODO means it's an item that needs addressing
+              ;; WAITING means it's dependent on something else happening
+              ;; DELEGATED means someone else is doing it and I need to follow up with them
+              ;; ASSIGNED means someone else has full, autonomous responsibility for it
+              ;; CANCELLED means it's no longer necessary to finish
+              ;; DONE means it's complete
+              (sequence "TODO(t@/!)" "WAITING(w@/!)" "DELEGATED(e@/!)" "|" "ASSIGNED(a@/!)" "CANCELLED(c@/!)" "DONE(d@/!)")
+              ))
     #+END_SRC
 
 *** dropped easy template
