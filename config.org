@@ -10,7 +10,8 @@
      (cond ((eq system-type 'windows-nt)
             (set-face-attribute 'default nil :font "Consolas" :height 143))
            ((eq system-type 'darwin)
-            (set-face-attribute 'default nil :font "Menlo" :height 143))
+            ;; (set-face-attribute 'default nil :font "Menlo" :height 143))
+            (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 160)) ; t for default case
            ;; (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
            ;; looks like gnu/linux is not working in system-type
            (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 136)) ; t for default case
@@ -23,7 +24,8 @@
      (blink-cursor-mode -1)
      (column-number-mode 1)                  ; display column number in modeline
      (display-time-mode 1)
-     (menu-bar-mode -1)
+     (cond ((eq system-type 'darwin))
+           (t (menu-bar-mode -1)))
      (scroll-bar-mode -1)
      (show-paren-mode 1)                     ; highlight matching parenthese
      (tool-bar-mode -1)
