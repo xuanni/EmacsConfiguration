@@ -155,6 +155,9 @@ Either this or add =#+STARTUP: indent= to the file
               ;; DONE means it's complete
               (sequence "TODO(t@/!)" "WAITING(w@/!)" "DELEGATED(e@/!)" "|" "ASSIGNED(a@/!)" "CANCELLED(c@/!)" "DONE(d@/!)")
               ))
+      ;; put - STATE change from xx to xx into drawer so when export,
+      ;; these state changes won't be exported
+      (setq org-log-into-drawer t)
     #+END_SRC
 
 *** dropped easy template
