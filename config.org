@@ -666,9 +666,15 @@ add key bindings
 
 ** notmuch-emacs
 
-   frontend for notmuch
+frontend for notmuch
 
-   #+BEGIN_SRC emacs-lisp :tangle no
+Some helpful commands
+- view message in external viewer (browser), use . v
+- search anything use s
+- display tags use t
+
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (autoload 'notmuch "notmuch" "notmuch mail" t)
      ;; (require 'notmuch)  ;; always load when start emacs
      (setq notmuch-search-oldest-first nil)
@@ -682,7 +688,7 @@ add key bindings
      (setq message-yank-empty-prefix "")
      (setq message-yank-prefix "")
      (setq notmuch-show-all-tags-list t)     ; show all tags in hello screen
-     (require 'org-notmuch)                  ; store links in notmuch buffers
+     (require 'ol-notmuch)                  ; store links in notmuch buffers (was called org-notmuch, recently renamed to ol-notmuch)
    #+END_SRC
 
 ** company mode
