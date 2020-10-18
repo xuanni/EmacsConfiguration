@@ -943,6 +943,16 @@ Auto capitalize words
 #+END_SRC
 
 #+RESULTS:
+** avy
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-:") 'avy-goto-char)   ;input 1 char
+  (global-set-key (kbd "C-'") 'avy-goto-char-2) ;input 2 chars
+  (global-set-key (kbd "M-g f") 'avy-goto-line) ;input chars at line start
+  (global-set-key (kbd "M-g w") 'avy-goto-word-1) ;input 1 char, goto word
+  (global-set-key (kbd "M-g e") 'avy-goto-word-0) ;input 0 char(many more options)
+  (avy-setup-default)
+  (global-set-key (kbd "C-c C-j") 'avy-resume)
+#+END_SRC
 
 * Self-defined Commands
 
