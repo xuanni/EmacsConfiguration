@@ -603,6 +603,9 @@ add key bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-c h g") 'helm-ag)
   (global-set-key (kbd "C-c h d") 'helm-do-ag)
+  ;; automatically turn to wgrep mode if C-c C-s if pressed
+  (add-hook 'helm-ag-mode-hook 'wgrep-change-to-wgrep-mode t)
+
 #+END_SRC
 
 #+RESULTS:
