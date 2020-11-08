@@ -649,7 +649,8 @@ add key bindings
    #+BEGIN_SRC emacs-lisp :tangle yes
      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
    #+END_SRC
-
+** org-web-tools
+Install pandoc (needed), install org-web-tools from the MELPA
 ** yasnippet
 
    only enable yas-minor-mode for certain major modes
