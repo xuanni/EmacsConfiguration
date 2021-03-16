@@ -1,6 +1,7 @@
 *~
 .cache/
 *.cache
+*.elc
 *.eld
 semanticdb/
 auto-save-list/
