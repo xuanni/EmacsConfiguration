@@ -2,10 +2,20 @@
 # name: full template of article class
 # key: article
 # --
-\documentclass[${1:options}]{article}
+\documentclass[${1:11pt,letterpaper}]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[]{times}
+% enable this to use sans serif (default is computer modern
+% if times is not used)
+% \renewcommand{\familydefault}{\sfdefault}
 
+
+\title{$2}
 \author{$3}
 
 \begin{document}
+\maketitle
+
 $0
+
 \end{document}
