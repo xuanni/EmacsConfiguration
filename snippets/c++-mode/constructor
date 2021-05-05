@@ -2,6 +2,6 @@
 # name: constructor
 # key: ctor
 # --
-${1:Class}::$1(${2:args}) ${3: : ${4:init}} {
+${2:$1::}${1:Type}(${3:args})${4::} {
     $0
 }

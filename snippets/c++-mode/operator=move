@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: operator= move
+# key: =m
+# where this is a reference to myself
+# group: operator overloading
+# --
+${1:MyClass}& ${2:$1::}operator=($1 &&rhs) {
+    $0
+    return *this;
+}

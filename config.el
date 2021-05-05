@@ -259,8 +259,14 @@
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; change projectile indexing method for Windows
-(cond ((eq system-type 'windows-nt)
-       (setq projectile-indexing-method 'alien)))
+;; (cond ((eq system-type 'windows-nt)
+;;        (setq projectile-indexing-method 'alien)))
+;; now change indexing to hybrid for all platforms, for new version of
+;; projectile this is fast enough even on Windows, and also alien method
+;; won't allow using .projectile file
+;; I am using .projectile file to exclude some files/dirs
+;; I am using .dir-locals.el to customize compilation dir and cmd2
+(setq projectile-indexing-method 'hybrid)
 
 (global-set-key (kbd "C-c h g") 'helm-ag)
 (global-set-key (kbd "C-c h d") 'helm-do-ag)
@@ -347,6 +353,8 @@
            (eldoc-mode nil eldoc)
            (captain-mode nil captain)
            (org-indent-mode nil org-indent)
+           (counsel-mode nil counsel)
+           (ivy-mode nil ivy)
            ))
 
 (cond ((eq system-type 'darwin)
