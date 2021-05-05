@@ -252,7 +252,7 @@ When you use =C-c C-o= to follow links, if the link is within the document, you 
 ** recentf location
    use local disk instead of network drive
    #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; (setq recentf-save-file "/local/mnt/workspace/.recentf")
+     (setq recentf-save-file "/local/mnt/workspace/.recentf")
    #+END_SRC
 
    History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
@@ -376,7 +376,7 @@ In Ivy, you use counsel-ag to search and C-c C-o (Ivy-occur) to open results in 
 *Helm-multi-occur*
 In helm, C-x b open buffer list, C-spc to mark buffers, C-s to search within marked buffers
 
-This seems to be missing in Ivy
+This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you cannot mark buffers)
 
 #+begin_src emacs-lisp :tangle no
 
@@ -384,13 +384,20 @@ This seems to be missing in Ivy
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-initial-inputs-alist nil)     ;remove ^
 
+  (setq ivy-height-alist
+        '((t
+           lambda (_caller)
+           (/ (* (frame-height) 2) 5))))
+
   (global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-c h g") 'counsel-ag)
 
   (ivy-mode 1)
   (counsel-mode 1)
-  (ivy-prescient-mode)
+  ;; use amx instead, ivy-prescient will alter ag results as well, not wanted.
+  ;; amx must be installed, it will be auto-picked by ivy, amx is forked from smex, which stays at 2015 release (old)
+  ;; (ivy-prescient-mode)
   ;; this must be after counsel is loaded
   (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
 #+end_src
@@ -536,9 +543,14 @@ This seems to be missing in Ivy
      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
      ;; change projectile indexing method for Windows
-     (cond ((eq system-type 'windows-nt)
-            (setq projectile-indexing-method 'alien)))
-
+     ;; (cond ((eq system-type 'windows-nt)
+     ;;        (setq projectile-indexing-method 'alien)))
+     ;; now change indexing to hybrid for all platforms, for new version of
+     ;; projectile this is fast enough even on Windows, and also alien method
+     ;; won't allow using .projectile file
+     ;; I am using .projectile file to exclude some files/dirs
+     ;; I am using .dir-locals.el to customize compilation dir and cmd2
+     (setq projectile-indexing-method 'hybrid)
    #+END_SRC
 
 ** helm-swoop
@@ -793,6 +805,8 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
                 (eldoc-mode nil eldoc)
                 (captain-mode nil captain)
                 (org-indent-mode nil org-indent)
+                (counsel-mode nil counsel)
+                (ivy-mode nil ivy)
                 ))
 
    #+END_SRC

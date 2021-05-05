@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: for auto iterator
+# key: for
+# --
+for (${1:auto }${2:i} = ${3:var}${4:.}begin(); $2 != $3$4end(); ++$2) {
+    $0
+}

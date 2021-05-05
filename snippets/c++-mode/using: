@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: using Class::Class  ...
+# key: using
+# --
+using ${1:Class}::${2:Class};
+$0

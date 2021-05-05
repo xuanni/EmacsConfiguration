@@ -1,8 +1,7 @@
 # -*- mode: snippet -*-
-# name: typedef struct
+# name: typedef enum
 # key: tde
 # --
-typedef enum
-{
+typedef enum {
     $0
 } ${1:Name};

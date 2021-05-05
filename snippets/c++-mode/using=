@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: using def = type ...
+# key: using
+# --
+using ${1:NewType} = ${2:OldType};
+$0
