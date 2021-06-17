@@ -16,3 +16,4 @@ eshell/
 ede-projects.el
 .nfs*
 irony/
+*.pyc
