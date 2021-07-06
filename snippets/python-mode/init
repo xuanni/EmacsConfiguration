@@ -3,6 +3,6 @@
 # key: init
 # group : definitions
 # --
-def __init__(self${1:, args}):
-    ${2:"${3:docstring}"
-    }$0
+def __init__(self${4:, *args, **kwargs}):
+    super().__init__(${4:$(string-trim-left yas-text "[, \t\n\r]+")})
+    $0

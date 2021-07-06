@@ -1,7 +1,12 @@
 # -*- mode: snippet -*-
 # name: class
-# key: cls
+# key: cl
 # group: object oriented
 # --
-class ${1:class}:
-    $0
+class ${1:class}(${2:object}):
+    """${3:Class Doc String}
+    """
+
+    def __init__(self${4:, *args, **kwargs}):
+        super().__init__(${4:$(string-trim-left yas-text "[, \t\n\r]+")})
+        $0
