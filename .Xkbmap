@@ -1,1 +1,2 @@
--option ctrl:swap_lwin_lctl -option altwin:alt_win
+-option ctrl:swap_lalt_lctl
+#-option ctrl:swap_lwin_lctl -option altwin:alt_win

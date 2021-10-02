@@ -11,6 +11,14 @@
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
+(unless package-archive-contents (package-refresh-contents))
+
+;; use-package
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(require 'use-package)
+(setq use-package-always-ensure t)
+
 ;; enable this and disable next snippet to update org
 ;; (require 'package)
 ;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)

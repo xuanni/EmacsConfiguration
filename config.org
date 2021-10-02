@@ -4,7 +4,9 @@
 
 * Emacs built-in
 
-** Font
+** Appearance and behavior
+
+Set font
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'windows-nt)
@@ -18,12 +20,13 @@
            )
    #+END_SRC
 
-** Appearance and behavior
+Set other appearance
+
    #+BEGIN_SRC emacs-lisp :tangle yes
      (prefer-coding-system 'utf-8-unix)
      (blink-cursor-mode -1)
      (column-number-mode 1)                  ; display column number in modeline
-     (display-time-mode 1)
+     ;; (display-time-mode 1)                ; disable this to save some modeline space for 2 column views
      (cond ((eq system-type 'darwin))
            (t (menu-bar-mode -1)))
      (scroll-bar-mode -1)
@@ -251,7 +254,7 @@ When you use =C-c C-o= to follow links, if the link is within the document, you 
 
 ** recentf location
    use local disk instead of network drive
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (setq recentf-save-file "/local/mnt/workspace/.recentf")
    #+END_SRC
 
@@ -366,7 +369,15 @@ Increase the limits for reading logs and many line flushes
   (setq undo-strong-limit 200000000)      ; 200M
 #+END_SRC
 * Packages
+** modeline (doom)
+Depends on =all-the-icons= package and needs to install the fonts once, using =M-x all-the-icons-install-fonts=
 
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package all-the-icons)
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+#+END_SRC
 ** ivy, counsel, swiper
 
 How to use *Nuclear weapon of multi-editing* in Ivy?

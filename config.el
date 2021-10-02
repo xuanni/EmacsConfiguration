@@ -152,8 +152,6 @@
 (add-hook 'before-save-hook 'whitespace-cleanup)
 (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
 
-;; (setq recentf-save-file "/local/mnt/workspace/.recentf")
-
 (global-set-key (kbd "C-x C-b") 'buffer-menu) ; not use default list-buffers because it will not focus on the buffer list
 
 (add-hook 'org-mode-hook 'abbrev-mode)
@@ -163,6 +161,11 @@
 
 (global-set-key (kbd "C-x t") 'eshell)
 (global-set-key (kbd "C-x y") 'shell)
+
+(use-package all-the-icons)
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 
 (require 'helm-config)
 
