@@ -292,8 +292,12 @@
 (remove-hook 'server-switch-hook 'magit-commit-diff)
 
 ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-(require 'org-superstar)
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+;; traditional method (no auto installing of the package)
+;; (require 'org-superstar)                ;more fancy bullets
+;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+;; use-package
+(use-package org-superstar
+  :hook ((org-mode . (lambda () (org-superstar-mode 1)))))
 
 (require 'yasnippet)
 (yas-reload-all)

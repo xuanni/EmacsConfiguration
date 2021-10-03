@@ -668,11 +668,16 @@ add key bindings
      (require 'grep-a-lot)
      (grep-a-lot-setup-keys)
    #+END_SRC
-** org-bullets
+** org-bullets org-superstar
+=org-bullets= won't change utf 8 symbols for the bullets/lists, but =org-superstar= will.
    #+BEGIN_SRC emacs-lisp :tangle yes
      ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-     (require 'org-superstar)                ;more fancy bullets
-     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+     ;; traditional method (no auto installing of the package)
+     ;; (require 'org-superstar)                ;more fancy bullets
+     ;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+     ;; use-package
+     (use-package org-superstar
+       :hook ((org-mode . (lambda () (org-superstar-mode 1)))))
    #+END_SRC
 ** org-web-tools
 Install pandoc (needed), install org-web-tools from the MELPA
