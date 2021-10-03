@@ -670,7 +670,9 @@ add key bindings
    #+END_SRC
 ** org-bullets
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+     ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+     (require 'org-superstar)                ;more fancy bullets
+     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
    #+END_SRC
 ** org-web-tools
 Install pandoc (needed), install org-web-tools from the MELPA

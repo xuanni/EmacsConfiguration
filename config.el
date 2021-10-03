@@ -11,7 +11,7 @@
 (prefer-coding-system 'utf-8-unix)
 (blink-cursor-mode -1)
 (column-number-mode 1)                  ; display column number in modeline
-(display-time-mode 1)
+;; (display-time-mode 1)                ; disable this to save some modeline space for 2 column views
 (cond ((eq system-type 'darwin))
       (t (menu-bar-mode -1)))
 (scroll-bar-mode -1)
@@ -291,7 +291,9 @@
 ;; broken diff buffer
 (remove-hook 'server-switch-hook 'magit-commit-diff)
 
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(require 'org-superstar)
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
 (require 'yasnippet)
 (yas-reload-all)

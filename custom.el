@@ -23,7 +23,7 @@
  '(magit-diff-use-overlays nil)
  '(org-agenda-files '("~/Documents/org/notes.org" "~/Documents/org/todo.org"))
  '(package-selected-packages
-   '(doom-modeline doom-themes monokai-theme spacemacs-theme zenburn-theme magit yasnippet-snippets window-numbering which-key wgrep-helm wgrep-ag undo-tree smartparens org-web-tools org-bullets helm-projectile helm-gtags helm-ag exec-path-from-shell elpy dired-narrow delight company-irony-c-headers company-irony captain bm avy auctex))
+   '(org-superstar doom-modeline doom-themes monokai-theme spacemacs-theme zenburn-theme magit yasnippet-snippets window-numbering which-key wgrep-helm wgrep-ag undo-tree smartparens org-web-tools org-bullets helm-projectile helm-gtags helm-ag exec-path-from-shell elpy dired-narrow delight company-irony-c-headers company-irony captain bm avy auctex))
  '(pos-tip-background-color "#FFFACE")
  '(pos-tip-foreground-color "#272822")
  '(vc-annotate-background nil)
