@@ -344,42 +344,6 @@ Stock emacs comes with very old version of org-mode, to upgrade org-mode, first 
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 #+END_SRC
 
-*** org capture and agenda settings
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (cond
-   ((string-equal system-type "windows-nt")
-    (setq org-agenda-path "u:/Documents/org/")) ; this is Windows map of /usr2/xni
-   (t
-    (setq org-agenda-path "~/Documents/org/")))
-
-  (setq org-todo-file (concat org-agenda-path "todo.org"))
-  (setq org-notes-file (concat org-agenda-path "notes.org"))
-  (setq org-log-file (concat org-agenda-path "log.org"))
-  (setq org-finance-file (concat org-agenda-path "finance.org"))
-  (setq org-travel-file (concat org-agenda-path "travel.org"))
-
-  ;; (setq org-agenda-files (list
-  ;;                         org-todo-file
-  ;;                         org-notes-file
-  ;;                         org-log-file
-  ;;                         ))
-
-  (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
-
-  (setq org-capture-templates
-        (quote (
-                ("t" "TODO" entry (file org-todo-file)
-                 "* TODO %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %T\n:END:\n%?" :prepend t)
-
-                ("l" "Work Log" entry (file org-log-file)
-                 "* Week %t \t:worklog:\n%?")
-
-                ("n" "Notes" entry (file org-notes-file)
-                "* %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %U\n:END:\n%?")
-                )))
-#+END_SRC
-
 *** dropped easy template
 from v9.2, org mode got rid of easy template (<s thing), you can get it back by
 #+begin_src emacs-lisp :tangle no
