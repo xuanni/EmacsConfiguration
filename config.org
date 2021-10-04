@@ -3,273 +3,151 @@
 #+DATE: <2018-02-15 Thu>
 
 * Emacs built-in
-
 ** Appearance and behavior
 
-Set font
+*** Set font
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (cond ((eq system-type 'windows-nt)
-            (set-face-attribute 'default nil :font "Consolas" :height 143))
-           ((eq system-type 'darwin)
-            ;; (set-face-attribute 'default nil :font "Menlo" :height 143))
-            (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 160)) ; t for default case
-           ;; (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
-           ;; looks like gnu/linux is not working in system-type
-           (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 136)) ; t for default case
-           )
-   #+END_SRC
-
-Set other appearance
-
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (prefer-coding-system 'utf-8-unix)
-     (blink-cursor-mode -1)
-     (column-number-mode 1)                  ; display column number in modeline
-     ;; (display-time-mode 1)                ; disable this to save some modeline space for 2 column views
-     (cond ((eq system-type 'darwin))
-           (t (menu-bar-mode -1)))
-     (scroll-bar-mode -1)
-     (show-paren-mode 1)                     ; highlight matching parenthese
-     (tool-bar-mode -1)
-     (which-function-mode 1)                 ; display function name in modeline
-     (fset 'yes-or-no-p 'y-or-n-p)           ; simplify this
-     (setq-default indent-tabs-mode nil)     ; use space instead of tabs (setq: buffer local var, setq-default global)
-     (setq initial-scratch-message ";; Put your mess here\n\n")
-     (setq inhibit-startup-message nil)
-     (setq inhibit-startup-screen t)
-     (setq large-file-warning-threshold 100000000)
-     (setq scroll-step 1)                    ; don't suddenly roll up a lot of lines
-     (setq tab-width 4)
-     (setq visible-bell t)                   ; flash screen instead of audible ding
-     (if (eq system-type 'darwin)
-         (progn
-           (setq ns-command-modifier (quote control))
-           (setq ns-right-command-modifier (quote meta))))
-     (put 'narrow-to-region 'disabled nil)
-     (put 'downcase-region 'disabled nil)
-     (global-auto-revert-mode 1)             ;could be more traffic/network
-   #+END_SRC
-
-** org-mode
-
-*** org indent mode
-Either this or add =#+STARTUP: indent= to the file
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (add-hook 'org-mode-hook 'org-indent-mode)
+  (cond ((eq system-type 'windows-nt)
+         (set-face-attribute 'default nil :font "Consolas" :height 143))
+        ((eq system-type 'darwin)
+         ;; (set-face-attribute 'default nil :font "Menlo" :height 143))
+         (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 160)) ; t for default case
+        ;; (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
+        ;; looks like gnu/linux is not working in system-type
+        (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 136)) ; t for default case
+        )
 #+END_SRC
 
-*** install latest org mode
-    stock emacs comes with very old version of org-mode, to upgrade org-mode, first =emacs -q=, then =eval-region= below code, then package list, find org (and possibly org-plus-contrib) and install it. sometimes direct =package-install= command won't work so you have resort to the =package-list= method.
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (require 'package)
-      (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-    #+END_SRC
-*** use line wrap and speed commands
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq org-startup-truncated nil)        ; tell org mode to wrap line instead of shift
-     (setq org-use-speed-commands t)         ; use single key to navigate
-   #+END_SRC
-
-*** global keys to activate org capture and agenda
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (global-set-key (kbd "C-c l") 'org-store-link)
-     (global-set-key (kbd "C-c a") 'org-agenda)
-     (global-set-key (kbd "C-c c") 'org-capture)
-     (global-set-key (kbd "C-c b") 'org-switchb)
-   #+END_SRC
-
-*** org refile
-    Check this [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Blog post]] for the first 4 ~setq~ down below for some tricks when doing ~org-refile~
-    #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; refile across files, otherwise can only refile within the same file
-     (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
-     ;; refile as the top heading, otherwise can only refile as the child of existing headings
-     (setq org-refile-use-outline-path 'file)
-     ;; refile list all possibilities at once, not the default step by step, for helm
-     (setq org-outline-path-complete-in-steps nil)
-     ;; refile can create new parent, must add "/New Heading" at the end
-     (setq org-refile-allow-creating-parent-nodes 'confirm)
-
-    #+END_SRC
-
-*** org capture and agenda settings
-
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (cond
-      ((string-equal system-type "windows-nt")
-       (setq org-agenda-path "u:/Documents/org/")) ; this is Windows map of /usr2/xni
-      (t
-       (setq org-agenda-path "~/Documents/org/")))
-
-     (setq org-todo-file (concat org-agenda-path "todo.org"))
-     (setq org-notes-file (concat org-agenda-path "notes.org"))
-     (setq org-log-file (concat org-agenda-path "log.org"))
-     (setq org-finance-file (concat org-agenda-path "finance.org"))
-     (setq org-travel-file (concat org-agenda-path "travel.org"))
-
-     ;; (setq org-agenda-files (list
-     ;;                         org-todo-file
-     ;;                         org-notes-file
-     ;;                         org-log-file
-     ;;                         ))
-
-     (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
-
-     (setq org-capture-templates
-           (quote (
-                   ("t" "TODO" entry (file org-todo-file)
-                    "* TODO %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %T\n:END:\n%?" :prepend t)
-
-                   ("l" "Work Log" entry (file org-log-file)
-                    "* Week %t \t:worklog:\n%?")
-
-                   ("n" "Notes" entry (file org-notes-file)
-                   "* %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %U\n:END:\n%?")
-                   )))
-   #+END_SRC
-
-   #+RESULTS:
-   | t | TODO | entry | (file org-todo-file) | * TODO %^{Title} %^G |
-
-*** calendar and diary
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq org-agenda-include-diary t)
-    #+END_SRC
-
-*** closing todo items
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq org-log-done 'time)
-    #+END_SRC
-
-*** customize todo keywords
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      ;; (setq org-todo-keywords '(
-      ;;                           (sequence "TODO" "|" "DONE" "POSTPONE" "ABANDONED") ; for normal stuff
-      ;;                           (sequence "CR" "|" "FIXED" "NOT-A-BUG") ; for bug
-      ;;                           ))
-      (setq org-todo-keywords
-            '(;; Sequence for TASKS
-              ;; TODO means it's an item that needs addressing
-              ;; WAITING means it's dependent on something else happening
-              ;; DELEGATED means someone else is doing it and I need to follow up with them
-              ;; ASSIGNED means someone else has full, autonomous responsibility for it
-              ;; CANCELLED means it's no longer necessary to finish
-              ;; DONE means it's complete
-              (sequence "TODO(t@/!)" "WAITING(w@/!)" "DELEGATED(e@/!)" "|" "ASSIGNED(a@/!)" "CANCELLED(c@/!)" "DONE(d@/!)")
-              ))
-      ;; put - STATE change from xx to xx into drawer so when export,
-      ;; these state changes won't be exported
-      (setq org-log-into-drawer t)
-    #+END_SRC
-
-*** dropped easy template
-from v9.2, org mode got rid of easy template (<s thing), you can get it back by
-#+begin_src emacs-lisp :tangle no
-(require 'org-tempo)
-#+end_src
-but the new replacement is good too. C-c C-, and choose from the pop up list
-
-*** org babel
+*** Set theme
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-babel-load-languages
-        (quote
-         ((emacs-lisp . t)
-          (shell . t)
-          (python . t)
-          (awk . t)
-          (C . t)
-          (java . t)
-          (latex . t)
-          (makefile . t)
-          (octave . t))))
-  #+END_SRC
-*** org export
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-export-backends (quote (ascii html latex man md odt groff)))
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    (load-theme 'doom-one t)
+
+    ;; Enable flashing mode-line on errors
+    ;; (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    ;; (doom-themes-neotree-config)
+    ;; or for treemacs users
+    ;; (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+    ;; (doom-themes-treemacs-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    ;; (doom-themes-org-config)
+    )
 #+END_SRC
-*** org keys
-When you use =C-c C-o= to follow links, if the link is within the document, you can use this command to go back. There is another command =org-mark-ring-push=, which was originally bind to this key.
+
+*** Set other appearance
+
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (require 'org)
-  (define-key org-mode-map (kbd "C-c %") 'org-mark-ring-goto)
+  (prefer-coding-system 'utf-8-unix)
+  (blink-cursor-mode -1)
+  (column-number-mode 1)                  ; display column number in modeline
+  ;; (display-time-mode 1)                ; disable this to save some modeline space for 2 column views
+  (cond ((eq system-type 'darwin))
+        (t (menu-bar-mode -1)))
+  (scroll-bar-mode -1)
+  (show-paren-mode 1)                     ; highlight matching parenthese
+  (tool-bar-mode -1)
+  (which-function-mode 1)                 ; display function name in modeline
+  (fset 'yes-or-no-p 'y-or-n-p)           ; simplify this
+  (setq-default indent-tabs-mode nil)     ; use space instead of tabs (setq: buffer local var, setq-default global)
+  (setq initial-scratch-message ";; Put your mess here\n\n")
+  (setq inhibit-startup-message nil)
+  (setq inhibit-startup-screen t)
+  (setq large-file-warning-threshold 100000000)
+  (setq scroll-step 1)                    ; don't suddenly roll up a lot of lines
+  (setq tab-width 4)
+  (setq visible-bell t)                   ; flash screen instead of audible ding
+  (if (eq system-type 'darwin)
+      (progn
+        (setq ns-command-modifier (quote control))
+        (setq ns-right-command-modifier (quote meta))))
+  (put 'narrow-to-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+  (global-auto-revert-mode 1)             ;could be more traffic/network
 #+END_SRC
-** Backup files
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; Remove all backup files
-     ;; (setq make-backup-files nil)
-     ;; (setq backup-inhibited t)
-     ;; (setq auto-save-default nil)
-     ;; or alternatively
-     (setq backup-directory-alist '(("." . "~/.saves")))
-   #+END_SRC
+
+*** Backup files
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Remove all backup files
+  ;; (setq make-backup-files nil)
+  ;; (setq backup-inhibited t)
+  ;; (setq auto-save-default nil)
+  ;; or alternatively
+  (setq backup-directory-alist '(("." . "~/.emacs.d/saves")))
+#+END_SRC
 
 ** Language Settings
 
 *** C
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq-default c-default-style "linux")
-      (setq-default c-basic-offset 4)
-      (c-set-offset 'case-label '+)           ; fix case index
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq-default c-default-style "linux")
+  (setq-default c-basic-offset 4)
+  (c-set-offset 'case-label '+)           ; fix case index
+#+END_SRC
 
 *** python
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq python-indent-offset 4)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq python-indent-offset 4)
+#+END_SRC
 
 *** Scons
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (add-to-list 'auto-mode-alist '("\\.scons\\'" . python-mode))
-      (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-to-list 'auto-mode-alist '("\\.scons\\'" . python-mode))
+  (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
+#+END_SRC
 
 *** makefile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-to-list 'auto-mode-alist '("\\.mak\\'" . makefile-mode))
 #+END_SRC
+*** XML completion
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq nxml-slash-auto-complete-flag t)
+#+END_SRC
+
 ** dired
 *** dired-jump
-   load dired key bindings (C-x C-j to go to file location in dired mode)
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'dired-x)
-   #+END_SRC
+Load dired key bindings (C-x C-j to go to file location in dired mode)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'dired-x)
+#+END_SRC
 *** dired copy files
-   With this option on, Emacs automatically copies marked files to another opened dired in another window
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq dired-dwim-target t)
-   #+END_SRC
-
-** XML completion
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq nxml-slash-auto-complete-flag t)
-   #+END_SRC
+With this option on, Emacs automatically copies marked files to another opened dired in another window
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq dired-dwim-target t)
+#+END_SRC
 
 ** whitespace cleanup
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (add-hook 'before-save-hook 'whitespace-cleanup)
-     (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'before-save-hook 'whitespace-cleanup)
+  (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
+#+END_SRC
 
-** recentf location
+** recentf location (machine specific: don't tangle)
    use local disk instead of network drive
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (setq recentf-save-file "/local/mnt/workspace/.recentf")
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle no
+  (setq recentf-save-file "/local/mnt/workspace/.recentf")
+#+END_SRC
 
-   History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
+History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
 
 ** ibuffer
 Disable this due to slow performance
 =from emacs wiki=
 
- - ‘M-s a C-s’ - Do incremental search in the marked buffers.
- - ‘M-s a C-M-s’ - Isearch for regexp in the marked buffers.
- - ‘U’ - Replace by regexp in each of the marked buffers.
- - ‘Q’ - Query replace in each of the marked buffers.
- - ‘I’ - As above, with a regular expression.
- - ‘0’ - Run occur on the marked buffers.
+- ‘M-s a C-s’ - Do incremental search in the marked buffers.
+- ‘M-s a C-M-s’ - Isearch for regexp in the marked buffers.
+- ‘U’ - Replace by regexp in each of the marked buffers.
+- ‘Q’ - Query replace in each of the marked buffers.
+- ‘I’ - As above, with a regular expression.
+- ‘0’ - Run occur on the marked buffers.
 
 *** view subset of buffers
 Also try ibuffer’s “limiting” feature (‘/’), which allows you to just view a subset of your buffers.
@@ -340,7 +218,7 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
 #+END_SRC
 
 ** Abbrev mode
-turn on abbrev minor mode for some major modes
+Turn on abbrev minor mode for some major modes
 
 M-x edit-abbrevs to edit the tables C-x C-s to save it
 
@@ -350,16 +228,15 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
 #+END_SRC
 ** miscellaneous
 
-   Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
+Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+#+END_SRC
 ** global key bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-x t") 'eshell)
   (global-set-key (kbd "C-x y") 'shell)
-
 #+END_SRC
 ** undo limit
 Increase the limits for reading logs and many line flushes
@@ -368,7 +245,134 @@ Increase the limits for reading logs and many line flushes
   (setq undo-outer-limit 150000000)       ; 150M
   (setq undo-strong-limit 200000000)      ; 200M
 #+END_SRC
+** org-mode
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org
+    :ensure org-plus-contrib
+    :hook ((org-mode . org-indent-mode))
+    :bind (("C-c l" . org-store-link)
+           ("C-c a" . org-agenda)
+           ("C-c c" . org-capture)
+           ("C-c b" . org-switchb)
+           :map org-mode-map
+           ;; When you use =C-c C-o= to follow links, if the link is
+           ;; within the document,
+           ;; you can use this command to go back. There is another command
+           ;; =org-mark-ring-push=, which was originally bind to this key.
+           ("C-c %" . org-mark-ring-goto)
+           )
+    :config (progn
+              (setq org-startup-truncated nil)
+              (setq org-use-speed-commands t) ; n and p at the 0 position each heading
+              ;; refile across files, otherwise can only refile within the same file
+              (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+              ;; refile as the top heading, otherwise can only refile as the child of existing headings
+              (setq org-refile-use-outline-path 'file)
+              ;; refile list all possibilities at once, not the default step by step, for helm
+              (setq org-outline-path-complete-in-steps nil)
+              ;; refile can create new parent, must add "/New Heading" at the end
+              (setq org-refile-allow-creating-parent-nodes 'confirm)
+              ;; calendar and dairy
+              (setq org-agenda-include-diary t)
+              ;; closing TODO items
+              (setq org-log-done 'time)
+              ;; customize TODO keywords
+              (setq org-todo-keywords
+                    '(;; Sequence for TASKS
+                      ;; TODO means it's an item that needs addressing
+                      ;; WAITING means it's dependent on something else happening
+                      ;; DELEGATED means someone else is doing it and I need to follow up with them
+                      ;; ASSIGNED means someone else has full, autonomous responsibility for it
+                      ;; CANCELLED means it's no longer necessary to finish
+                      ;; DONE means it's complete
+                      (sequence "TODO(t@/!)" "WAITING(w@/!)" "DELEGATED(e@/!)" "|" "ASSIGNED(a@/!)" "CANCELLED(c@/!)" "DONE(d@/!)")
+                      ))
+              ;; put - STATE change from xx to xx into drawer so when export,
+              ;; these state changes won't be exported
+              (setq org-log-into-drawer t)
+              ;; org babel
+              (setq org-babel-load-languages
+                    (quote
+                     ((emacs-lisp . t)
+                      (shell . t)
+                      (python . t)
+                      (awk . t)
+                      (C . t)
+                      (java . t)
+                      (latex . t)
+                      (makefile . t)
+                      (octave . t))))
+              ;; org export
+              (setq org-export-backends (quote (ascii html latex man md odt groff)))
+
+              ;; capture templates
+                                          ;              (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
+              ))
+#+END_SRC
+
+*** install latest org mode
+Stock emacs comes with very old version of org-mode, to upgrade org-mode, first =emacs -q=, then =eval-region= below code, then package list, find org (and possibly org-plus-contrib) and install it. sometimes direct =package-install= command won't work so you have resort to the =package-list= method.
+#+BEGIN_SRC emacs-lisp :tangle no
+  (require 'package)
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+#+END_SRC
+
+*** org capture and agenda settings
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (cond
+   ((string-equal system-type "windows-nt")
+    (setq org-agenda-path "u:/Documents/org/")) ; this is Windows map of /usr2/xni
+   (t
+    (setq org-agenda-path "~/Documents/org/")))
+
+  (setq org-todo-file (concat org-agenda-path "todo.org"))
+  (setq org-notes-file (concat org-agenda-path "notes.org"))
+  (setq org-log-file (concat org-agenda-path "log.org"))
+  (setq org-finance-file (concat org-agenda-path "finance.org"))
+  (setq org-travel-file (concat org-agenda-path "travel.org"))
+
+  ;; (setq org-agenda-files (list
+  ;;                         org-todo-file
+  ;;                         org-notes-file
+  ;;                         org-log-file
+  ;;                         ))
+
+  (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
+
+  (setq org-capture-templates
+        (quote (
+                ("t" "TODO" entry (file org-todo-file)
+                 "* TODO %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %T\n:END:\n%?" :prepend t)
+
+                ("l" "Work Log" entry (file org-log-file)
+                 "* Week %t \t:worklog:\n%?")
+
+                ("n" "Notes" entry (file org-notes-file)
+                "* %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %U\n:END:\n%?")
+                )))
+#+END_SRC
+
+*** dropped easy template
+from v9.2, org mode got rid of easy template (<s thing), you can get it back by
+#+begin_src emacs-lisp :tangle no
+(require 'org-tempo)
+#+end_src
+but the new replacement is good too. C-c C-, and choose from the pop up list
+
 * Packages
+** org-bullets org-superstar
+=org-bullets= won't change utf 8 symbols for the bullets/lists, but =org-superstar= will.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  ;; traditional method (no auto installing of the package)
+  ;; (require 'org-superstar)                ;more fancy bullets
+  ;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  ;; use-package
+  (use-package org-superstar
+    :hook ((org-mode . (lambda () (org-superstar-mode 1)))))
+#+END_SRC
 ** modeline (doom)
 Depends on =all-the-icons= package and needs to install the fonts once, using =M-x all-the-icons-install-fonts=
 
@@ -378,6 +382,325 @@ Depends on =all-the-icons= package and needs to install the fonts once, using =M
     :ensure t
     :init (doom-modeline-mode 1))
 #+END_SRC
+** which-key
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package which-key
+    :config
+    (which-key-mode 1))
+#+END_SRC
+
+** undo-tree
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package undo-tree
+    :config
+    (global-undo-tree-mode))
+#+END_SRC
+
+** smartparens
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smartparens
+    :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode) . smartparens-mode))
+#+END_SRC
+** captain
+
+Auto capitalize words
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package captain
+    :hook (
+           ;; don't capitalize in programming modes. Only in comment
+           ;; Now I still have a problem, which is in comment, the first
+           ;; word is not capitalized. Second sentence is fine.
+           (prog-mode . (lambda ()
+                          (setq captain-predicate
+                                (lambda () (nth 8 (syntax-ppss (point)))))))
+           ;; Or for text modes, work all the time:
+           (text-mode . (lambda ()
+                          (setq captain-predicate (lambda () t))))
+           ;; Or don't work in source blocks in Org mode:
+           (org-mode . (lambda ()
+                         (setq captain-predicate
+                               (lambda () (not (org-in-src-block-p))))))
+           )
+    :config
+    (global-captain-mode t)
+    (setq sentence-end-double-space nil))
+#+END_SRC
+
+#+RESULTS:
+** bm
+   visual bookmarks
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package bm
+       :bind (
+              ("<C-f2>" . bm-toggle)
+              ("<f2>" . bm-next)
+              ("<S-f2>" . bm-show-all))
+       ;; (global-set-key (kbd "<S-f2>") 'bm-previous)
+       ;; Click on fringe to toggle bookmarks, and use mouse wheel to move between them.
+       ;; (global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
+       ;; (global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
+       ;; (global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
+       ;; If you would like to cycle through bookmarks in all open buffers, add the following line:
+       :config
+       (setq bm-cycle-all-buffers t))
+   #+END_SRC
+
+** dired-narrow
+This belongs to dired-hack, a larger collection of dired enhancements
+
+Here I will bind "/" to dired-narrow
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dired-narrow
+    :bind (:map dired-mode-map
+                ("/" . dired-narrow)))
+  ;;(define-key dired-mode-map (kbd "/") 'dired-narrow)
+#+END_SRC
+** exec path
+   this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (cond ((eq system-type 'darwin)
+            (exec-path-from-shell-initialize)))
+   #+END_SRC
+
+** wgrep-helm
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package wgrep)
+   #+END_SRC
+
+** helm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package helm
+    :hook (helm-occur-mode . wgrep-change-to-wgrep-mode)
+    :bind (("C-c h" . helm-command-prefix)
+           ("M-x" . helm-M-x)
+           ("M-y" . helm-show-kill-ring)
+           ("C-x b" . helm-mini)
+           ("C-x C-f" . helm-find-files)
+           ("M-s o" . helm-occur)
+           :map helm-command-map
+           ("g" . helm-ag)
+           ("d" . helm-do-ag)
+           )
+    :config
+    (require 'helm-config)
+    (setq
+     ;; helm-input-idle-delay                     0.01
+     ;; helm-reuse-last-window-split-state        t
+     ;; helm-always-two-windows                   t
+     ;; helm-split-window-inside-p                nil
+     ;; helm-commands-using-frame                 '(completion-at-point
+     ;;                                             helm-apropos
+     ;;                                             helm-eshell-prompts helm-imenu
+     ;;                                             helm-imenu-in-all-buffers)
+     ;; helm-actions-inherit-frame-settings       t
+     ;; helm-use-frame-when-more-than-two-windows t
+     ;; helm-use-frame-when-dedicated-window      t
+     ;; helm-frame-background-color               "DarkSlateGray"
+     ;; helm-show-action-window-other-window      'left
+     ;; helm-allow-mouse                          t
+     ;; helm-move-to-line-cycle-in-source         t
+     ;; helm-autoresize-max-height                80 ; it is %.
+     ;; helm-autoresize-min-height                20 ; it is %.
+     ;; helm-debug-root-directory                 "/home/thierry/tmp/helm-debug"
+     ;; helm-follow-mode-persistent               t
+     ;; helm-candidate-number-limit               500
+     helm-visible-mark-prefix                  "✓"
+     helm-ff-search-library-in-sexp               t
+     helm-scroll-amount                           8
+     )
+    ;; (set-face-foreground 'helm-mark-prefix "Gold1")
+    ;; (add-to-list 'helm-sources-using-default-as-input 'helm-source-info-bash)
+    ;; (helm-define-key-with-subkeys global-map (kbd "C-c n") ?n 'helm-cycle-resume)
+    )
+  (global-unset-key (kbd "C-x c"))        ;not to confuse with C-x C-c quit
+
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*helm" (* not-newline) "*" eos)
+                 (display-buffer-in-side-window)
+                 (inhibit-same-window . t)
+                 (window-height . 0.4)))
+#+END_SRC
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (require 'helm-config)
+
+     ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+     ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+     ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+     (global-set-key (kbd "C-c h") 'helm-command-prefix)
+     (global-unset-key (kbd "C-x c"))
+
+     (global-set-key (kbd "M-x") 'helm-M-x)
+     (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+     (global-set-key (kbd "C-x b") 'helm-mini)
+     (global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+     ;; for search, still use c-s
+     ;; for read only helm-occur (C-c h M-s o), I bind it to replace occur (M-s o)
+     (global-set-key (kbd "M-s o") 'helm-occur)
+     ;; for multi editing search, use helm-swoop (M-i) see below section
+     ;; no more, helm-swoop is slow for large files, helm-occur is much faster
+     ;; swiper is in between in terms of performance
+     ;; this is to enable edit mode automatically (could bind it to C-x C-q to manually
+     ;; use it) see https://github.com/emacs-helm/helm/issues/2146
+     (add-hook 'helm-occur-mode-hook 'wgrep-change-to-wgrep-mode t)
+
+     ;; make helm open at bottom with full frame width
+     (add-to-list 'display-buffer-alist
+                  `(,(rx bos "*helm" (* not-newline) "*" eos)
+                    (display-buffer-in-side-window)
+                    (inhibit-same-window . t)
+                    (window-height . 0.4)))
+     ;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+     ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+     ;; (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
+
+     ;; (when (executable-find "curl")
+     ;;   (setq helm-google-suggest-use-curl-p t)) ;not sure what this is for
+
+     (setq
+      ;; helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+           ;; helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+           helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+           helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+           ;; helm-ff-file-name-history-use-recentf t
+           )
+
+     (helm-mode 1)                           ; turn on helm mode for kill buffer etc
+
+   #+END_SRC
+
+** helm-gtags
+Requires GNU Global
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package helm-gtags
+       :hook ((c-mode c++-mode java-mode asm-mode) . helm-gtags-mode)
+       :bind (:map helm-gtags-mode-map
+                   ("M-." . helm-gtags-dwim)
+                   ("M-," . helm-gtags-pop-stack)
+                   ("C-c <" . helm-gtags-previous-history)
+                   ("C-c >" . helm-gtags-next-history)
+              ;; (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+              ;; (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+              ;; (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+              ;; (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+              ;; (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+              ;; (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+              ;; (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+              ;; (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+              ;; (define-key helm-gtags-mode-map (kbd "C-x k") 'kill-buffer)
+                   )
+       :config
+       (setq helm-gtags-auto-update t)
+       (setq helm-gtags-suggested-key-mapping t)
+       )
+
+   #+END_SRC
+** helm-projectile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package helm-projectile
+    :bind-keymap ("C-c p" . projectile-command-map)
+    :config
+    (helm-projectile-on)
+    (projectile-mode t)
+    (setq projectile-enable-caching t)
+    (setq projectile-globally-ignored-directories
+          (quote
+           (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Debug*")))
+    (setq projectile-globally-ignored-file-suffixes
+          (quote
+           ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
+    (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
+    (setq projectile-completion-system 'helm)
+    (setq projectile-indexing-method 'hybrid)
+    )
+  ;; after upgrade packages need to add this
+  ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+  ;; change projectile indexing method for Windows
+  ;; (cond ((eq system-type 'windows-nt)
+  ;;        (setq projectile-indexing-method 'alien)))
+  ;; now change indexing to hybrid for all platforms, for new version of
+  ;; projectile this is fast enough even on Windows, and also alien method
+  ;; won't allow using .projectile file
+  ;; I am using .projectile file to exclude some files/dirs
+  ;; I am using .dir-locals.el to customize compilation dir and cmd2
+  ;; (setq projectile-indexing-method 'hybrid)
+#+END_SRC
+
+** helm-swoop
+Disable due to slowness in large files
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;; helm from https://github.com/emacs-helm/helm
+  (require 'helm)
+
+  ;; Locate the helm-swoop folder to your path
+  (add-to-list 'load-path "~/.emacs.d/elisp/helm-swoop")
+  (require 'helm-swoop)
+
+  ;; Change the keybinds to whatever you like :)
+  (global-set-key (kbd "M-i") 'helm-swoop)
+  (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+  (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+  (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+
+  ;; When doing isearch, hand the word over to helm-swoop
+  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+  ;; From helm-swoop to helm-multi-swoop-all
+  (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+  ;; When doing evil-search, hand the word over to helm-swoop
+  ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
+
+  ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+  (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+
+  ;; Move up and down like isearch
+  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+  (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+  (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+
+  ;; Save buffer when helm-multi-swoop-edit complete
+  (setq helm-multi-swoop-edit-save t)
+
+  ;; If this value is t, split window inside the current window
+  (setq helm-swoop-split-with-multiple-windows nil)
+
+  ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+  (setq helm-swoop-split-direction 'split-window-vertically)
+
+  ;; If nil, you can slightly boost invoke speed in exchange for text color
+  (setq helm-swoop-speed-or-color t)
+
+  ;; ;; Go to the opposite side of line from the end or beginning of line
+  (setq helm-swoop-move-to-line-cycle t)
+
+  ;; Optional face for line numbers
+  ;; Face name is `helm-swoop-line-number-face`
+  (setq helm-swoop-use-line-number-face t)
+
+  ;; If you prefer fuzzy matching
+  (setq helm-swoop-use-fuzzy-match nil)
+
+  ;; If you would like to use migemo, enable helm's migemo feature
+  ;; (helm-migemo-mode 1)
+
+#+END_SRC
+** helm-ag
+add key bindings
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package helm-ag
+    :hook (helm-ag-mode . wgrep-change-to-wgrep-mode)
+    )
+  ;; (global-set-key (kbd "C-c h g") 'helm-ag)
+  ;; (global-set-key (kbd "C-c h d") 'helm-do-ag)
+  ;; automatically turn to wgrep mode if C-c C-s if pressed
+  ;; (add-hook 'helm-ag-mode-hook 'wgrep-change-to-wgrep-mode t)
+
+#+END_SRC
+
+#+RESULTS:
+: helm-do-ag
 ** ivy, counsel, swiper
 
 How to use *Nuclear weapon of multi-editing* in Ivy?
@@ -451,252 +774,66 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
          (setq projectile-indexing-method 'alien)))
 #+END_SRC
 
-** helm
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'helm-config)
-
-     ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-     ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-     ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-     (global-set-key (kbd "C-c h") 'helm-command-prefix)
-     (global-unset-key (kbd "C-x c"))
-
-     (global-set-key (kbd "M-x") 'helm-M-x)
-     (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-     (global-set-key (kbd "C-x b") 'helm-mini)
-     (global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-     ;; for search, still use c-s
-     ;; for read only helm-occur (C-c h M-s o), I bind it to replace occur (M-s o)
-     (global-set-key (kbd "M-s o") 'helm-occur)
-     ;; for multi editing search, use helm-swoop (M-i) see below section
-     ;; no more, helm-swoop is slow for large files, helm-occur is much faster
-     ;; swiper is in between in terms of performance
-     ;; this is to enable edit mode automatically (could bind it to C-x C-q to manually
-     ;; use it) see https://github.com/emacs-helm/helm/issues/2146
-     (add-hook 'helm-occur-mode-hook 'wgrep-change-to-wgrep-mode t)
-
-     ;; make helm open at bottom with full frame width
-     (add-to-list 'display-buffer-alist
-                  `(,(rx bos "*helm" (* not-newline) "*" eos)
-                    (display-buffer-in-side-window)
-                    (inhibit-same-window . t)
-                    (window-height . 0.4)))
-     ;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-     ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-     ;; (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
-
-     ;; (when (executable-find "curl")
-     ;;   (setq helm-google-suggest-use-curl-p t)) ;not sure what this is for
-
-     (setq
-      ;; helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-           ;; helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-           helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-           helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-           ;; helm-ff-file-name-history-use-recentf t
-           )
-
-     (helm-mode 1)                           ; turn on helm mode for kill buffer etc
-
-   #+END_SRC
-
-** helm-gtags
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'helm-gtags)
-     ;; (add-hook 'dired-mode-hook 'helm-gtags-mode)
-     ;; (add-hook 'eshell-mode-hook 'helm-gtags-mode)
-     (add-hook 'c-mode-hook 'helm-gtags-mode)
-     (add-hook 'c++-mode-hook 'helm-gtags-mode)
-     (add-hook 'java-mode-hook 'helm-gtags-mode)
-     (add-hook 'asm-mode-hook 'helm-gtags-mode)
-     ;; for python, use elpy-goto-definition (same key)
-     ;; (add-hook 'python-mode-hook 'helm-gtags-mode)
-
-     (setq helm-gtags-auto-update t)
-     (setq helm-gtags-suggested-key-mapping t)
-
-     ;; key bindings
-     (eval-after-load "helm-gtags"
-       '(progn
-          (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-          ;; (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-          ;; (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-          ;; (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-          ;; (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-          (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-          (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-          (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
-
-     ;; key bindings (old)
-     ;; (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-     ;; (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-     ;; (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-     ;; (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-     ;; (define-key helm-gtags-mode-map (kbd "C-x k") 'kill-buffer)
-     (provide 'setup-helm-gtags)
-   #+END_SRC
-** helm-projectile
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (helm-projectile-on)
-     (projectile-mode t)
-     (setq projectile-enable-caching t)
-     (setq projectile-globally-ignored-directories
-      (quote
-       (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Debug*")))
-     (setq projectile-globally-ignored-file-suffixes
-      (quote
-       ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
-     (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
-
-     (setq projectile-completion-system 'helm)
-     ;; after upgrade packages need to add this
-     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
-     ;; change projectile indexing method for Windows
-     ;; (cond ((eq system-type 'windows-nt)
-     ;;        (setq projectile-indexing-method 'alien)))
-     ;; now change indexing to hybrid for all platforms, for new version of
-     ;; projectile this is fast enough even on Windows, and also alien method
-     ;; won't allow using .projectile file
-     ;; I am using .projectile file to exclude some files/dirs
-     ;; I am using .dir-locals.el to customize compilation dir and cmd2
-     (setq projectile-indexing-method 'hybrid)
-   #+END_SRC
-
-** helm-swoop
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; helm from https://github.com/emacs-helm/helm
-  (require 'helm)
-
-  ;; Locate the helm-swoop folder to your path
-  (add-to-list 'load-path "~/.emacs.d/elisp/helm-swoop")
-  (require 'helm-swoop)
-
-  ;; Change the keybinds to whatever you like :)
-  (global-set-key (kbd "M-i") 'helm-swoop)
-  (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-  (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
-  (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
-
-  ;; When doing isearch, hand the word over to helm-swoop
-  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-  ;; From helm-swoop to helm-multi-swoop-all
-  (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-  ;; When doing evil-search, hand the word over to helm-swoop
-  ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
-
-  ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-  (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-
-  ;; Move up and down like isearch
-  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-  (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-
-  ;; Save buffer when helm-multi-swoop-edit complete
-  (setq helm-multi-swoop-edit-save t)
-
-  ;; If this value is t, split window inside the current window
-  (setq helm-swoop-split-with-multiple-windows nil)
-
-  ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-  (setq helm-swoop-split-direction 'split-window-vertically)
-
-  ;; If nil, you can slightly boost invoke speed in exchange for text color
-  (setq helm-swoop-speed-or-color t)
-
-  ;; ;; Go to the opposite side of line from the end or beginning of line
-  (setq helm-swoop-move-to-line-cycle t)
-
-  ;; Optional face for line numbers
-  ;; Face name is `helm-swoop-line-number-face`
-  (setq helm-swoop-use-line-number-face t)
-
-  ;; If you prefer fuzzy matching
-  (setq helm-swoop-use-fuzzy-match nil)
-
-  ;; If you would like to use migemo, enable helm's migemo feature
-  ;; (helm-migemo-mode 1)
-
-#+END_SRC
-** helm-ag
-add key bindings
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (global-set-key (kbd "C-c h g") 'helm-ag)
-  (global-set-key (kbd "C-c h d") 'helm-do-ag)
-  ;; automatically turn to wgrep mode if C-c C-s if pressed
-  (add-hook 'helm-ag-mode-hook 'wgrep-change-to-wgrep-mode t)
-
-#+END_SRC
-
-#+RESULTS:
-: helm-do-ag
 ** auto remove old packages
 #+BEGIN_SRC emacs-lisp :tangle yes
 (setq auto-package-update-delete-old-version t)
 #+END_SRC
 ** window-numbering
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (window-numbering-mode 1)
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package window-numbering
+    :config
+    (window-numbering-mode 1)
+    )
+#+END_SRC
 
 ** Version Control
 *** magit
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (if (eq system-type 'windows-nt)
-          (setq magit-git-executable "c:\\Program Files\\Git\\bin\\git.exe")
-        )
-      (global-set-key (kbd "C-x g") 'magit-status)
-      (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
-      ;; turn off diff when doing commit, use C-c C-d to see the diff manually
-      ;; if not turned off, for large commits, it will be very slow, alternative
-      ;; way is to C-g to cancel diff when committing, but will end up with an
-      ;; broken diff buffer
-      (remove-hook 'server-switch-hook 'magit-commit-diff)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package magit
+    :bind (("C-x g" . magit-status)
+           ("C-x M-g" . magit-dispatch-popup))
+    :config
+    (if (eq system-type 'windows-nt)
+        (setq magit-git-executable "c:\\Program Files\\Git\\bin\\git.exe")
+      )
+    ;; turn off diff when doing commit, use C-c C-d to see the diff manually
+    ;; if not turned off, for large commits, it will be very slow, alternative
+    ;; way is to C-g to cancel diff when committing, but will end up with an
+    ;; broken diff buffer
+    (remove-hook 'server-switch-hook 'magit-commit-diff)
+    )
+  ;; (global-set-key (kbd "C-x g") 'magit-status)
+  ;; (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+#+END_SRC
 
 *** p4
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (load-library "p4")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package p4
+    :config
+    (load-library "p4")
+  )
+#+END_SRC
 
 ** grep-a-lot
    #+BEGIN_SRC emacs-lisp :tangle no
      (require 'grep-a-lot)
      (grep-a-lot-setup-keys)
    #+END_SRC
-** org-bullets org-superstar
-=org-bullets= won't change utf 8 symbols for the bullets/lists, but =org-superstar= will.
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-     ;; traditional method (no auto installing of the package)
-     ;; (require 'org-superstar)                ;more fancy bullets
-     ;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-     ;; use-package
-     (use-package org-superstar
-       :hook ((org-mode . (lambda () (org-superstar-mode 1)))))
-   #+END_SRC
 ** org-web-tools
 Install pandoc (needed), install org-web-tools from the MELPA
 ** yasnippet
 
-   only enable yas-minor-mode for certain major modes
+Only enable yas-minor-mode for certain major modes
 
-   #+begin_src emacs-lisp :tangle yes
-     (require 'yasnippet)
-     (yas-reload-all)
-     (add-hook 'org-mode-hook #'yas-minor-mode)
-     (add-hook 'c-mode-hook #'yas-minor-mode)
-     (add-hook 'c++-mode-hook #'yas-minor-mode)
-     (add-hook 'python-mode-hook #'yas-minor-mode)
-     (add-hook 'sh-mode-hook #'yas-minor-mode)
-     (add-hook 'nroff-mode-hook #'yas-minor-mode)
-     (add-hook 'LaTeX-mode-hook #'yas-minor-mode)
-     (add-hook 'nxml-mode-hook #'yas-minor-mode)
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  (use-package yasnippet
+    :hook ((org-mode c-mode c++-mode python-mode sh-mode nroff-mode LaTeX-mode nxml-mode) . yas-minor-mode)
+    :config
+    (yas-reload-all)
+    )
+  (use-package yasnippet-snippets)
+#+end_src
 
 ** notmuch-emacs
 
@@ -726,40 +863,53 @@ Some helpful commands
    #+END_SRC
 
 ** company mode
-   global mode will slow down eshell even hang it.
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; (add-hook 'after-init-hook 'global-company-mode)
-     (add-hook 'c-mode-hook 'company-mode)
-     (add-hook 'c++-mode-hook 'company-mode)
-     (add-hook 'text-mode-hook 'company-mode)
-     (add-hook 'sh-mode-hook 'company-mode)
-     (add-hook 'python-mode-hook 'company-mode)
-     (add-hook 'emacs-lisp-mode-hook 'company-mode)
-     (add-hook 'org-mode-hook 'company-mode)
-     (add-hook 'lisp-mode-hook 'company-mode)
-   #+END_SRC
+Global mode will slow down eshell even hang it.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company
+    :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode) . company-mode)
+    )
+  ;; (add-hook 'after-init-hook 'global-company-mode) ;; not use
+  ;; (add-hook 'c-mode-hook 'company-mode)
+  ;; (add-hook 'c++-mode-hook 'company-mode)
+  ;; (add-hook 'text-mode-hook 'company-mode)
+  ;; (add-hook 'sh-mode-hook 'company-mode)
+  ;; (add-hook 'python-mode-hook 'company-mode)
+  ;; (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  ;; (add-hook 'org-mode-hook 'company-mode)
+  ;; (add-hook 'lisp-mode-hook 'company-mode)
+#+END_SRC
 
 ** irony-mode
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (add-hook 'c-mode-hook 'irony-mode)
-     (add-hook 'c++-mode-hook 'irony-mode)
-
-     ;; Windows performance tweaks
-     ;;
-     (when (boundp 'w32-pipe-read-delay)
-       (setq w32-pipe-read-delay 0))
-     ;; Set the buffer size to 64K on Windows (from the original 4K)
-     (when (boundp 'w32-pipe-buffer-size)
-       (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package irony
+    :hook ((c-mode c++-mode) . irony-mode)
+    :config
+    ;; Windows performance tweaks
+    ;;
+    (when (boundp 'w32-pipe-read-delay)
+      (setq w32-pipe-read-delay 0))
+    ;; Set the buffer size to 64K on Windows (from the original 4K)
+    (when (boundp 'w32-pipe-buffer-size)
+      (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
+    )
+  ;; (add-hook 'c-mode-hook 'irony-mode)
+  ;; (add-hook 'c++-mode-hook 'irony-mode)
+#+END_SRC
 
 ** company-irony
-   use this as backend instead of company-clang for C/C++/Objective-C
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (eval-after-load 'company
-       '(add-to-list 'company-backends '(company-irony-c-headers company-irony)))
-     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-   #+END_SRC
+Use this as backend instead of company-clang for C/C++/Objective-C
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-irony-c-headers)
+  (use-package company-irony
+    :hook (irony-mode . irony-cdb-autosetup-compile-options)
+    :config
+    (eval-after-load 'company
+      '(add-to-list 'company-backends '(company-irony-c-headers company-irony)))
+    )
+  ;; (eval-after-load 'company
+  ;;   '(add-to-list 'company-backends '(company-irony-c-headers company-irony)))
+  ;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+#+END_SRC
 
 ** diminish
 NOTE mode must be diminished after it's loaded (eval-after-load)
@@ -795,7 +945,7 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 ** delight
 NOTE mode must be diminished after it's loaded (eval-after-load)
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (require 'delight)
      ;; (delight 'helm-mode)
      ;; (delight 'abbrev-mode)
@@ -829,99 +979,50 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 
    #+END_SRC
 
-** exec path
-   this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (cond ((eq system-type 'darwin)
-            (exec-path-from-shell-initialize)))
-   #+END_SRC
-
-** bm
-   visual bookmarks
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'bm)
-     (global-set-key (kbd "<C-f2>") 'bm-toggle)
-     (global-set-key (kbd "<f2>")   'bm-next)
-     (global-set-key (kbd "<S-f2>") 'bm-show-all)
-     ;; (global-set-key (kbd "<S-f2>") 'bm-previous)
-     ;; Click on fringe to toggle bookmarks, and use mouse wheel to move between them.
-     (global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
-     (global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
-     (global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
-     ;; If you would like to cycle through bookmarks in all open buffers, add the following line:
-     (setq bm-cycle-all-buffers t)
-   #+END_SRC
-
 ** AucTeX
-   auto save when compile
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq TeX-save-query nil)
-     (cond ((eq system-type 'windows-nt)
-            (setq TeX-view-program-list
-                  '(("Sumatra PDF"
-                     ("\"c:/Program Files/SumatraPDF/SumatraPDF.exe\" -reuse-instance"
-                      (mode-io-correlate " -forward-search \"%b\" %n ") " %o"))))
-            (setq TeX-view-program-selection
-                  '(((output-dvi style-pstricks) "dvips and start") (output-dvi "Yap")
-                    (output-pdf "Sumatra PDF") (output-html "start"))))
-           )
-   #+END_SRC
+Auto save when compile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package auctex
+    :ensure t
+    :defer t
+    :config
+    (setq TeX-save-query nil)
+    (cond ((eq system-type 'windows-nt)
+           (setq TeX-view-program-list
+                 '(("Sumatra PDF"
+                    ("\"c:/Program Files/SumatraPDF/SumatraPDF.exe\" -reuse-instance"
+                     (mode-io-correlate " -forward-search \"%b\" %n ") " %o"))))
+           (setq TeX-view-program-selection
+                 '(((output-dvi style-pstricks) "dvips and start") (output-dvi "Yap")
+                   (output-pdf "Sumatra PDF") (output-html "start"))))
+          )
+    )
+#+END_SRC
 
 ** elpy
-   python IDE like
+python IDE like
 
 *NOTE* elpy-config is different on different machines, mainly because of python difference
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (advice-add 'python-mode :before 'elpy-enable)
-     ;; (add-hook 'elpy-mode-hook
-     ;;           '(lambda () (local-unset-key (kbd "M-.") 'xref-find-definitions)))
-     (add-hook 'elpy-mode-hook
-               '(lambda () (local-set-key (kbd "M-.") 'elpy-goto-definition)))
-     (add-hook 'elpy-mode-hook
-               '(lambda () (local-set-key (kbd "M-]") 'xref-find-definitions)))
-   #+END_SRC
-
-** wgrep-helm
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (require 'wgrep)
-   #+END_SRC
-
-** which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
-(which-key-mode)
+  (use-package elpy
+    :hook (
+           (elpy-mode . (lambda () (local-set-key (kbd "M-.") 'elpy-goto-definition)))
+           (elpy-mode . (lambda () (local-set-key (kbd "M-]") 'xref-find-definitions))))
+    :config
+    (advice-add 'python-mode :before 'elpy-enable)
+    )
+  ;; ;; (add-hook 'elpy-mode-hook
+  ;; ;;           '(lambda () (local-unset-key (kbd "M-.") 'xref-find-definitions)))
+  ;; (add-hook 'elpy-mode-hook
+  ;;           '(lambda () (local-set-key (kbd "M-.") 'elpy-goto-definition)))
+  ;; (add-hook 'elpy-mode-hook
+  ;;           '(lambda () (local-set-key (kbd "M-]") 'xref-find-definitions)))
 #+END_SRC
 
-** undo-tree
-#+BEGIN_SRC emacs-lisp :tangle yes
-(require 'undo-tree)
-(global-undo-tree-mode)
-#+END_SRC
-
-** smartparens
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (require 'smartparens-config)
-
-  (add-hook 'c-mode-hook 'smartparens-mode)
-  (add-hook 'c++-mode-hook 'smartparens-mode)
-  ;; (add-hook 'text-mode-hook 'smartparens-mode)
-  (add-hook 'sh-mode-hook 'smartparens-mode)
-  (add-hook 'python-mode-hook 'smartparens-mode)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
-  (add-hook 'org-mode-hook 'smartparens-mode)
-  ;; (add-hook 'lisp-mode-hook 'smartparens-mode)
-  ;; (add-hook 'nxml-mode-hook 'smartparens-mode)
-#+END_SRC
 ** crux
 #+BEGIN_SRC emacs-lisp :tangle no
 (global-set-key (kbd "C-c t") 'crux-visit-term-buffer)
-#+END_SRC
-** dired-narrow
-This belongs to dired-hack, a larger collection of dired enhancements
-
-Here I will bind "/" to dired-narrow
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (define-key dired-mode-map (kbd "/") 'dired-narrow)
 #+END_SRC
 ** ibuffer-projectile
 
@@ -947,40 +1048,8 @@ Here I will bind "/" to dired-narrow
 
 #+RESULTS:
 | lambda | nil | (ibuffer-projectile-set-filter-groups) | (unless (eq ibuffer-sorting-mode (quote alphabetic)) (ibuffer-do-sort-by-alphabetic)) |
-** captain
-
-Auto capitalize words
-#+BEGIN_SRC emacs-lisp :tangle yes
-
-  (global-captain-mode t)
-
-  ;; don't capitalize in programming modes. Only in comment
-  ;; Now I still have a problem, which is in comment, the first
-  ;; word is not capitalized. Second sentence is fine.
-  (add-hook 'prog-mode-hook
-     (lambda ()
-       (setq captain-predicate
-             (lambda () (nth 8 (syntax-ppss (point)))))))
-
-  ;; Or for text modes, work all the time:
-  (add-hook 'text-mode-hook
-            (lambda ()
-              (setq captain-predicate (lambda () t))))
-
-  ;; Or don't work in source blocks in Org mode:
-  (add-hook
-   'org-mode-hook
-   (lambda ()
-     (setq captain-predicate
-           (lambda () (not (org-in-src-block-p))))))
-
-
-  (setq sentence-end-double-space nil)
-#+END_SRC
-
-#+RESULTS:
 ** avy
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "C-:") 'avy-goto-char)   ;input 1 char
   (global-set-key (kbd "C-'") 'avy-goto-char-2) ;input 2 chars
   (global-set-key (kbd "M-g f") 'avy-goto-line) ;input chars at line start
@@ -993,68 +1062,68 @@ Auto capitalize words
 * Self-defined Commands
 
 ** insert-date
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (defun insert-date (prefix)
-       "Insert the current date. With prefix-argument, use ISO format. With
-        two prefix arguments, write out the day and month name."
-       (interactive "P")
-       (let ((format (cond
-                      ;; ((not prefix) "%d.%m.%Y")
-                      ;; ((equal prefix '(4)) "%Y-%m-%d")
-                      ((not prefix) "%b. %d, %Y")))
-             (system-time-locale "en_US"))
-         (insert (format-time-string format))))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun insert-date (prefix)
+    "Insert the current date. With prefix-argument, use ISO format. With
+     two prefix arguments, write out the day and month name."
+    (interactive "P")
+    (let ((format (cond
+                   ;; ((not prefix) "%d.%m.%Y")
+                   ;; ((equal prefix '(4)) "%Y-%m-%d")
+                   ((not prefix) "%b. %d, %Y")))
+          (system-time-locale "en_US"))
+      (insert (format-time-string format))))
+#+END_SRC
 
 ** Toggle window split directions
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (defun toggle-window-split ()
-       (interactive)
-       (if (= (count-windows) 2)
-           (let* ((this-win-buffer (window-buffer))
-                  (next-win-buffer (window-buffer (next-window)))
-                  (this-win-edges (window-edges (selected-window)))
-                  (next-win-edges (window-edges (next-window)))
-                  (this-win-2nd (not (and (<= (car this-win-edges)
-                                              (car next-win-edges))
-                                          (<= (cadr this-win-edges)
-                                              (cadr next-win-edges)))))
-                  (splitter
-                   (if (= (car this-win-edges)
-                          (car (window-edges (next-window))))
-                       'split-window-horizontally
-                     'split-window-vertically)))
-             (delete-other-windows)
-             (let ((first-win (selected-window)))
-               (funcall splitter)
-               (if this-win-2nd (other-window 1))
-               (set-window-buffer (selected-window) this-win-buffer)
-               (set-window-buffer (next-window) next-win-buffer)
-               (select-window first-win)
-               (if this-win-2nd (other-window 1))))))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun toggle-window-split ()
+    (interactive)
+    (if (= (count-windows) 2)
+        (let* ((this-win-buffer (window-buffer))
+               (next-win-buffer (window-buffer (next-window)))
+               (this-win-edges (window-edges (selected-window)))
+               (next-win-edges (window-edges (next-window)))
+               (this-win-2nd (not (and (<= (car this-win-edges)
+                                           (car next-win-edges))
+                                       (<= (cadr this-win-edges)
+                                           (cadr next-win-edges)))))
+               (splitter
+                (if (= (car this-win-edges)
+                       (car (window-edges (next-window))))
+                    'split-window-horizontally
+                  'split-window-vertically)))
+          (delete-other-windows)
+          (let ((first-win (selected-window)))
+            (funcall splitter)
+            (if this-win-2nd (other-window 1))
+            (set-window-buffer (selected-window) this-win-buffer)
+            (set-window-buffer (next-window) next-win-buffer)
+            (select-window first-win)
+            (if this-win-2nd (other-window 1))))))
+#+END_SRC
 
 ** handle large files
 
-   Found this code via stack overflow, comment out the set buffer read only part.
+Found this code via stack overflow, comment out the set buffer read only part.
 
-   Notice this is setting the =fundamental-mode=, so later on I can manually set to any mode so that the syntax highlighting will be enabled, e.g., =asm-mode= for lst files.
+Notice this is setting the =fundamental-mode=, so later on I can manually set to any mode so that the syntax highlighting will be enabled, e.g., =asm-mode= for lst files.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (defun my-find-file-check-make-large-file-read-only-hook ()
-       "If a file is over a given size, make the buffer read only."
-       (when (> (buffer-size) (* 1024 1024)) ; 1M size
-         ;; (setq buffer-read-only t)
-         (buffer-disable-undo)
-         (fundamental-mode)))
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun my-find-file-check-make-large-file-read-only-hook ()
+    "If a file is over a given size, make the buffer read only."
+    (when (> (buffer-size) (* 1024 1024)) ; 1M size
+      ;; (setq buffer-read-only t)
+      (buffer-disable-undo)
+      (fundamental-mode)))
 
-     (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
-   #+END_SRC
+  (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
+#+END_SRC
 * bug fix for linux font size
-  #+BEGIN_SRC emacs-lisp :tangle yes
-    (define-key special-event-map [config-changed-event] #'ignore)
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (define-key special-event-map [config-changed-event] #'ignore)
+#+END_SRC
 
 * Emacs server
 #+begin_src emacs-lisp :tangle yes

@@ -6,6 +6,7 @@
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
   (when (< emacs-major-version 24)
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
@@ -39,17 +40,29 @@
 (defun recent-file (file1 file2)
   (string< (file-last-mod-time file1) (file-last-mod-time file2)))
 
-(if (recent-file "~/.emacs.d/config.org" "~/.emacs.d/config.el")
-    (load "~/.emacs.d/config.el")
-  (org-babel-load-file
-   (expand-file-name "config.org"
-                     user-emacs-directory)))
+(if (file-exists-p "~/.emacs.d/config.el")
+    (if (recent-file "~/.emacs.d/config.org" "~/.emacs.d/config.el")
+	(load "~/.emacs.d/config.el")
+      (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
+  (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
 
 ;; load custom.el for themes
-(load "~/.emacs.d/custom.el")
+;; (load "~/.emacs.d/custom.el")
 ;; (require 'custom)
 
 ;; ----------------------------------------------------------------
 ;; Idealy there should be nothing below this line
 ;; as long as there is no `customize.el' used in the configuration
 ;; ----------------------------------------------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(doom-themes use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
