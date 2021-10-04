@@ -245,6 +245,7 @@ Increase the limits for reading logs and many line flushes
   (setq undo-outer-limit 150000000)       ; 150M
   (setq undo-strong-limit 200000000)      ; 200M
 #+END_SRC
+* Packages
 ** org-mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -351,7 +352,6 @@ from v9.2, org mode got rid of easy template (<s thing), you can get it back by
 #+end_src
 but the new replacement is good too. C-c C-, and choose from the pop up list
 
-* Packages
 ** org-bullets org-superstar
 =org-bullets= won't change utf 8 symbols for the bullets/lists, but =org-superstar= will.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -363,6 +363,8 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
   (use-package org-superstar
     :hook ((org-mode . (lambda () (org-superstar-mode 1)))))
 #+END_SRC
+** org-web-tools
+Install pandoc (needed), install org-web-tools from the MELPA
 ** modeline (doom)
 Depends on =all-the-icons= package and needs to install the fonts once, using =M-x all-the-icons-install-fonts=
 
@@ -461,7 +463,7 @@ Here I will bind "/" to dired-narrow
    #+END_SRC
 
 ** helm
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package helm
     :hook (helm-occur-mode . wgrep-change-to-wgrep-mode)
     :bind (("C-c h" . helm-command-prefix)
@@ -520,7 +522,7 @@ Here I will bind "/" to dired-narrow
 
 ** helm-gtags
 Requires GNU Global
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (use-package helm-gtags
        :hook ((c-mode c++-mode java-mode asm-mode) . helm-gtags-mode)
        :bind (:map helm-gtags-mode-map
@@ -545,7 +547,7 @@ Requires GNU Global
 
    #+END_SRC
 ** helm-projectile
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package helm-projectile
     :bind-keymap ("C-c p" . projectile-command-map)
     :config
@@ -636,7 +638,7 @@ Disable due to slowness in large files
 #+END_SRC
 ** helm-ag
 add key bindings
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package helm-ag
     :hook (helm-ag-mode . wgrep-change-to-wgrep-mode)
     )
@@ -649,7 +651,7 @@ add key bindings
 
 #+RESULTS:
 : helm-do-ag
-** ivy, counsel, swiper
+** ivy, swiper, counsel, counsel-gtags, counsel-projectile
 
 How to use *Nuclear weapon of multi-editing* in Ivy?
 In helm, you can use helm-ag to search and C-c C-e to open results in another window, and then edit them, and then C-c C-c to commit.
@@ -660,28 +662,104 @@ In helm, C-x b open buffer list, C-spc to mark buffers, C-s to search within mar
 
 This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you cannot mark buffers)
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
+  (use-package counsel
+    :after ivy
+    ;; :bind-keymap (("C-c h" . counsel-mode-map))
+    :bind (("M-x" . counsel-M-x)
+           ;; ("C-x b" . counsel-switch-buffer)
+           ("C-c h i" . counsel-semantic-or-imenu))
+    :config (counsel-mode))
 
-  (setq ivy-use-virtual-buffers t)        ;
-  (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-initial-inputs-alist nil)     ;remove ^
+  (use-package ivy
+    :defer 0.1
+    :diminish
+    :bind (("C-c C-r" . ivy-resume)
+           ("C-x B" . ivy-switch-buffer-other-window))
+    :config
+    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-initial-inputs-alist nil)     ;remove ^
+    (setq ivy-height-alist
+          '((t
+             lambda (_caller)
+             (/ (* (frame-height) 2) 5))))
+    (ivy-mode))
 
-  (setq ivy-height-alist
-        '((t
-           lambda (_caller)
-           (/ (* (frame-height) 2) 5))))
+  ;; (use-package ivy-rich
+  ;;   :after ivy
+  ;;   :custom
+  ;;   (ivy-virtual-abbreviate 'full
+  ;;                           ivy-rich-switch-buffer-align-virtual-buffer t
+  ;;                           ivy-rich-path-style 'abbrev)
+  ;;   :config
+  ;;   (ivy-set-display-transformer 'ivy-switch-buffer
+  ;;                                'ivy-rich-switch-buffer-transformer))
 
-  (global-set-key (kbd "C-s") 'swiper)
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-c h g") 'counsel-ag)
+  (use-package swiper
+    :after ivy
+    :bind (("C-s" . swiper)
+           ("C-r" . swiper)))
 
-  (ivy-mode 1)
-  (counsel-mode 1)
-  ;; use amx instead, ivy-prescient will alter ag results as well, not wanted.
-  ;; amx must be installed, it will be auto-picked by ivy, amx is forked from smex, which stays at 2015 release (old)
-  ;; (ivy-prescient-mode)
-  ;; this must be after counsel is loaded
-  (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
+  (use-package counsel-ag-popup
+    :after counsel
+    :bind (("C-c h g" . counsel-ag)))
+
+  (use-package counsel-gtags
+    :hook ((c-mode c++-mode java-mode asm-mode) . counsel-gtags-mode)
+    :bind (
+           ("M-." . counsel-gtags-dwim)
+           ("M-," . counsel-gtags-go-backward)
+           ;; ("M-t" . counsel-gtags-find-definition)
+           ;; ("M-r" . counsel-gtags-find-reference)
+           ;; ("M-s" . counsel-gtags-find-symbol)
+           )
+    )
+
+  (use-package counsel-projectile
+    :bind-keymap ("C-c p" . projectile-command-map)
+    :config
+    (counsel-projectile-mode)
+    (projectile-mode t)
+    (setq projectile-enable-caching t)
+    (setq projectile-globally-ignored-directories
+          (quote
+           (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Debug*")))
+    (setq projectile-globally-ignored-file-suffixes
+          (quote
+           ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
+    (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
+    (setq projectile-completion-system 'ivy)
+
+    ;; change projectile indexing method for Windows
+    (cond ((eq system-type 'windows-nt)
+           (setq projectile-indexing-method 'alien)))
+    )
+
+  (use-package ivy-prescient)
+  (use-package amx)
+
+
+  ;; (setq ivy-use-virtual-buffers t)        ;
+  ;; (setq ivy-count-format "(%d/%d) ")
+  ;; (setq ivy-initial-inputs-alist nil)     ;remove ^
+
+  ;; (setq ivy-height-alist
+  ;;       '((t
+  ;;          lambda (_caller)
+  ;;          (/ (* (frame-height) 2) 5))))
+
+  ;; (global-set-key (kbd "C-s") 'swiper)
+  ;; (global-set-key (kbd "M-x") 'counsel-M-x)
+  ;; (global-set-key (kbd "C-c h g") 'counsel-ag)
+
+  ;; (ivy-mode 1)
+  ;; (counsel-mode 1)
+  ;; ;; use amx instead, ivy-prescient will alter ag results as well, not wanted.
+  ;; ;; amx must be installed, it will be auto-picked by ivy, amx is forked from smex, which stays at 2015 release (old)
+  ;; ;; (ivy-prescient-mode)
+  ;; ;; this must be after counsel is loaded
+  ;; (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
 #+end_src
 ** counsel-gtags
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -768,8 +846,6 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
      (require 'grep-a-lot)
      (grep-a-lot-setup-keys)
    #+END_SRC
-** org-web-tools
-Install pandoc (needed), install org-web-tools from the MELPA
 ** yasnippet
 
 Only enable yas-minor-mode for certain major modes
