@@ -380,7 +380,10 @@ Depends on =all-the-icons= package and needs to install the fonts once, using =M
   (use-package all-the-icons)
   (use-package doom-modeline
     :ensure t
-    :init (doom-modeline-mode 1))
+    :init
+    :config
+    (setq doom-modeline-buffer-file-name-style 'buffer-name) ;uniquify buffer name<>
+    (doom-modeline-mode 1))
 #+END_SRC
 ** which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -486,18 +489,18 @@ Here I will bind "/" to dired-narrow
     (setq
      ;; helm-input-idle-delay                     0.01
      ;; helm-reuse-last-window-split-state        t
-     ;; helm-always-two-windows                   t
+     helm-always-two-windows                   t
      ;; helm-split-window-inside-p                nil
-     ;; helm-commands-using-frame                 '(completion-at-point
-     ;;                                             helm-apropos
-     ;;                                             helm-eshell-prompts helm-imenu
-     ;;                                             helm-imenu-in-all-buffers)
-     ;; helm-actions-inherit-frame-settings       t
-     ;; helm-use-frame-when-more-than-two-windows t
-     ;; helm-use-frame-when-dedicated-window      t
-     ;; helm-frame-background-color               "DarkSlateGray"
-     ;; helm-show-action-window-other-window      'left
-     ;; helm-allow-mouse                          t
+     helm-commands-using-frame                 '(completion-at-point
+                                                 helm-apropos
+                                                 helm-eshell-prompts helm-imenu
+                                                 helm-imenu-in-all-buffers)
+     helm-actions-inherit-frame-settings       t
+     helm-use-frame-when-more-than-two-windows t
+     helm-use-frame-when-dedicated-window      t
+     helm-frame-background-color               "DarkSlateGray"
+     helm-show-action-window-other-window      'left
+     helm-allow-mouse                          t
      ;; helm-move-to-line-cycle-in-source         t
      ;; helm-autoresize-max-height                80 ; it is %.
      ;; helm-autoresize-min-height                20 ; it is %.
@@ -511,7 +514,11 @@ Here I will bind "/" to dired-narrow
     ;; (set-face-foreground 'helm-mark-prefix "Gold1")
     ;; (add-to-list 'helm-sources-using-default-as-input 'helm-source-info-bash)
     ;; (helm-define-key-with-subkeys global-map (kbd "C-c n") ?n 'helm-cycle-resume)
+    (helm-mode 1)
     )
+  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+  ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
   (global-unset-key (kbd "C-x c"))        ;not to confuse with C-x C-c quit
 
   (add-to-list 'display-buffer-alist
@@ -520,55 +527,6 @@ Here I will bind "/" to dired-narrow
                  (inhibit-same-window . t)
                  (window-height . 0.4)))
 #+END_SRC
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (require 'helm-config)
-
-     ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-     ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-     ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-     (global-set-key (kbd "C-c h") 'helm-command-prefix)
-     (global-unset-key (kbd "C-x c"))
-
-     (global-set-key (kbd "M-x") 'helm-M-x)
-     (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-     (global-set-key (kbd "C-x b") 'helm-mini)
-     (global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-     ;; for search, still use c-s
-     ;; for read only helm-occur (C-c h M-s o), I bind it to replace occur (M-s o)
-     (global-set-key (kbd "M-s o") 'helm-occur)
-     ;; for multi editing search, use helm-swoop (M-i) see below section
-     ;; no more, helm-swoop is slow for large files, helm-occur is much faster
-     ;; swiper is in between in terms of performance
-     ;; this is to enable edit mode automatically (could bind it to C-x C-q to manually
-     ;; use it) see https://github.com/emacs-helm/helm/issues/2146
-     (add-hook 'helm-occur-mode-hook 'wgrep-change-to-wgrep-mode t)
-
-     ;; make helm open at bottom with full frame width
-     (add-to-list 'display-buffer-alist
-                  `(,(rx bos "*helm" (* not-newline) "*" eos)
-                    (display-buffer-in-side-window)
-                    (inhibit-same-window . t)
-                    (window-height . 0.4)))
-     ;; (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-     ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-     ;; (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
-
-     ;; (when (executable-find "curl")
-     ;;   (setq helm-google-suggest-use-curl-p t)) ;not sure what this is for
-
-     (setq
-      ;; helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-           ;; helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-           helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-           helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-           ;; helm-ff-file-name-history-use-recentf t
-           )
-
-     (helm-mode 1)                           ; turn on helm mode for kill buffer etc
-
-   #+END_SRC
 
 ** helm-gtags
 Requires GNU Global
