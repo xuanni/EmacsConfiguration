@@ -758,6 +758,7 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
 *** p4
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package p4
+    :defer t
     :config
     (load-library "p4")
   )
