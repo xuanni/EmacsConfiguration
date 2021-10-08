@@ -261,7 +261,8 @@ Increase the limits for reading logs and many line flushes
            ;; within the document,
            ;; you can use this command to go back. There is another command
            ;; =org-mark-ring-push=, which was originally bind to this key.
-           ("C-c %" . org-mark-ring-goto)
+           ;; ("C-c %" . org-mark-ring-goto) ;; this has problem as of <2021-10-07 Thu>
+           ("C-c C-g" . org-mark-ring-goto) ;this push is mapped to C-c %, goto has no mapping by default, so map to C-c C-g here
            )
     :config (progn
               (setq org-startup-truncated nil)
