@@ -327,13 +327,13 @@ Increase the limits for reading logs and many line flushes
               (setq org-capture-templates
                     (quote (
                             ("t" "TODO" entry (file org-todo-file)
-                             "* TODO %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %T\n:END:\n%?" :prepend t)
+                             "* TODO %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(random)\n:INCEPTION: %T\n:END:\n%?" :prepend t)
 
                             ("l" "Work Log" entry (file org-log-file)
                              "* Week %t \t:worklog:\n%?")
 
                             ("n" "Notes" entry (file org-notes-file)
-                             "* %^{Title} %^G\n:PROPERTIES:\n:INCEPTION: %U\n:END:\n%?")
+                             "* %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(random)\n:INCEPTION: %U\n:END:\n%?")
                             )))
               ))
 #+END_SRC
