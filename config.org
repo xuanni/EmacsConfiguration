@@ -294,17 +294,18 @@ Increase the limits for reading logs and many line flushes
               ;; these state changes won't be exported
               (setq org-log-into-drawer t)
               ;; org babel
-              (setq org-babel-load-languages
-                    (quote
-                     ((emacs-lisp . t)
-                      (shell . t)
-                      (python . t)
-                      (awk . t)
-                      (C . t)
-                      (java . t)
-                      (latex . t)
-                      (makefile . t)
-                      (octave . t))))
+              (org-babel-do-load-languages
+               'org-babel-load-languages
+               (quote
+                ((emacs-lisp . t)
+                 (shell . t)
+                 (python . t)
+                 (awk . t)
+                 (C . t)
+                 (java . t)
+                 (latex . t)
+                 (makefile . t)
+                 (octave . t))))
               ;; org export
               (setq org-export-backends (quote (ascii html latex man md odt groff)))
 
@@ -328,13 +329,13 @@ Increase the limits for reading logs and many line flushes
               (setq org-capture-templates
                     (quote (
                             ("t" "TODO" entry (file org-todo-file)
-                             "* TODO %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(random)\n:INCEPTION: %T\n:END:\n%?" :prepend t)
+                             "* TODO %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(number-to-string (random))\n:INCEPTION: %T\n:END:\n%?" :prepend t)
 
                             ("l" "Work Log" entry (file org-log-file)
                              "* Week %t \t:worklog:\n%?")
 
                             ("n" "Notes" entry (file org-notes-file)
-                             "* %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(random)\n:INCEPTION: %U\n:END:\n%?")
+                             "* %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(number-to-string (random))\n:INCEPTION: %U\n:END:\n%?")
                             )))
               ))
 #+END_SRC
