@@ -820,6 +820,16 @@ Global mode will slow down eshell even hang it.
   (use-package company
     :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode) . company-mode)
     )
+
+  ;; #1098 default bindings has been changed to c-n/c-p, I don't want this, so
+  ;; use below to get m-n/m-p back
+  (with-eval-after-load 'company
+    (dolist (map (list company-active-map company-search-map))
+      (define-key map (kbd "C-n") nil)
+      (define-key map (kbd "C-p") nil)
+      (define-key map (kbd "M-n") #'company-select-next)
+      (define-key map (kbd "M-p") #'company-select-previous)))
+
   ;; (add-hook 'after-init-hook 'global-company-mode) ;; not use
   ;; (add-hook 'c-mode-hook 'company-mode)
   ;; (add-hook 'c++-mode-hook 'company-mode)
@@ -853,14 +863,14 @@ Use this as backend instead of company-clang for C/C++/Objective-C
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-irony-c-headers)
   (use-package company-irony
-    :hook (irony-mode . irony-cdb-autosetup-compile-options)
+    ;; :hook (irony-mode . irony-cdb-autosetup-compile-options) ;; not working
     :config
     (eval-after-load 'company
       '(add-to-list 'company-backends '(company-irony-c-headers company-irony)))
     )
   ;; (eval-after-load 'company
   ;;   '(add-to-list 'company-backends '(company-irony-c-headers company-irony)))
-  ;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 #+END_SRC
 
 ** diminish
