@@ -394,6 +394,7 @@ Depends on =all-the-icons= package and needs to install the fonts once, using =M
 ** smartparens
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
+    :init (require 'smartparens-config)
     :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode) . smartparens-mode))
 #+END_SRC
 ** captain
@@ -783,7 +784,7 @@ Only enable yas-minor-mode for certain major modes
     :config
     (yas-reload-all)
     )
-  (use-package yasnippet-snippets)
+;;  (use-package yasnippet-snippets)
 #+end_src
 
 ** notmuch-emacs
