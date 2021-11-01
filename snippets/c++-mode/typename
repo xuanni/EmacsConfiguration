@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: typename
+# key: tn
+# --
+typename $0
