@@ -1061,6 +1061,16 @@ python IDE like
   (avy-setup-default)
   (global-set-key (kbd "C-c C-j") 'avy-resume)
 #+END_SRC
+** eshell
+Modify eshell prompt
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package eshell-git-prompt
+    :after eshell)
+
+  (use-package eshell
+    :config
+    (eshell-git-prompt-use-theme 'powerline))
+#+END_SRC
 
 * Self-defined Commands
 
