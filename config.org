@@ -2,10 +2,8 @@
 #+AUTHOR: Sean Ni
 #+DATE: <2018-02-15 Thu>
 
-* Emacs built-in
-** Appearance and behavior
-
-*** Set font
+* Appearance and behavior
+** Set font
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (cond ((eq system-type 'windows-nt)
@@ -17,9 +15,18 @@
         ;; looks like gnu/linux is not working in system-type
         (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 136)) ; t for default case
         )
+
+  (set-face-attribute 'fixed-pitch nil :family "Source Code Pro" :foundry "ADBO" :height 136)
+
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :family "Source Sans 3" :foundry "ADBO" :height 142)
+  ;; :family "Iosevka Aile" :foundry "UKWN" :height 120
+  ;; :family "Source Sans 3" :foundry "ADBO" :height 142
+  ;; :family "DejaVu Sans" :foundry "PfEd" :height 142
+
 #+END_SRC
 
-*** Set theme
+** Set theme
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package doom-themes
     :ensure t
@@ -41,7 +48,7 @@
     )
 #+END_SRC
 
-*** Set other appearance
+** Set other appearance
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (prefer-coding-system 'utf-8-unix)
@@ -72,7 +79,7 @@
   (global-auto-revert-mode 1)             ;could be more traffic/network
 #+END_SRC
 
-*** Backup files
+** Backup files
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Remove all backup files
   ;; (setq make-backup-files nil)
@@ -82,9 +89,9 @@
   (setq backup-directory-alist '(("." . "~/.emacs.d/saves")))
 #+END_SRC
 
-** Language Settings
+* Language Settings
 
-*** C
+** C
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq-default c-default-style "linux")
@@ -92,45 +99,45 @@
   (c-set-offset 'case-label '+)           ; fix case index
 #+END_SRC
 
-*** python
+** python
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq python-indent-offset 4)
 #+END_SRC
 
-*** Scons
+** Scons
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-to-list 'auto-mode-alist '("\\.scons\\'" . python-mode))
   (add-to-list 'auto-mode-alist '("\\.api\\'" . python-mode))
 #+END_SRC
 
-*** makefile
+** makefile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-to-list 'auto-mode-alist '("\\.mak\\'" . makefile-mode))
 #+END_SRC
-*** XML completion
+** XML completion
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq nxml-slash-auto-complete-flag t)
 #+END_SRC
 
-** dired
-*** dired-jump
+* dired
+** dired-jump
 Load dired key bindings (C-x C-j to go to file location in dired mode)
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'dired-x)
 #+END_SRC
-*** dired copy files
+** dired copy files
 With this option on, Emacs automatically copies marked files to another opened dired in another window
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq dired-dwim-target t)
 #+END_SRC
 
-** whitespace cleanup
+* whitespace cleanup
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-hook 'before-save-hook 'whitespace-cleanup)
   (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
 #+END_SRC
 
-** recentf location (machine specific: don't tangle)
+* recentf location (machine specific: don't tangle)
    use local disk instead of network drive
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq recentf-save-file "/local/mnt/workspace/.recentf")
@@ -138,8 +145,8 @@ With this option on, Emacs automatically copies marked files to another opened d
 
 History of why I changed this and changed it back. First off, it should not be changed, otherwise it won't be portable. Reason why I changed this was I suspect the recent file was the reason why helm-mini was slow. But change this won't help. Indeed, the slowness of helm-mini was due to the recentf, because helm-buffer-list was instant but helm-mini was not, and the only difference between the two was recentf was present in helm-mini. So I found the command helm-recentf, and it is *VERY SLOW*. It appears that there are 2 files inside recentf that were from a network scratch disk, which was very slow to access. Problem solved by removing these 2 files from the recentf list. Now problem is why the helm-recentf needs to check the actual file itself instead of just load the list file?
 
-** ibuffer
-Disable this due to slow performance
+* ibuffer
+Disable this due to slow performance. Also don't need this as the projectile can handle most situations.
 =from emacs wiki=
 
 - ‘M-s a C-s’ - Do incremental search in the marked buffers.
@@ -149,13 +156,13 @@ Disable this due to slow performance
 - ‘I’ - As above, with a regular expression.
 - ‘0’ - Run occur on the marked buffers.
 
-*** view subset of buffers
+** view subset of buffers
 Also try ibuffer’s “limiting” feature (‘/’), which allows you to just view a subset of your buffers.
 
-*** Diff
+** Diff
 Ibuffer can show you the differences between an unsaved buffer and the file on disk with `=’.
 
-*** Grouping
+** Grouping
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-x C-b") 'buffer-menu) ; not use default list-buffers because it will not focus on the buffer list
 #+END_SRC
@@ -217,7 +224,7 @@ Ibuffer can show you the differences between an unsaved buffer and the file on d
   ;; (setq ibuffer-show-empty-filter-groups nil)
 #+END_SRC
 
-** Abbrev mode
+* Abbrev mode
 Turn on abbrev minor mode for some major modes
 
 M-x edit-abbrevs to edit the tables C-x C-s to save it
@@ -226,31 +233,33 @@ M-x edit-abbrevs to edit the tables C-x C-s to save it
   (add-hook 'org-mode-hook 'abbrev-mode)
   (add-hook 'shell-mode 'abbrev-mode)
 #+END_SRC
-** miscellaneous
+* miscellaneous
 
 Emacs 25 add new variable package-selected-packages, every time you open packages, the customize.el will add this variable to your init.el or .emacs. To prevent it from doing this, add this, so custom.el will be used to hold that data, but never source control it.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 #+END_SRC
-** global key bindings
+* global key bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-x t") 'eshell)
   (global-set-key (kbd "C-x y") 'shell)
 #+END_SRC
-** undo limit
+* undo limit
 Increase the limits for reading logs and many line flushes
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq undo-limit 100000000)             ; 100M
   (setq undo-outer-limit 150000000)       ; 150M
   (setq undo-strong-limit 200000000)      ; 200M
 #+END_SRC
-** org-mode
-
+* org mode
+** org behavior
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
     :ensure org-plus-contrib
-    :hook ((org-mode . org-indent-mode))
+    :hook ((org-mode . org-indent-mode)
+           (org-mode . variable-pitch-mode)
+           (org-mode . visual-line-mode))
     :bind (("C-c l" . org-store-link)
            ("C-c a" . org-agenda)
            ("C-c c" . org-capture)
@@ -278,6 +287,9 @@ Increase the limits for reading logs and many line flushes
               (setq org-agenda-include-diary t)
               ;; closing TODO items
               (setq org-log-done 'time)
+              ;; some visual stuff
+              (setq org-ellipsis " ▾"
+                    org-hide-emphasis-markers t)
               ;; customize TODO keywords
               (setq org-todo-keywords
                     '(;; Sequence for TASKS
@@ -339,23 +351,52 @@ Increase the limits for reading logs and many line flushes
               ))
 #+END_SRC
 
-*** install latest org mode
+** org variable pitch fonts
+
+Use different font size for different level of headings. However, for code and other blocks, still use fixed pitch fonts.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (with-eval-after-load 'org-faces
+    (dolist (face '((org-level-1 . 1.3)
+                    (org-level-2 . 1.2)
+                    (org-level-3 . 1.1)
+                    (org-level-4 . 1.05)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil :family "Source Sans 3" :foundry "ADBO" :height (cdr face))))
+
+  ;; ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
+#+END_SRC
+
+** install latest =org-mode=
 Stock emacs comes with very old version of org-mode, to upgrade org-mode, first =emacs -q=, then =eval-region= below code, then package list, find org (and possibly org-plus-contrib) and install it. sometimes direct =package-install= command won't work so you have resort to the =package-list= method.
 #+BEGIN_SRC emacs-lisp :tangle no
   (require 'package)
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 #+END_SRC
 
-*** dropped easy template
+** dropped easy template
 from v9.2, org mode got rid of easy template (<s thing), you can get it back by
 #+begin_src emacs-lisp :tangle no
 (require 'org-tempo)
 #+end_src
 but the new replacement is good too. C-c C-, and choose from the pop up list
-
-* Packages
 ** org-bullets org-superstar
 =org-bullets= won't change utf 8 symbols for the bullets/lists, but =org-superstar= will.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   ;; traditional method (no auto installing of the package)
@@ -365,7 +406,9 @@ but the new replacement is good too. C-c C-, and choose from the pop up list
   (use-package org-superstar
     :hook ((org-mode . (lambda () (org-superstar-mode 1)))))
 #+END_SRC
-** modeline (doom)
+** org-web-tools
+Install pandoc (needed), install org-web-tools from the MELPA
+* modeline (doom)
 Depends on =all-the-icons= package and needs to install the fonts once, using =M-x all-the-icons-install-fonts=
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -377,27 +420,27 @@ Depends on =all-the-icons= package and needs to install the fonts once, using =M
     (setq doom-modeline-buffer-file-name-style 'buffer-name) ;uniquify buffer name<>
     (doom-modeline-mode 1))
 #+END_SRC
-** which-key
+* which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package which-key
     :config
     (which-key-mode 1))
 #+END_SRC
 
-** undo-tree
+* undo-tree
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package undo-tree
     :config
     (global-undo-tree-mode))
 #+END_SRC
 
-** smartparens
+* smartparens
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
     :init (require 'smartparens-config)
     :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode) . smartparens-mode))
 #+END_SRC
-** captain
+* captain
 
 Auto capitalize words
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -423,7 +466,7 @@ Auto capitalize words
 #+END_SRC
 
 #+RESULTS:
-** bm
+* bm
    visual bookmarks
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package bm
@@ -441,7 +484,7 @@ Auto capitalize words
        (setq bm-cycle-all-buffers t))
    #+END_SRC
 
-** dired-narrow
+* dired-narrow
 This belongs to dired-hack, a larger collection of dired enhancements
 
 Here I will bind "/" to dired-narrow
@@ -451,19 +494,30 @@ Here I will bind "/" to dired-narrow
                 ("/" . dired-narrow)))
   ;;(define-key dired-mode-map (kbd "/") 'dired-narrow)
 #+END_SRC
-** exec path
+* eshell
+Modify eshell prompt
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package eshell-git-prompt
+    :after eshell)
+
+  (use-package eshell
+    :config
+    (eshell-git-prompt-use-theme 'powerline))
+#+END_SRC
+
+* exec path
    this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
    #+BEGIN_SRC emacs-lisp :tangle no
      (cond ((eq system-type 'darwin)
             (exec-path-from-shell-initialize)))
    #+END_SRC
 
-** wgrep-helm
+* wgrep-helm
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package wgrep)
    #+END_SRC
 
-** helm
+* helm
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm
     :hook (helm-occur-mode . wgrep-change-to-wgrep-mode)
@@ -521,7 +575,7 @@ Here I will bind "/" to dired-narrow
                  (window-height . 0.4)))
 #+END_SRC
 
-** helm-gtags
+* helm-gtags
 Requires GNU Global
 + when use with LSP, LSP uses xref-* to find ref/def which is by default M-. And M-,
 however, xref is not good (setting up compile_commands.json), so keep this enabled for now
@@ -550,7 +604,7 @@ however, xref is not good (setting up compile_commands.json), so keep this enabl
        )
 
    #+END_SRC
-** helm-projectile
+* helm-projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-projectile
     :bind-keymap ("C-c p" . projectile-command-map)
@@ -582,7 +636,7 @@ however, xref is not good (setting up compile_commands.json), so keep this enabl
   ;; (setq projectile-indexing-method 'hybrid)
 #+END_SRC
 
-** helm-swoop
+* helm-swoop
 Disable due to slowness in large files
 #+BEGIN_SRC emacs-lisp :tangle no
   ;; helm from https://github.com/emacs-helm/helm
@@ -640,7 +694,7 @@ Disable due to slowness in large files
   ;; (helm-migemo-mode 1)
 
 #+END_SRC
-** helm-ag
+* helm-ag
 add key bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-ag
@@ -655,13 +709,13 @@ add key bindings
 
 #+RESULTS:
 : helm-do-ag
-** helm-xref
+* helm-xref
 Use with LSP once if it is better than helm-gtags
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-xref
     :init)
 #+END_SRC
-** ivy, counsel, swiper
+* ivy, counsel, swiper
 
 How to use *Nuclear weapon of multi-editing* in Ivy?
 In helm, you can use helm-ag to search and C-c C-e to open results in another window, and then edit them, and then C-c C-c to commit.
@@ -695,7 +749,7 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
   ;; this must be after counsel is loaded
   (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
 #+end_src
-** counsel-gtags
+* counsel-gtags
 #+BEGIN_SRC emacs-lisp :tangle no
   (add-hook 'c-mode-hook 'counsel-gtags-mode)
   (add-hook 'c++-mode-hook 'counsel-gtags-mode)
@@ -712,7 +766,7 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
     (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
      #+END_SRC
 
-** counsel-projectile
+* counsel-projectile
 #+BEGIN_SRC emacs-lisp :tangle no
   (counsel-projectile-mode)
   (projectile-mode t)
@@ -734,11 +788,11 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
          (setq projectile-indexing-method 'alien)))
 #+END_SRC
 
-** auto remove old packages
+* auto remove old packages
 #+BEGIN_SRC emacs-lisp :tangle yes
 (setq auto-package-update-delete-old-version t)
 #+END_SRC
-** window-numbering
+* window-numbering
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package window-numbering
     :config
@@ -746,8 +800,8 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
     )
 #+END_SRC
 
-** Version Control
-*** magit
+* Version Control
+** magit
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
@@ -767,7 +821,7 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
   ;; (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 #+END_SRC
 
-*** p4
+** p4
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package p4
     :defer t
@@ -776,14 +830,12 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
   )
 #+END_SRC
 
-** grep-a-lot
+* grep-a-lot
    #+BEGIN_SRC emacs-lisp :tangle no
      (require 'grep-a-lot)
      (grep-a-lot-setup-keys)
    #+END_SRC
-** org-web-tools
-Install pandoc (needed), install org-web-tools from the MELPA
-** yasnippet
+* yasnippet
 
 Only enable yas-minor-mode for certain major modes
 
@@ -796,7 +848,7 @@ Only enable yas-minor-mode for certain major modes
 ;;  (use-package yasnippet-snippets)
 #+end_src
 
-** notmuch-emacs
+* notmuch-emacs
 
 frontend for notmuch
 
@@ -823,7 +875,7 @@ Some helpful commands
      (require 'ol-notmuch)                  ; store links in notmuch buffers (was called org-notmuch, recently renamed to ol-notmuch)
    #+END_SRC
 
-** company mode
+* company mode
 Global mode will slow down eshell even hang it.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
@@ -850,7 +902,7 @@ Global mode will slow down eshell even hang it.
   ;; (add-hook 'lisp-mode-hook 'company-mode)
 #+END_SRC
 
-** irony-mode
+* irony-mode
 Use LSP instead, set this to no tangle
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package irony
@@ -868,7 +920,7 @@ Use LSP instead, set this to no tangle
   ;; (add-hook 'c++-mode-hook 'irony-mode)
 #+END_SRC
 
-** company-irony
+* company-irony
 Use this as backend instead of company-clang for C/C++/Objective-C
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-irony-c-headers)
@@ -883,7 +935,7 @@ Use this as backend instead of company-clang for C/C++/Objective-C
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 #+END_SRC
 
-** diminish
+* diminish
 NOTE mode must be diminished after it's loaded (eval-after-load)
 
    #+BEGIN_SRC emacs-lisp :tangle no
@@ -914,7 +966,7 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
      (eval-after-load "filladapt" '(diminish 'eldoc-mode))
    #+END_SRC
 
-** delight
+* delight
 NOTE mode must be diminished after it's loaded (eval-after-load)
 
    #+BEGIN_SRC emacs-lisp :tangle no
@@ -951,7 +1003,7 @@ NOTE mode must be diminished after it's loaded (eval-after-load)
 
    #+END_SRC
 
-** AucTeX
+* AucTeX
 Auto save when compile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package auctex
@@ -971,7 +1023,7 @@ Auto save when compile
     )
 #+END_SRC
 
-** lsp-mode
+* lsp-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-mode
     :init
@@ -1002,7 +1054,7 @@ Auto save when compile
   ;;     :config
   ;;     (which-key-mode))
 #+END_SRC
-** elpy
+* elpy
 python IDE like
 
 *NOTE* elpy-config is different on different machines, mainly because of python difference
@@ -1023,11 +1075,11 @@ python IDE like
   ;;           '(lambda () (local-set-key (kbd "M-]") 'xref-find-definitions)))
 #+END_SRC
 
-** crux
+* crux
 #+BEGIN_SRC emacs-lisp :tangle no
 (global-set-key (kbd "C-c t") 'crux-visit-term-buffer)
 #+END_SRC
-** ibuffer-projectile
+* ibuffer-projectile
 
 #+BEGIN_SRC emacs-lisp :tangle no
 
@@ -1051,7 +1103,7 @@ python IDE like
 
 #+RESULTS:
 | lambda | nil | (ibuffer-projectile-set-filter-groups) | (unless (eq ibuffer-sorting-mode (quote alphabetic)) (ibuffer-do-sort-by-alphabetic)) |
-** avy
+* avy
 #+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "C-:") 'avy-goto-char)   ;input 1 char
   (global-set-key (kbd "C-'") 'avy-goto-char-2) ;input 2 chars
@@ -1061,17 +1113,6 @@ python IDE like
   (avy-setup-default)
   (global-set-key (kbd "C-c C-j") 'avy-resume)
 #+END_SRC
-** eshell
-Modify eshell prompt
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package eshell-git-prompt
-    :after eshell)
-
-  (use-package eshell
-    :config
-    (eshell-git-prompt-use-theme 'powerline))
-#+END_SRC
-
 * Self-defined Commands
 
 ** insert-date
