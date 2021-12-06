@@ -274,6 +274,7 @@ Increase the limits for reading logs and many line flushes
            )
     :config (progn
               (setq org-startup-truncated nil)
+              (setq org-startup-folded t) ; show overview rather than `showeverything'
               (setq org-use-speed-commands t) ; n and p at the 0 position each heading
               ;; refile across files, otherwise can only refile within the same file
               (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
