@@ -578,9 +578,9 @@ Modify eshell prompt
 
 * helm-gtags
 Requires GNU Global
-+ when use with LSP, LSP uses xref-* to find ref/def which is by default M-. And M-,
-however, xref is not good (setting up compile_commands.json), so keep this enabled for now
-+ turns out the clangd (v7) I was using was too old. Needs newer versions (like 13 which is current release). With this new version, we don't need GNU global any more. woohoo~
++ when use with LSP, LSP uses =xref-*= to find ref/def which is by default =M-.= And =M-,= . However, =xref= is not good (setting up =compile_commands.json=), so keep this enabled for now
++ turns out the =clangd (v7)= I was using was too old. Needs newer versions (like 13 which is current release). With this new version, we don't need GNU global any more. woohoo~
+
    #+BEGIN_SRC emacs-lisp :tangle no
      (use-package helm-gtags
        :hook ((c-mode c++-mode java-mode asm-mode) . helm-gtags-mode)
