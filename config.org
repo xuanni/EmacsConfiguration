@@ -23,7 +23,8 @@
   ;; :family "Iosevka Aile" :foundry "UKWN" :height 120
   ;; :family "Source Sans 3" :foundry "ADBO" :height 142
   ;; :family "DejaVu Sans" :foundry "PfEd" :height 142
-
+  ;; :family "Liberation Sans" :foundry "1ASC" :height 142
+  ;; :family "Noto Sans" :foundry "GOOG" :height 142
 #+END_SRC
 
 ** Set theme
