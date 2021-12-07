@@ -443,7 +443,7 @@ Key bindings: (base key map is =C-c m=)
         :unnarrowed t)
        ("p" "Project" plain "* Description\n\n%?\n\n* Applicable Chipsets\n"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                           "#+title: ${title}\n#+date: %U\n#+filetags: Project")
+                           "#+title: ${title}\n#+date: %U\n#+filetags: project")
         :unnarrowed t)
        ))
     (org-roam-dailies-capture-templates
