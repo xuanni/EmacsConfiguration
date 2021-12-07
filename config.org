@@ -19,7 +19,7 @@
   (set-face-attribute 'fixed-pitch nil :family "Source Code Pro" :foundry "ADBO" :height 136)
 
   ;; Set the variable pitch face
-  (set-face-attribute 'variable-pitch nil :family "Noto Sans" :foundry "GOOG" :height 142)
+  (set-face-attribute 'variable-pitch nil :family "Liberation Sans" :foundry "1ASC" :height 142)
   ;; :family "Iosevka Aile" :foundry "UKWN" :height 120
   ;; :family "Source Sans 3" :foundry "ADBO" :height 142
   ;; :family "DejaVu Sans" :foundry "PfEd" :height 142
@@ -367,7 +367,7 @@ Use different font size for different level of headings. However, for code and o
                     (org-level-6 . 1.0)
                     (org-level-7 . 1.0)
                     (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil :family "Noto Sans" :foundry "GOOG" :height (cdr face))))
+      (set-face-attribute (car face) nil :family "Liberation Sans" :foundry "1ASC" :height (cdr face))))
 
   ;; ;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
