@@ -12,15 +12,15 @@ Notice this is setting the =fundamental-mode=, so later on I can manually set to
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defun my-find-file-check-make-large-file-read-only-hook ()
     "If a file is over a given size, make the buffer read only."
-  
+
     (cond ((and (>= (buffer-size) (* 5 1024 1024)) ; 5M is the normal editing limit
-		(< (buffer-size) (* 100 1024 1024))) ; 5M - 100M is the log/lst editing limit
-	   (fundamental-mode))
-	  ((>= (buffer-size) (* 100 1024 1024)) ; > 100M view only
-	   (setq buffer-read-only t)
-	   (buffer-disable-undo)
-	   (fundamental-mode))
-	  ))
+                (< (buffer-size) (* 100 1024 1024))) ; 5M - 100M is the log/lst editing limit
+           (fundamental-mode))
+          ((>= (buffer-size) (* 100 1024 1024)) ; > 100M view only
+           (setq buffer-read-only t)
+           (buffer-disable-undo)
+           (fundamental-mode))
+          ))
   (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 #+END_SRC
 ** garbage collection and undo limits
@@ -468,6 +468,10 @@ Key bindings: (base key map is =C-c m=)
        ("p" "Project" plain "* Description\n\n%?\n\n"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                            "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: project") ;category used for agenda view to avoid long file names in narrow column agenda view
+        :unnarrowed t)
+       ("i" "Issue" plain "* Description\n\n%?\n\n"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                           "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: issue")
         :unnarrowed t)
        ("t" "Task" plain "* TODO %?\n\n"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
