@@ -437,13 +437,17 @@ Key bindings: (base key map is =C-c m=)
     (org-roam-directory "~/Documents/org/org-roam")
     (org-roam-complete-everywhere t)
     (org-roam-capture-templates
-     '(("d" "default" plain "%?"
+     '(("d" "default" plain "* %?"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                           "#+title: ${title}\n#+date: %U\n")
+                           "#+title: ${title}\n#+category: ${title}#+date: %U\n")
         :unnarrowed t)
-       ("p" "Project" plain "* Description\n\n%?\n\n* Applicable Chipsets\n"
+       ("p" "Project" plain "* Description\n\n%?\n\n"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                           "#+title: ${title}\n#+date: %U\n#+filetags: project")
+                           "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: project") ;category used for agenda view to avoid long file names in narrow column agenda view
+        :unnarrowed t)
+       ("t" "Task" plain "* TODO %?\n\n"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                           "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: task")
         :unnarrowed t)
        ))
     (org-roam-dailies-capture-templates
@@ -452,23 +456,23 @@ Key bindings: (base key map is =C-c m=)
         :if-new (file+head "%<%Y-%m-%d>.org"
                            "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"))
        ("t" "task" entry
-        "* TODO %?\n  %U\n  %a\n  %i"
+        "* TODO %?\n%U\n%a\n%i"
         :if-new (file+head+olp "%<%Y-%m-%d>.org"
                                "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"
                                ("Tasks"))
         :empty-lines 1)
        ("l" "log entry" entry
-        "* %<%I:%M %p> - %?"
+        "* %U - %?"
         :if-new (file+head+olp "%<%Y-%m-%d>.org"
                                "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"
                                ("Log")))
        ("j" "journal" entry
-        "* %<%I:%M %p> - Journal  :journal:\n\n%?\n\n"
+        "* %U - Journal  :journal:\n\n%?\n\n"
         :if-new (file+head+olp "%<%Y-%m-%d>.org"
                                "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"
                                ("Journal")))
        ("m" "meeting" entry
-        "* %<%I:%M %p> - %^{Meeting Title}  :meetings:\n\n%?\n\n"
+        "* %U - %^{Meeting Title}  :meetings:\n\n%?\n\n"
         :if-new (file+head+olp "%<%Y-%m-%d>.org"
                                "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"
                                ("Meeting")))))
@@ -1189,9 +1193,10 @@ python IDE like
 #+RESULTS:
 | lambda | nil | (ibuffer-projectile-set-filter-groups) | (unless (eq ibuffer-sorting-mode (quote alphabetic)) (ibuffer-do-sort-by-alphabetic)) |
 * avy
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "C-;") 'avy-goto-char-timer)   ;input 0 char
   (global-set-key (kbd "C-:") 'avy-goto-char)   ;input 1 char
-  (global-set-key (kbd "C-'") 'avy-goto-char-2) ;input 2 chars
+;  (global-set-key (kbd "C-'") 'avy-goto-char-2) ;input 2 chars
   (global-set-key (kbd "M-g f") 'avy-goto-line) ;input chars at line start
   (global-set-key (kbd "M-g w") 'avy-goto-word-1) ;input 1 char, goto word
   (global-set-key (kbd "M-g e") 'avy-goto-word-0) ;input 0 char(many more options)
