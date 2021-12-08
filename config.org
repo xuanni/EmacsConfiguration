@@ -3,6 +3,37 @@
 #+DATE: <2018-02-15 Thu>
 
 * Appearance and behavior
+** handle large files
+
+Found this code via stack overflow, comment out the set buffer read only part.
+
+Notice this is setting the =fundamental-mode=, so later on I can manually set to any mode so that the syntax highlighting will be enabled, e.g., =asm-mode= for lst files.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun my-find-file-check-make-large-file-read-only-hook ()
+    "If a file is over a given size, make the buffer read only."
+  
+    (cond ((and (>= (buffer-size) (* 5 1024 1024)) ; 5M is the normal editing limit
+		(< (buffer-size) (* 100 1024 1024))) ; 5M - 100M is the log/lst editing limit
+	   (fundamental-mode))
+	  ((>= (buffer-size) (* 100 1024 1024)) ; > 100M view only
+	   (setq buffer-read-only t)
+	   (buffer-disable-undo)
+	   (fundamental-mode))
+	  ))
+  (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
+#+END_SRC
+** garbage collection and undo limits
+
+Increase the limits for reading logs and many line flushes
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq gc-cons-threshold (* 128 1024 1024))
+  (setq undo-limit (* 64 1024 1024))
+  (setq undo-strong-limit (* 100 1024 1024))
+  (setq undo-outer-limit (* 110 1024 1024))
+#+END_SRC
+
 ** Set font
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -245,13 +276,6 @@ Emacs 25 add new variable package-selected-packages, every time you open package
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-set-key (kbd "C-x t") 'eshell)
   (global-set-key (kbd "C-x y") 'shell)
-#+END_SRC
-* undo limit
-Increase the limits for reading logs and many line flushes
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq undo-limit 100000000)             ; 100M
-  (setq undo-outer-limit 150000000)       ; 150M
-  (setq undo-strong-limit 200000000)      ; 200M
 #+END_SRC
 * org mode
 ** org behavior
@@ -1248,22 +1272,6 @@ python IDE like
             (if this-win-2nd (other-window 1))))))
 #+END_SRC
 
-** handle large files
-
-Found this code via stack overflow, comment out the set buffer read only part.
-
-Notice this is setting the =fundamental-mode=, so later on I can manually set to any mode so that the syntax highlighting will be enabled, e.g., =asm-mode= for lst files.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defun my-find-file-check-make-large-file-read-only-hook ()
-    "If a file is over a given size, make the buffer read only."
-    (when (> (buffer-size) (* 1024 1024)) ; 1M size
-      ;; (setq buffer-read-only t)
-      (buffer-disable-undo)
-      (fundamental-mode)))
-
-  (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
-#+END_SRC
 * bug fix for linux font size
 #+BEGIN_SRC emacs-lisp :tangle yes
   (define-key special-event-map [config-changed-event] #'ignore)
