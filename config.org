@@ -992,6 +992,27 @@ Some helpful commands
      (require 'ol-notmuch)                  ; store links in notmuch buffers (was called org-notmuch, recently renamed to ol-notmuch)
    #+END_SRC
 
+* org-mime
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-mime
+    :ensure t
+    :config
+    (setq org-mime-export-options '(:section-numbers nil
+                                                     :with-author nil
+                                                     :with-toc nil)))
+
+  (add-hook 'message-send-hook 'org-mime-htmlize)
+  ;; (add-hook 'message-send-hook 'org-mime-confirm-when-no-multipart)
+#+END_SRC
+
+* mu4e
+Email client
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-to-list 'load-path "~/.emacs.machine/") ;machine dependent configs
+  (require 'nx-email)
+#+END_SRC
+
 * company mode
 Global mode will slow down eshell even hang it.
 #+BEGIN_SRC emacs-lisp :tangle yes
