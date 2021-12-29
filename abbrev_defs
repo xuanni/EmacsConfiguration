@@ -131,7 +131,6 @@
     ("bg" "background" nil 1)
     ("eg" "e.g.," nil 0)
     ("elp" "emacs-lisp" nil 2)
-    ("fw" "firmware" nil 0)
     ("ie" "i.e.," nil 0)
    ))
 
@@ -192,4 +191,3 @@
 (define-abbrev-table 'vc-git-region-history-mode-abbrev-table '())
 
 (define-abbrev-table 'xref--xref-buffer-mode-abbrev-table '())
-
