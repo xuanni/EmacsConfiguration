@@ -353,16 +353,16 @@ Emacs 25 add new variable package-selected-packages, every time you open package
                (t
                 (setq org-agenda-path "~/Documents/org/")))
               (setq org-todo-file (concat org-agenda-path "todo.org"))
-              (setq org-notes-file (concat org-agenda-path "notes.org"))
+              ;; (setq org-notes-file (concat org-agenda-path "notes.org"))
               (setq org-log-file (concat org-agenda-path "log.org"))
               ;; (setq org-finance-file (concat org-agenda-path "finance.org"))
               ;; (setq org-travel-file (concat org-agenda-path "travel.org"))
-              ;; (setq org-agenda-files (list
-              ;;                         org-todo-file
-              ;;                         org-notes-file
-              ;;                         org-log-file
-              ;;                         ))
-              (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
+              (setq org-agenda-files (list
+                                      org-todo-file
+                                      ;; org-notes-file
+                                      org-log-file
+                                      ))
+              ;; (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
               (setq org-capture-templates
                     (quote (
                             ("t" "TODO" entry (file org-todo-file)
@@ -371,8 +371,9 @@ Emacs 25 add new variable package-selected-packages, every time you open package
                             ("l" "Work Log" entry (file org-log-file)
                              "* Week %t \t:worklog:\n%?")
 
-                            ("n" "Notes" entry (file org-notes-file)
-                             "* %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(number-to-string (random))\n:INCEPTION: %U\n:END:\n%?")
+                            ;; use org-roam instead
+                            ;; ("n" "Notes" entry (file org-notes-file)
+                            ;;  "* %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(number-to-string (random))\n:INCEPTION: %U\n:END:\n%?")
                             )))
               ))
 #+END_SRC
@@ -473,10 +474,6 @@ Key bindings: (base key map is =C-c m=)
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                            "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: issue")
         :unnarrowed t)
-       ("t" "Task" plain "* TODO %?\n\n"
-        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                           "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: task")
-        :unnarrowed t)
        ))
     (org-roam-dailies-capture-templates
      '(("d" "default" entry
@@ -490,17 +487,17 @@ Key bindings: (base key map is =C-c m=)
                                ("Tasks"))
         :empty-lines 1)
        ("l" "log entry" entry
-        "* %U - %?"
+        "* %U %?"
         :if-new (file+head+olp "%<%Y-%m-%d>.org"
                                "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"
                                ("Log")))
        ("j" "journal" entry
-        "* %U - Journal  :journal:\n\n%?\n\n"
+        "* %U Journal  :journal:\n\n%?\n\n"
         :if-new (file+head+olp "%<%Y-%m-%d>.org"
                                "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"
                                ("Journal")))
        ("m" "meeting" entry
-        "* %U - %^{Meeting Title}  :meetings:\n\n%?\n\n"
+        "* %U %^{Meeting Title}  :meetings:\n\n%?\n\n"
         :if-new (file+head+olp "%<%Y-%m-%d>.org"
                                "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n"
                                ("Meeting")))))
