@@ -366,7 +366,7 @@ Emacs 25 add new variable package-selected-packages, every time you open package
               (setq org-capture-templates
                     (quote (
                             ("t" "TODO" entry (file org-todo-file)
-                             "* TODO %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(number-to-string (random))\n:INCEPTION: %T\n:END:\n%?" :prepend t)
+                             "* TODO %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID: id-%(number-to-string (random))\n:INCEPTION: %T\n:END:\n%?" :prepend t)
 
                             ("l" "Work Log" entry (file org-log-file)
                              "* Week %t \t:worklog:\n%?")
