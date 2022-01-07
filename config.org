@@ -315,7 +315,7 @@ Emacs 25 add new variable package-selected-packages, every time you open package
               (setq org-log-done 'time)
               ;; some visual stuff
               (setq org-ellipsis " ▾"
-                    org-hide-emphasis-markers t)
+                    org-hide-emphasis-markers nil) ;hide markers would cause the typing trouble when exiting the marker
               ;; customize TODO keywords
               (setq org-todo-keywords
                     '(;; Sequence for TASKS
