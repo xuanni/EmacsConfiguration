@@ -128,7 +128,9 @@ Increase the limits for reading logs and many line flushes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq-default c-default-style "linux")
   (setq-default c-basic-offset 4)
-  (c-set-offset 'case-label '+)           ; fix case index
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (c-set-offset 'case-label '+)))
 #+END_SRC
 
 ** python
