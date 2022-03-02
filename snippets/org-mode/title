@@ -3,7 +3,7 @@
 # key: tit
 # --
 #+TITLE: ${1:Title}
-#+AUTHOR: Xuan Ni
+#+AUTHOR: Sean Ni
 #+DATE: ${2:}
 
 $0
