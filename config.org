@@ -152,6 +152,22 @@ Increase the limits for reading logs and many line flushes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq nxml-slash-auto-complete-flag t)
 #+END_SRC
+** json
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package json-mode
+    :ensure t)
+#+END_SRC
+** cmake
+*#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package cmake-mode
+    :ensure t)
+#+END_SRC
+** plantuml
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package plantuml-mode
+    :ensure t)
+#+END_SRC
+*
 
 * dired
 ** dired-jump
@@ -554,7 +570,7 @@ Depends on =all-the-icons= package and needs to install the fonts once, using =M
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
     :init (require 'smartparens-config)
-    :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode) . smartparens-mode))
+    :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode json-mode) . smartparens-mode))
 #+END_SRC
 * captain
 
@@ -1007,7 +1023,7 @@ Some helpful commands
 * mu4e
 Email client
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (add-to-list 'load-path "~/.emacs.machine/") ;machine dependent configs
   (require 'nx-email)
 #+END_SRC
@@ -1016,7 +1032,7 @@ Email client
 Global mode will slow down eshell even hang it.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
-    :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode) . company-mode)
+    :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode cmake-mode plantuml-mode) . company-mode)
     )
 
   ;; #1098 default bindings has been changed to c-n/c-p, I don't want this, so
@@ -1172,6 +1188,7 @@ Auto save when compile
            (python-mode . lsp)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration))
+    :config (setq lsp-semantic-tokens-enable t) ; for C/C++ gray out undefined macros
     :commands lsp)
 
   ;; optionally
@@ -1196,7 +1213,7 @@ python IDE like
 
 *NOTE* elpy-config is different on different machines, mainly because of python difference
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package elpy
     :hook (
            (elpy-mode . (lambda () (local-set-key (kbd "M-.") 'elpy-goto-definition)))
