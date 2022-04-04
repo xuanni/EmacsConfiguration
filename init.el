@@ -6,7 +6,7 @@
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+  ;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
   (when (< emacs-major-version 24)
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
@@ -42,7 +42,7 @@
 
 (if (file-exists-p "~/.emacs.d/config.el")
     (if (recent-file "~/.emacs.d/config.org" "~/.emacs.d/config.el")
-	(load "~/.emacs.d/config.el")
+        (load "~/.emacs.d/config.el")
       (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
   (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
 
