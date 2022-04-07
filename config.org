@@ -121,6 +121,10 @@ Increase the limits for reading logs and many line flushes
   (setq backup-directory-alist '(("." . "~/.emacs.d/saves")))
 #+END_SRC
 
+** emacs 28 native compilation warning disable
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq native-comp-async-report-warnings-errors nil)
+#+END_SRC
 * Language Settings
 
 ** C
