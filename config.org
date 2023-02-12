@@ -869,6 +869,9 @@ In helm, C-x b open buffer list, C-spc to mark buffers, C-s to search within mar
 
 This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you cannot mark buffers)
 
+*Isearch*
+since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
+
 #+begin_src emacs-lisp :tangle yes
 
   (setq ivy-use-virtual-buffers t)        ;
@@ -881,6 +884,7 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
            (/ (* (frame-height) 2) 5))))
 
   (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "C-z") 'isearch-forward)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-c h g") 'counsel-ag)
 
