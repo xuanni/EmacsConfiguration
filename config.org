@@ -872,7 +872,55 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
 *Isearch*
 since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
 
-#+begin_src emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun my-counsel-ag ()
+    (interactive)
+    (counsel-ag nil default-directory))
+
+  (use-package counsel
+    :after ivy
+    :bind (("M-x" . 'counsel-M-x)
+           ("C-c h i" . 'counsel-semantic-or-imenu)
+           ("C-c h g" . 'my-counsel-ag))  ;search current folder only. Use projectile-ag to search root path. Use c-u counsel-ag to search other path
+    :config (counsel-mode))
+
+  (use-package ivy
+    :defer 0.1
+    :diminish
+    :bind (("C-c C-r" . ivy-resume)
+           ("C-x B" . ivy-switch-buffer-other-window))
+    :custom
+    (ivy-count-format "(%d/%d) ")
+    (ivy-use-virtual-buffers t)
+    (ivy-initial-inputs-alist nil)        ; remove ^
+    (ivy-height-alist
+     '((t
+        lambda (_caller)
+        (/ (* (frame-height) 2) 5))))
+    :config (ivy-mode))
+
+  ;; (use-package ivy-rich
+  ;;   :after ivy
+  ;;   :custom
+  ;;   (ivy-virtual-abbreviate 'full
+  ;;                           ivy-rich-switch-buffer-align-virtual-buffer t
+  ;;                           ivy-rich-path-style 'abbrev)
+  ;;   :config
+  ;;   (ivy-set-display-transformer 'ivy-switch-buffer
+  ;;                                'ivy-rich-switch-buffer-transformer))
+
+  (use-package swiper
+    :after ivy
+    :bind (("C-s" . swiper)
+           ;; ("C-r" . swiper)
+           ))
+
+  (global-set-key (kbd "C-z") 'isearch-forward) ;still want isearch
+  ;; (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
+
+#+END_SRC
+
+#+begin_src emacs-lisp :tangle no
 
   (setq ivy-use-virtual-buffers t)        ;
   (setq ivy-count-format "(%d/%d) ")
@@ -915,24 +963,40 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
 
 * counsel-projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (counsel-projectile-mode)
-  (projectile-mode t)
+  ;; add an action to open dired at root of project
+  (defun my/counsel-projectile-switch-project-action-dired (project)
+    "Open ‘dired’ at the root of the project."
+    (let ((projectile-switch-project-action
+           (lambda ()
+             (projectile-dired))))
+      (counsel-projectile-switch-project-by-name project)))
 
-  ;; after upgrade packages need to add this
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (setq projectile-enable-caching t)
-  (setq projectile-globally-ignored-directories
-        (quote
-         (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Debug*")))
-  (setq projectile-globally-ignored-file-suffixes
-        (quote
-         ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
-  (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
-  (setq projectile-completion-system 'ivy)
+  (use-package counsel-projectile
+    :bind-keymap ("C-c p" . projectile-command-map)
+    :config
+    (counsel-projectile-mode)
+    (projectile-mode t)
+    (setq projectile-enable-caching t)
+    (setq projectile-globally-ignored-directories
+          (quote
+           (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "Debug*")))
+    (setq projectile-globally-ignored-file-suffixes
+          (quote
+           ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
+    (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
+    (setq projectile-completion-system 'ivy)
+    (setq projectile-indexing-method 'hybrid)
+    (cond ((eq system-type 'windows-nt)
+           (setq projectile-indexing-method 'alien)))
+    (counsel-projectile-modify-action
+     'counsel-projectile-switch-project-action
+     '((add ("." my/counsel-projectile-switch-project-action-dired
+             "open ‘dired’ at the root of the project")
+            1)))
+    )
 
-  ;; change projectile indexing method for Windows
-  (cond ((eq system-type 'windows-nt)
-         (setq projectile-indexing-method 'alien)))
+
+
 #+END_SRC
 
 * auto remove old packages
