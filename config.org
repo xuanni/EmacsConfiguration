@@ -872,10 +872,6 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
 *Isearch*
 since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
 
-*Problems*
-- ivy action (M-o) in switch projects won't show all options in the minibuffer, and also there is no option to go to dired in the action list.
-
-
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defun my-counsel-ag ()
     (interactive)
@@ -947,6 +943,8 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
   ;; (ivy-prescient-mode)
   ;; this must be after counsel is loaded
   (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
+  ;; Install flx package to use fuzzy matching in command
+  ;; *PROBLEM* this won't work for flipped keywords, like "str1 str2" won't find file name *_str2_str1.ext
 #+end_src
 * counsel-gtags
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -966,15 +964,19 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
      #+END_SRC
 
 * counsel-projectile
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; add an action to open dired at root of project
-  (defun my/counsel-projectile-switch-project-action-dired (project)
-    "Open ‘dired’ at the root of the project."
-    (let ((projectile-switch-project-action
-           (lambda ()
-             (projectile-dired))))
-      (counsel-projectile-switch-project-by-name project)))
+After C-c p p switch project, press M-o to pop up the action list,
+- o :: default, find file or load buffer (if opened already)
+- f :: find-file
+- d :: find-dir
+- D :: open dired
+- v :: open magit
+- ss :: use ag in the project
+- xe :: open eshell
+- xv :: open vterm
 
+*PROBLEM* The action list is not complete, I figure out the D option much later. And there is no way to scroll the list up or down, at least I haven't discovered any yet.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel-projectile
     :bind-keymap ("C-c p" . projectile-command-map)
     :config
@@ -992,11 +994,6 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
     (setq projectile-indexing-method 'hybrid)
     (cond ((eq system-type 'windows-nt)
            (setq projectile-indexing-method 'alien)))
-    ;; (counsel-projectile-modify-action
-    ;;  'counsel-projectile-switch-project-action
-    ;;  '((add ("." my/counsel-projectile-switch-project-action-dired
-    ;;          "open ‘dired’ at the root of the project")
-    ;;         1)))
     )
 #+END_SRC
 
