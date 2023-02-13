@@ -861,7 +861,7 @@ Use with LSP once if it is better than helm-gtags
 * ivy, counsel, swiper
 
 How to use *Nuclear weapon of multi-editing* in Ivy?
-In helm, you can use helm-ag to search and C-c C-e to open results in another window, and then edit them, and then C-c C-c to commit.
+In helm, you can use helm-ag to search and C-c C-e to open results in another window, and then edit them, and then C-c C-c to commit. (Or C-x C-s to edit mode, and  C-x C-s to apply changes)
 In Ivy, you use counsel-ag to search and C-c C-o (Ivy-occur) to open results in another window, and then C-x C-q (ivy-wgrep-change-to-wgrep-mode, this simply just enable edit mode) to enable editing, and make changes, and C-x C-s to save changes. (Files not saved, though). One more step but acceptable
 
 *Helm-multi-occur*
@@ -871,6 +871,10 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
 
 *Isearch*
 since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
+
+*Problems*
+- ivy action (M-o) in switch projects won't show all options in the minibuffer, and also there is no option to go to dired in the action list.
+
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defun my-counsel-ag ()
@@ -899,15 +903,15 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
         (/ (* (frame-height) 2) 5))))
     :config (ivy-mode))
 
-  ;; (use-package ivy-rich
-  ;;   :after ivy
-  ;;   :custom
-  ;;   (ivy-virtual-abbreviate 'full
-  ;;                           ivy-rich-switch-buffer-align-virtual-buffer t
-  ;;                           ivy-rich-path-style 'abbrev)
-  ;;   :config
-  ;;   (ivy-set-display-transformer 'ivy-switch-buffer
-  ;;                                'ivy-rich-switch-buffer-transformer))
+  (use-package ivy-rich
+    :after ivy
+    :custom
+    (ivy-virtual-abbreviate 'full
+                            ivy-rich-switch-buffer-align-virtual-buffer t
+                            ivy-rich-path-style 'abbrev)
+    :config
+    (ivy-set-display-transformer 'ivy-switch-buffer
+                                 'ivy-rich-switch-buffer-transformer))
 
   (use-package swiper
     :after ivy
@@ -988,15 +992,12 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
     (setq projectile-indexing-method 'hybrid)
     (cond ((eq system-type 'windows-nt)
            (setq projectile-indexing-method 'alien)))
-    (counsel-projectile-modify-action
-     'counsel-projectile-switch-project-action
-     '((add ("." my/counsel-projectile-switch-project-action-dired
-             "open ‘dired’ at the root of the project")
-            1)))
+    ;; (counsel-projectile-modify-action
+    ;;  'counsel-projectile-switch-project-action
+    ;;  '((add ("." my/counsel-projectile-switch-project-action-dired
+    ;;          "open ‘dired’ at the root of the project")
+    ;;         1)))
     )
-
-
-
 #+END_SRC
 
 * auto remove old packages
