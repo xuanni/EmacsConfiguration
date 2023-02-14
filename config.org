@@ -899,8 +899,10 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
         (/ (* (frame-height) 2) 5))))
     :config (ivy-mode))
 
-  ;; (use-package ivy-rich
-  ;;   :after ivy
+  (use-package ivy-rich
+    :after ivy
+    :init
+    (ivy-rich-mode 1))
   ;;   :custom
   ;;   (ivy-virtual-abbreviate 'full
   ;;                           ivy-rich-switch-buffer-align-virtual-buffer t
