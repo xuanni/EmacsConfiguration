@@ -669,13 +669,13 @@ Modify eshell prompt
            ("M-y" . helm-show-kill-ring)
            ("C-x b" . helm-mini)
            ("C-x C-f" . helm-find-files)
-           ("M-s o" . helm-occur)
+           ("C-s" . helm-occur)
            :map helm-command-map
            ("g" . helm-ag)
            ("d" . helm-do-ag)
            )
     :config
-    (require 'helm-config)
+    ;; (require 'helm-config)
     (setq
      ;; helm-input-idle-delay                     0.01
      ;; helm-reuse-last-window-split-state        t
@@ -710,6 +710,7 @@ Modify eshell prompt
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
   ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
   (global-unset-key (kbd "C-x c"))        ;not to confuse with C-x C-c quit
+  (global-set-key (kbd "C-z") 'isearch-forward)
 
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*helm" (* not-newline) "*" eos)
