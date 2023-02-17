@@ -70,8 +70,8 @@ Increase the limits for reading logs and many line flushes
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
           doom-themes-enable-italic t) ; if nil, italics is universally disabled
     ;; (load-theme 'doom-one-light t)
-    (load-theme 'doom-solarized-dark-high-contrast t)
-
+    ;; (load-theme 'doom-solarized-dark-high-contrast t)
+    (load-theme 'spacemacs-light)
     ;; Enable flashing mode-line on errors
     ;; (doom-themes-visual-bell-config)
     ;; Enable custom neotree theme (all-the-icons must be installed!)
@@ -661,7 +661,7 @@ Modify eshell prompt
    #+END_SRC
 
 * helm
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm
     :hook (helm-occur-mode . wgrep-change-to-wgrep-mode)
     :bind (("C-c h" . helm-command-prefix)
@@ -748,7 +748,7 @@ Requires GNU Global
 
    #+END_SRC
 * helm-projectile
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-projectile
     :bind-keymap ("C-c p" . projectile-command-map)
     :config
@@ -839,7 +839,7 @@ Disable due to slowness in large files
 #+END_SRC
 * helm-ag
 add key bindings
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-ag
     :hook (helm-ag-mode . wgrep-change-to-wgrep-mode)
     )
@@ -854,7 +854,7 @@ add key bindings
 : helm-do-ag
 * helm-xref
 Use with LSP once if it is better than helm-gtags
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-xref
     :init)
 #+END_SRC
@@ -872,7 +872,7 @@ This seems to be missing in Ivy (main reason is that, in ivy minibuffer, you can
 *Isearch*
 since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (defun my-counsel-ag ()
     (interactive)
     (counsel-ag nil default-directory))
@@ -983,7 +983,7 @@ After C-c p p switch project, press M-o to pop up the action list,
 
 *PROBLEM* The action list is not complete, I figure out the D option much later. And there is no way to scroll the list up or down, at least I haven't discovered any yet.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package counsel-projectile
     :bind-keymap ("C-c p" . projectile-command-map)
     :config
@@ -1288,7 +1288,7 @@ Auto save when compile
   ;; if you are helm user
   (use-package helm-lsp :commands helm-lsp-workspace-symbol)
   ;; if you are ivy user
-  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+  ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
   ;; optionally if you want to use debugger
