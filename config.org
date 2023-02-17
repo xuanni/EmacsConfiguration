@@ -917,9 +917,14 @@ since c-s is used by swiper, I will map c-z to isearch for  keyboard macros
            ;; ("C-r" . swiper)
            ))
 
+  (all-the-icons-ivy-setup)
+  (all-the-icons-ivy-rich-mode 1)
+  ;; (use-package all-the-icons-ivy-rich-mode
+  ;;   :ensure t
+  ;;   :init (all-the-icons-ivy-rich-mode 1))
+
   (global-set-key (kbd "C-z") 'isearch-forward) ;still want isearch
   ;; (define-key counsel-mode-map (kbd "C-c h i") 'counsel-semantic-or-imenu)
-
 #+END_SRC
 
 #+begin_src emacs-lisp :tangle no
