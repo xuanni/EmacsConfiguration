@@ -2,6 +2,7 @@
 # name: enum
 # key: enum
 # --
-enum ${1:class} ${2:NAME} ${3:: int} {
+enum ${1:class} ${2:NAME} ${3:: int}
+{
     $0
 };

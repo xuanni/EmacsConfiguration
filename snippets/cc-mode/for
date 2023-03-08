@@ -2,6 +2,7 @@
 # name: for (type i = start; i < end; i++)
 # key: for
 # --
-for (${1:auto }${2:i} = ${3:0}; $2 < ${4:end}; $2++) {
+for (${1:int }${2:i} = ${3:0}; $2 < ${4:end}; $2++)
+{
     $0
 }
