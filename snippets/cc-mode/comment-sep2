@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: comment separator one line
+# key: /sep2
+# --
+/* ---------------- $1 ---------------- */$0

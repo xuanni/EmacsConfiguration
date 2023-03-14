@@ -3,6 +3,7 @@
 # key: []
 # group: operator overloading
 # --
-${1:Type} operator[](${2:const size_t i}) ${3:const }{
+${1:Type} operator[](${2:const size_t i}) ${3:const }
+{
     $0
 }

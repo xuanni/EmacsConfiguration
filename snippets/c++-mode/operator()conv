@@ -3,6 +3,7 @@
 # key: ()
 # group: operator overloading
 # --
-operator ${1:Type}()(${2:int index}) {
+operator ${1:Type}()(${2:int index}) 
+{
     $0
 }

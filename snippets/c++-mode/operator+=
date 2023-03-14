@@ -3,7 +3,8 @@
 # key: +=
 # group: operator overloading
 # --
-${1:MyClass}& ${2:$1::}operator+=(${3:const $1 &rhs}) {
+${1:MyClass}& ${2:$1::}operator+=(${3:const $1 &rhs})
+{
     $0
     return *this;
 }
