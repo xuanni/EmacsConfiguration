@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 #name: Function prototype
-#key: fun
+#key: f
 # --
 ${3:int} ${1:function}(${2:argument})
 {

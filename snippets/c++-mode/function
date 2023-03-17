@@ -1,8 +1,8 @@
 # -*- mode: snippet -*-
-# name: function
-# key: f
+# name: class function/method
+# key: m
 # --
-${1:type} ${2:Class}::${3:name}(${4:args})${5: const}
+${1:return_type} ${2:ClassName::}${3:method}(${4:args})${5: const}
 {
     $0
 }

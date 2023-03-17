@@ -2,5 +2,5 @@
 # name: ifmain
 # key: ifm
 # --
-if __name__ == '__main__':
-    ${1:main()}
+if __name__ == '__main__'${1: and}:
+    ${2:main()}
