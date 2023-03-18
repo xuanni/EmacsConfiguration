@@ -1145,7 +1145,7 @@ Email client
 
 * company mode
 Global mode will slow down eshell even hang it.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package company
     :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode cmake-mode plantuml-mode) . company-mode)
     )
@@ -1190,7 +1190,7 @@ Use LSP instead, set this to no tangle
 
 * company-irony
 Use this as backend instead of company-clang for C/C++/Objective-C
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package company-irony-c-headers)
   (use-package company-irony
     ;; :hook (irony-mode . irony-cdb-autosetup-compile-options) ;; not working
