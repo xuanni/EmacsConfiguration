@@ -1145,7 +1145,7 @@ Email client
 
 * company mode
 Global mode will slow down eshell even hang it.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
     :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode cmake-mode plantuml-mode) . company-mode)
     )
