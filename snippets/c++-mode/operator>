@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: operator>
-# key: >
-# group: operator overloading
-# --
-bool operator>(const ${1:Type}& other) const
-{
-    $0
-}
