@@ -70,6 +70,7 @@ Increase the limits for reading logs and many line flushes
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
           doom-themes-enable-italic t) ; if nil, italics is universally disabled
     ;; (load-theme 'doom-one-light t)
+    (load-theme 'doom-one t)
     ;; (load-theme 'doom-solarized-dark-high-contrast t)
     ;; (load-theme 'spacemacs-light)
     ;; Enable flashing mode-line on errors
@@ -196,6 +197,10 @@ Increase the limits for reading logs and many line flushes
     :ensure t)
 #+END_SRC
 *
+** rust
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package rust-mode)
+#+END_SRC
 
 * dired
 ** dired-jump
@@ -601,7 +606,7 @@ Depends on =all-the-icons= package and needs to install the fonts once, using =M
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
     :init (require 'smartparens-config)
-    :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode json-mode) . smartparens-mode))
+    :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode json-mode rust-mode) . smartparens-mode))
 #+END_SRC
 * captain
 
@@ -1085,7 +1090,7 @@ Only enable yas-minor-mode for certain major modes
 
 #+begin_src emacs-lisp :tangle yes
   (use-package yasnippet
-    :hook ((org-mode c-mode c++-mode python-mode sh-mode nroff-mode LaTeX-mode nxml-mode) . yas-minor-mode)
+    :hook ((org-mode c-mode c++-mode python-mode sh-mode nroff-mode LaTeX-mode nxml-mode rust-mode) . yas-minor-mode)
     :config
     ;; (eval-after-load 'company
     ;;   '(add-to-list 'company-backends '(company-yasnippet)))
@@ -1147,7 +1152,7 @@ Email client
 Global mode will slow down eshell even hang it.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
-    :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode cmake-mode plantuml-mode) . company-mode)
+    :hook ((c-mode c++-mode text-mode sh-mode python-mode emacs-lisp-mode org-mode lisp-mode cmake-mode plantuml-mode rust-mode) . company-mode)
     )
 
   ;; #1098 default bindings has been changed to c-n/c-p, I don't want this, so
@@ -1300,6 +1305,7 @@ Auto save when compile
            (c++-mode . lsp)
            (c-mode . lsp)
            (python-mode . lsp)
+           (rust-mode . lsp)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration))
     :config (setq lsp-semantic-tokens-enable t) ; for C/C++ gray out undefined macros
