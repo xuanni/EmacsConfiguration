@@ -1060,7 +1060,7 @@ After C-c p p switch project, press M-o to pop up the action list,
     (remove-hook 'server-switch-hook 'magit-commit-diff)
     ;; speed up magit-status
     (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
-    (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+    ;; (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
     (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
     (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
     (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
