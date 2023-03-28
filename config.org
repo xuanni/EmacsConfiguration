@@ -694,7 +694,7 @@ Modify eshell prompt
            ("M-y" . helm-show-kill-ring)
            ("C-x b" . helm-mini)
            ("C-x C-f" . helm-find-files)
-           ("C-s" . helm-occur)
+           ("C-z" . helm-occur)
            :map helm-command-map
            ("g" . helm-ag)
            ("d" . helm-do-ag)
@@ -735,7 +735,7 @@ Modify eshell prompt
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
   ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
   (global-unset-key (kbd "C-x c"))        ;not to confuse with C-x C-c quit
-  (global-set-key (kbd "C-z") 'isearch-forward)
+  ;; (global-set-key (kbd "C-z") 'isearch-forward)
 
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*helm" (* not-newline) "*" eos)
