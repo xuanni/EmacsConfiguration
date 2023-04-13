@@ -570,6 +570,19 @@ Key bindings: (base key map is =C-c m=)
     )
 #+END_SRC
 
+How to resolve "unable to resolve link" error
+
+Seems the last line is the one that made the magic, when I tried.
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defun jnf/force-org-rebuild-cache ()
+    "Rebuild the `org-mode' and `org-roam' cache."
+    (interactive)
+    (org-id-update-id-locations)
+    ;; Note: you may need `org-roam-db-clear-all'
+    ;; followed by `org-roam-db-sync'
+    (org-roam-db-sync)
+    (org-roam-update-org-id-locations))
+#+END_SRC
 #+RESULTS:
 : org-roam-dailies-capture-tomorrow
 
