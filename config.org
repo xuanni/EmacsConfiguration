@@ -38,7 +38,7 @@ Increase the limits for reading logs and many line flushes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (cond ((eq system-type 'windows-nt)
-         (set-face-attribute 'default nil :font "Consolas" :height 143))
+         (set-face-attribute 'default nil :font "Source Code Pro" :height 143))
         ((eq system-type 'darwin)
          ;; (set-face-attribute 'default nil :font "Menlo" :height 143))
          (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 160)) ; t for default case
