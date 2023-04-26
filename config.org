@@ -818,7 +818,10 @@ Requires GNU Global
            ("o" "so" "lib" "a" "pyc" "elf" "lst" "suo" "sdf" "vtg" "mdt" "bin")))
     (setq projectile-globally-ignored-files (quote ("TAGS" "GTAGS" "GPATH" "GRTAGS")))
     (setq projectile-completion-system 'helm)
-    (setq projectile-indexing-method 'hybrid)
+    (cond ((eq system-type 'windows-nt)
+           (setq projectile-indexing-method 'alien))
+          (t                              ; non-Windows
+           (setq projectile-indexing-method 'hybrid)))
     )
   ;; after upgrade packages need to add this
   ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
