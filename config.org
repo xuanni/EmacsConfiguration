@@ -44,7 +44,7 @@ Increase the limits for reading logs and many line flushes
          (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 160)) ; t for default case
         ;; (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
         ;; looks like gnu/linux is not working in system-type
-        (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 158)) ; t for default case
+        (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 143)) ; t for default case
         )
 
   (set-face-attribute 'fixed-pitch nil :family "Source Code Pro" :foundry "ADBO" :height 136)
