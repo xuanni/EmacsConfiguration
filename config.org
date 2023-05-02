@@ -395,7 +395,8 @@ Emacs 25 add new variable package-selected-packages, every time you open package
                  (makefile . t)
                  (octave . t))))
               ;; org export
-              (setq org-export-backends (quote (ascii html latex man md odt groff)))
+              ;; (setq org-export-backends (quote (ascii html latex man md odt groff)))
+              (setq org-export-backends (quote (ascii html latex man md odt)))
 
               ;; capture templates
               (cond
@@ -1122,7 +1123,7 @@ Only enable yas-minor-mode for certain major modes
 
 #+begin_src emacs-lisp :tangle yes
   (use-package yasnippet
-    :hook ((org-mode c-mode c++-mode python-mode sh-mode nroff-mode LaTeX-mode nxml-mode rust-mode) . yas-minor-mode)
+    :hook ((org-mode c-mode c++-mode python-mode sh-mode nroff-mode LaTeX-mode nxml-mode rust-mode html-mode js-mode) . yas-minor-mode)
     :config
     ;; (eval-after-load 'company
     ;;   '(add-to-list 'company-backends '(company-yasnippet)))
