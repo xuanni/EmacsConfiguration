@@ -1,7 +1,6 @@
 #+TITLE: Emacs Configurations
 #+AUTHOR: Sean Ni
 #+DATE: <2018-02-15 Thu>
-
 * Appearance and behavior
 ** handle large files
 
