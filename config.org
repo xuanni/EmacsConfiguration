@@ -601,7 +601,24 @@ Seems the last line is the one that made the magic, when I tried.
 #+END_SRC
 #+RESULTS:
 : org-roam-dailies-capture-tomorrow
+** toc-org
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package toc-org
+    :ensure t
+    :hook (org-mode . toc-org-mode))
+#+END_SRC
+Below is original snippet from the toc-org github page, use use-package above instead
+#+BEGIN_SRC emacs-lisp :tangle no
+  (if (require 'toc-org nil t)
+      (progn
+        (add-hook 'org-mode-hook 'toc-org-mode)
 
+        ;; enable in markdown, too
+        ;; (add-hook 'markdown-mode-hook 'toc-org-mode)
+        ;; (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
+        )
+    (warn "toc-org not found"))
+#+END_SRC
 * modeline (doom)
 Depends on =all-the-icons= package and needs to install the fonts once, using =M-x all-the-icons-install-fonts=
 
