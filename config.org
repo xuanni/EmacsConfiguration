@@ -1423,6 +1423,17 @@ Auto save when compile
     ;;     (find-file-existing filename)))
     )
   (require 'dap-gdb-lldb)
+
+  ;; for dap-gdb-lldb, dap-debug-edit-template
+  ;; (dap-register-debug-template
+  ;;  "GDB::Run with args"
+  ;;  (list :type "gdb"
+  ;;        :request "launch"
+  ;;        :name "GDB::Run"
+  ;;        :arguments "arg1 arg2 ..."
+  ;;        :target "relative path from cwd to exec"
+  ;;        :cwd (lsp-workspace-root)))
+
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
   ;; optional if you want which-key integration (already has)
