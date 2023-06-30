@@ -428,6 +428,13 @@ Emacs 25 add new variable package-selected-packages, every time you open package
                             )))
               ))
 #+END_SRC
+** org appear
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Show hidden emphasis markers when cursor over it
+  ;; This solves the problem when editing markers (emphasis), I cannot exit it
+  (use-package org-appear
+    :hook (org-mode . org-appear-mode))
+#+END_SRC
 
 ** org variable pitch fonts
 
