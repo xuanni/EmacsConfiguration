@@ -994,6 +994,7 @@ Auto save when compile
 
 *PROBLEMS*
 - =consult-line= cannot mark current word, only current line
+  + solution: use =M-n= consult tries to guess what you want "future history" feature. Normally, first press will give you the whole line, and the second press will narrow down to the word at point.
 - =consult-line= results are out of order, pertaining to orderless?
 - =consult-projectile= is not called using =c-c p p=, but instead calling =projectile-switch-project=, the view is different
 - multi editing is not yet mastered
@@ -1167,6 +1168,7 @@ Auto save when compile
            ("M-s g" . consult-grep)
            ("M-s G" . consult-git-grep)
            ("M-s r" . consult-ripgrep)
+           ("M-s a" . consult-ag)         ; this is a separate package down below
            ("C-z" . consult-line)
            ("M-s L" . consult-line-multi)
            ;; ("M-s k" . consult-keep-lines)
