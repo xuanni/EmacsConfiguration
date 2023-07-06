@@ -550,8 +550,10 @@ Below is original snippet from the toc-org github page, use use-package above in
 * modeline (doom)
 Depends on =all-the-icons= package and needs to install the fonts once, using =M-x all-the-icons-install-fonts=
 
+*Update* <2023-07-06 Thu> after update, doom modeline uses =nerd-icons= instead of =all-the-icons=, so use =M-x nerd-icons-install-fonts= will fix  the broken icon problem.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package all-the-icons)
+  ;; (use-package all-the-icons)
   (use-package doom-modeline
     :ensure t
     :init
