@@ -212,6 +212,11 @@ With this option on, Emacs automatically copies marked files to another opened d
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq dired-dwim-target t)
 #+END_SRC
+** nerd-icons-dired
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package nerd-icons-dired
+    :hook (dired-mode . nerd-icons-dired-mode))
+#+END_SRC
 
 * whitespace cleanup
 #+BEGIN_SRC emacs-lisp :tangle yes
