@@ -129,6 +129,12 @@ Increase the limits for reading logs and many line flushes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq native-comp-async-report-warnings-errors nil)
 #+END_SRC
+
+** line number mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq display-line-numbers-type 'relative)
+  (global-display-line-numbers-mode)
+#+END_SRC
 * Language Settings
 
 ** C
