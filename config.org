@@ -327,12 +327,13 @@ Emacs 25 add new variable package-selected-packages, every time you open package
               (setq org-log-file (concat org-agenda-path "log.org"))
               ;; (setq org-finance-file (concat org-agenda-path "finance.org"))
               ;; (setq org-travel-file (concat org-agenda-path "travel.org"))
-              (setq org-agenda-files (list
-                                      org-todo-file
-                                      ;; org-notes-file
-                                      org-log-file
-                                      ))
-              ;; (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
+              ;; (setq org-agenda-files (list
+              ;;                         org-todo-file
+              ;;                         ;; org-notes-file
+              ;;                         org-log-file
+              ;;                         ))
+              ;; (setq org-agenda-files '("~/Documents/org"))
+              (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
               (setq org-capture-templates
                     (quote (
                             ("t" "TODO" entry (file org-todo-file)
