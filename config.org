@@ -35,19 +35,22 @@ Increase the limits for reading logs and many line flushes
 
 ** Set font
 
+=M-x describe-face= to inquire the current font and set it here.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (cond ((eq system-type 'windows-nt)
          (set-face-attribute 'default nil :font "Source Code Pro" :height 143))
         ((eq system-type 'darwin)
          ;; (set-face-attribute 'default nil :font "Menlo" :height 143))
-         (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 160)) ; t for default case
-        ;; (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136)) ; t for default case
+         (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 160))
+        ;; (t (set-face-attribute 'default nil :font "Courier 10 Pitch" :height 136))
         ;; looks like gnu/linux is not working in system-type
-        (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 143)) ; t for default case
+        ;; (t (set-face-attribute 'default nil :family "Source Code Pro" :foundry "ADBO" :height 143))
+        (t (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :foundry "JB" :height 137))
         )
 
-  (set-face-attribute 'fixed-pitch nil :family "Source Code Pro" :foundry "ADBO" :height 136)
-
+  ;; (set-face-attribute 'fixed-pitch nil :family "Source Code Pro" :foundry "ADBO" :height 136)
+  (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :foundry "JB" :height 137)
   ;; Set the variable pitch face
   (set-face-attribute 'variable-pitch nil :family "Segoe UI" :foundry "MS " :height 142)
   ;; tried variable pitch fonts (from best to worst)
@@ -135,12 +138,37 @@ Increase the limits for reading logs and many line flushes
   (setq display-line-numbers-type 'relative)
   (global-display-line-numbers-mode)
 #+END_SRC
+* Evil Mode
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;; (unless (package-installed-p 'evil)
+  ;;   (package-install 'evil))
+
+  ;; (require 'evil)
+  ;; (evil-mode 1)
+  ;; (use-package undo-fu)
+
+  (use-package evil
+    :demand t
+    :bind (("<escape>" . keyboard-escape-quit))
+    :init
+    (setq evil-search-module 'evil-search)
+    (setq evil-want-keybinding nil)
+    ;; (setq evil-undo-system 'undo-fu)
+    :config
+    (evil-mode 1))
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (setq evil-want-integration t)
+    (evil-collection-init))
+#+END_SRC
 * Language Settings
 
 ** C
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq-default c-default-style "linux")
+  ;; (setq-default c-default-style "linux")
   (setq-default c-basic-offset 4)
   (add-hook 'c-mode-common-hook
             (lambda ()
@@ -1348,7 +1376,9 @@ Auto save when compile
 #+END_SRC
 ** exec path
    this is for Mac only, for latex installation, for windows, set environmental variable PATH, for linux, it should be good out of box
-   #+BEGIN_SRC emacs-lisp :tangle no
+
+   <2024-06-05 Wed> looks like I have to enable this for linux as well, because when launch it NOT from terminal, it won't get the =.bashrc= sourced.
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (cond ((eq system-type 'darwin)
             (exec-path-from-shell-initialize)))
    #+END_SRC
