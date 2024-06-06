@@ -168,11 +168,12 @@ Increase the limits for reading logs and many line flushes
 ** C
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (setq-default c-default-style "linux")
+  (setq-default c-default-style "linux")
+  (setq-default indent-tabs-mode nil)
   (setq-default c-basic-offset 4)
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (c-set-offset 'case-label '+)))
+    (add-hook 'c-mode-common-hook
+              (lambda ()
+                (c-set-offset 'case-label '+)))
 #+END_SRC
 
 ** C++
