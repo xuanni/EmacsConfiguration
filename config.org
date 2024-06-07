@@ -168,10 +168,19 @@ Increase the limits for reading logs and many line flushes
 ** C
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq-default c-default-style "linux")
-  (setq-default indent-tabs-mode nil)
-  (setq-default c-basic-offset 4)
-    (add-hook 'c-mode-common-hook
+  ;; (setq-default c-default-style "linux"
+  ;;               c-basic-offset 4
+  ;;               indent-tabs-mode nil)
+  ;; above won't work on 29.3 emacs, tabs still tabs
+  ;; below is "linux" with tabs to spaces
+  (defun my/c-mode-common-hook ()
+    (c-set-style "Linux")
+    (setq
+     indent-tabs-mode nil
+     c-basic-offset 4))
+
+  (add-hook 'c-mode-common-hook 'my/c-mode-common-hook)
+  (add-hook 'c-mode-common-hook
               (lambda ()
                 (c-set-offset 'case-label '+)))
 #+END_SRC
