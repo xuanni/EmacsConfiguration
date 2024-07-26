@@ -175,14 +175,15 @@ Increase the limits for reading logs and many line flushes
   ;; below is "linux" with tabs to spaces
   (defun my/c-mode-common-hook ()
     (c-set-style "Linux")
+    (c-set-offset 'case-label '+)
     (setq
      indent-tabs-mode nil
      c-basic-offset 4))
 
   (add-hook 'c-mode-common-hook 'my/c-mode-common-hook)
-  (add-hook 'c-mode-common-hook
-              (lambda ()
-                (c-set-offset 'case-label '+)))
+  ;; (add-hook 'c-mode-common-hook
+  ;;             (lambda ()
+  ;;               (c-set-offset 'case-label '+)))
 #+END_SRC
 
 ** C++
