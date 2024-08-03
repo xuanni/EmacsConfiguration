@@ -51,6 +51,7 @@ Increase the limits for reading logs and many line flushes
 
   ;; (set-face-attribute 'fixed-pitch nil :family "Source Code Pro" :foundry "ADBO" :height 136)
   (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :foundry "JB" :height 137)
+  (set-face-attribute 'fixed-pitch nil :family "JetBrainsMono Nerd Font" :foundry "JB" :height 136)
   ;; Set the variable pitch face
   (set-face-attribute 'variable-pitch nil :family "Segoe UI" :foundry "MS " :height 142)
   ;; tried variable pitch fonts (from best to worst)
