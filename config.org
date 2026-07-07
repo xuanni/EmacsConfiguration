@@ -27,7 +27,14 @@ Notice this is setting the =fundamental-mode=, so later on I can manually set to
 Increase the limits for reading logs and many line flushes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq gc-cons-threshold (* 128 1024 1024))
+  (defvar my/default-gc-cons-threshold (* 32 1024 1024))
+  (setq gc-cons-threshold most-positive-fixnum)
+  (setq gc-cons-percentage 0.6)
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq gc-cons-threshold my/default-gc-cons-threshold
+                    gc-cons-percentage 0.1)))
+  (setq read-process-output-max (* 1024 1024))
   (setq undo-limit (* 64 1024 1024))
   (setq undo-strong-limit (* 100 1024 1024))
   (setq undo-outer-limit (* 110 1024 1024))
@@ -116,6 +123,8 @@ Increase the limits for reading logs and many line flushes
         (setq ns-right-command-modifier (quote meta))))
   (put 'narrow-to-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
+  (setq auto-revert-remote-files nil
+        auto-revert-verbose nil)
   (global-auto-revert-mode 1)             ;could be more traffic/network
 #+END_SRC
 
@@ -137,7 +146,8 @@ Increase the limits for reading logs and many line flushes
 ** line number mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq display-line-numbers-type 'relative)
-  (global-display-line-numbers-mode)
+  (dolist (hook '(prog-mode-hook conf-mode-hook))
+    (add-hook hook #'display-line-numbers-mode))
 #+END_SRC
 * Evil Mode
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -232,7 +242,7 @@ Increase the limits for reading logs and many line flushes
     :ensure t)
 #+END_SRC
 ** cmake
-*#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package cmake-mode
     :ensure t)
 #+END_SRC
@@ -267,7 +277,7 @@ With this option on, Emacs automatically copies marked files to another opened d
 * whitespace cleanup
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-hook 'before-save-hook 'whitespace-cleanup)
-  (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
+;  (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
 #+END_SRC
 
 * Abbrev mode
@@ -359,9 +369,11 @@ Emacs 25 add new variable package-selected-packages, every time you open package
               ;; capture templates
               (cond
                ((string-equal system-type "windows-nt")
-                (setq org-agenda-path "~/Documents/org/")) ; this is Windows map of /usr2/xni
+  ;;                (setq org-agenda-path "~/Documents/org/")) ; this is Windows map of /usr2/xni
+                  (setq org-agenda-path "y:/xni/org/")) ; company machine share win mount of DevCompute
                (t
-                (setq org-agenda-path "~/Documents/org/")))
+  ;;                (setq org-agenda-path "~/Documents/org/")))
+                  (setq org-agenda-path "/local/mnt/workspace/xni/org/"))) ;company DecCompute linux
               (setq org-todo-file (concat org-agenda-path "todo.org"))
               ;; (setq org-notes-file (concat org-agenda-path "notes.org"))
               (setq org-log-file (concat org-agenda-path "log.org"))
@@ -373,7 +385,17 @@ Emacs 25 add new variable package-selected-packages, every time you open package
               ;;                         org-log-file
               ;;                         ))
               ;; (setq org-agenda-files '("~/Documents/org"))
-              (setq org-agenda-files (directory-files-recursively org-agenda-path "\.org$"))
+                (defun my/org-refresh-agenda-files (&rest _)
+                  (setq org-agenda-files
+                        (and (file-directory-p org-agenda-path)
+                             (directory-files-recursively org-agenda-path "\\.org$"))))
+                (setq org-agenda-files
+                      (delq nil
+                            (mapcar (lambda (file)
+                                      (and (file-exists-p file) file))
+                                    (list org-todo-file org-log-file))))
+                (advice-add 'org-agenda :before #'my/org-refresh-agenda-files)
+                (advice-add 'org-refile :before #'my/org-refresh-agenda-files)
               (setq org-capture-templates
                     (quote (
                             ("t" "TODO" entry (file org-todo-file)
@@ -493,7 +515,7 @@ Key bindings: (base key map is =C-c m=)
     :init
     (setq org-roam-v2-ack t)              ;suppress warning message for v1/v2 incompatibility
     :custom
-    (org-roam-directory "~/Documents/org/org-roam")
+    (org-roam-directory (concat org-agenda-path "org-roam"))
     (org-roam-complete-everywhere t)
     (org-roam-capture-templates
      '(("d" "default" plain "* %?"
@@ -608,32 +630,33 @@ Depends on =all-the-icons= package and needs to install the fonts once, using =M
   ;; (use-package all-the-icons)
   (use-package doom-modeline
     :ensure t
-    :init
-    :config
-    (setq doom-modeline-buffer-file-name-style 'buffer-name) ;uniquify buffer name<>
-    (doom-modeline-mode 1))
+    :hook (after-init . doom-modeline-mode)
+    :custom
+    (doom-modeline-buffer-file-name-style 'buffer-name)) ;uniquify buffer name<>
 #+END_SRC
 * which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package which-key
+    :defer 1
     :config
     (which-key-mode 1))
 #+END_SRC
 
 * undo-tree
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package undo-tree
-    :config
-    (global-undo-tree-mode)
-    :custom
-    (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
-    )
+  ;; (use-package undo-tree
+  ;;   :config
+  ;;   (global-undo-tree-mode)
+  ;;   :custom
+  ;;   (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+  ;;   )
+  (use-package undo-tree)
 #+END_SRC
 
 * smartparens
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
-    :init (require 'smartparens-config)
+    :config (require 'smartparens-config)
     :hook ((c-mode c++-mode sh-mode python-mode emacs-lisp-mode org-mode json-mode rust-mode) . smartparens-mode))
 #+END_SRC
 * captain
@@ -647,17 +670,19 @@ Auto capitalize words
            ;; word is not capitalized. Second sentence is fine.
            (prog-mode . (lambda ()
                           (setq captain-predicate
-                                (lambda () (nth 8 (syntax-ppss (point)))))))
+                                (lambda () (nth 8 (syntax-ppss (point)))))
+                          (captain-mode 1)))
            ;; Or for text modes, work all the time:
            (text-mode . (lambda ()
-                          (setq captain-predicate (lambda () t))))
+                          (setq captain-predicate (lambda () t))
+                          (captain-mode 1)))
            ;; Or don't work in source blocks in Org mode:
            (org-mode . (lambda ()
                          (setq captain-predicate
-                               (lambda () (not (org-in-src-block-p))))))
+                               (lambda () (not (org-in-src-block-p))))
+                         (captain-mode 1)))
            )
     :config
-    (global-captain-mode t)
     (setq sentence-end-double-space nil))
 #+END_SRC
 
@@ -831,22 +856,25 @@ Auto save when compile
     ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
     (setq lsp-keymap-prefix "C-c l")
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           (c++-mode . lsp)
-           (c-mode . lsp)
-           (python-mode . lsp)
-           (rust-mode . lsp)
+           (c++-mode . lsp-deferred)
+           (c-mode . lsp-deferred)
+           (rust-mode . lsp-deferred)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration))
     :config (setq lsp-semantic-tokens-enable t) ; for C/C++ gray out undefined macros
-    :commands lsp)
+    :commands (lsp lsp-deferred))
 
   ;; optionally
-  (use-package lsp-ui :commands lsp-ui-mode)
+  (use-package lsp-ui
+    :commands lsp-ui-mode
+    :custom
+    (lsp-ui-doc-show-with-mouse nil)
+    (lsp-ui-doc-show-with-cursor nil))
   ;; if you are helm user
-  (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+  ;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
   ;; if you are ivy user
   ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+  ;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
   ;; This is for resolving the lsp-ui-doc-mode and dap-tooltip-mode
   ;; conflict. Somehow this is not working for me. Comment out for now.
@@ -866,43 +894,43 @@ Auto save when compile
   ;; (define-advice dap-disconnect (:after (orig-func &rest args) enable-lsp-ui-doc) (lsp-ui-doc-mode t))
 
   ;; optionally if you want to use debugger
-  (use-package dap-mode
-    :defer
-    :custom
-    (dap-auto-configure-mode t                           "Automatically configure dap.")
-    ;; (dap-auto-configure-features
-    ;;  '(sessions locals breakpoints expressions tooltip)  "Remove the button panel in the top.")
-    :bind (:map dap-mode-map
-                ("<f10>" . dap-debug)
-                ("<S-f10>" . dap-disconnect)
-                ("<f5>" . dap-continue)
-                ("<f6>" . dap-next)
-                ("<f7>" . dap-step-in)
-                ("<S-f7>" . dap-step-out)
-                ("<f8>" . dap-ui-expressions-add)
-                ("<f9>" . dap-breakpoint-toggle)
-                )
-    :config
+  ;; (use-package dap-mode
+  ;;   :defer
+  ;;   :custom
+  ;;   (dap-auto-configure-mode t                           "Automatically configure dap.")
+  ;;   ;; (dap-auto-configure-features
+  ;;   ;;  '(sessions locals breakpoints expressions tooltip)  "Remove the button panel in the top.")
+  ;;   :bind (:map dap-mode-map
+  ;;               ("<f10>" . dap-debug)
+  ;;               ("<S-f10>" . dap-disconnect)
+  ;;               ("<f5>" . dap-continue)
+  ;;               ("<f6>" . dap-next)
+  ;;               ("<f7>" . dap-step-in)
+  ;;               ("<S-f7>" . dap-step-out)
+  ;;               ("<f8>" . dap-ui-expressions-add)
+  ;;               ("<f9>" . dap-breakpoint-toggle)
+  ;;               )
+  ;;   :config
 
-    ;;; default debug template for (c++)
-    ;; (dap-register-debug-template
-    ;;  "C++ GDB dap"
-    ;;  (list :type "lldb-vscode"
-    ;;        :cwd nil
-    ;;        :args nil
-    ;;        :request "launch"
-    ;;        :program nil))
+  ;;   ;;; default debug template for (c++)
+  ;;   ;; (dap-register-debug-template
+  ;;   ;;  "C++ GDB dap"
+  ;;   ;;  (list :type "lldb-vscode"
+  ;;   ;;        :cwd nil
+  ;;   ;;        :args nil
+  ;;   ;;        :request "launch"
+  ;;   ;;        :program nil))
 
-    ;; (defun dap-debug-create-or-edit-json-template ()
-    ;;   "Edit the C++ debugging configuration or create + edit if none exists yet."
-    ;;   (interactive)
-    ;;   (let ((filename (concat (lsp-workspace-root) "/launch.json"))
-    ;;         (default "~/.emacs.d/default-launch.json"))
-    ;;     (unless (file-exists-p filename)
-    ;;       (copy-file default filename))
-    ;;     (find-file-existing filename)))
-    )
-  (require 'dap-gdb-lldb)
+  ;;   ;; (defun dap-debug-create-or-edit-json-template ()
+  ;;   ;;   "Edit the C++ debugging configuration or create + edit if none exists yet."
+  ;;   ;;   (interactive)
+  ;;   ;;   (let ((filename (concat (lsp-workspace-root) "/launch.json"))
+  ;;   ;;         (default "~/.emacs.d/default-launch.json"))
+  ;;   ;;     (unless (file-exists-p filename)
+  ;;   ;;       (copy-file default filename))
+  ;;   ;;     (find-file-existing filename)))
+  ;;   )
+  ;; (require 'dap-gdb-lldb)
 
   ;; for dap-gdb-lldb, dap-debug-edit-template
   ;; (dap-register-debug-template
@@ -929,14 +957,13 @@ Auto save when compile
                            (lsp-deferred))))
 
   (use-package python-mode
+    :defer t
     :hook (python-mode . lsp-deferred)
     :custom
     ;; NOTE: Set these if Python 3 is called "python3" on your system!
     ;; (python-shell-interpreter "python3")
     ;; (dap-python-executable "python3")
-    (dap-python-debugger 'debugpy)
-    :config
-    (require 'dap-python))
+    (dap-python-debugger 'debugpy))
 
   (use-package pyvenv
     :after python-mode
@@ -946,8 +973,9 @@ Auto save when compile
   ;; sort imports alphabetically
   (use-package py-isort
     :after python
-    :hook ((python-mode . pyvenv-mode)
-           (before-save . py-isort-before-save)))
+    :hook (python-mode . (lambda ()
+                           (pyvenv-mode 1)
+                           (add-hook 'before-save-hook #'py-isort-before-save nil t))))
 
   (use-package blacken
     :delight
@@ -1036,11 +1064,13 @@ Auto save when compile
 #+END_SRC
 * ag
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package ag)
+  (use-package ag
+    :defer t)
 #+END_SRC
 * rg
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package rg)
+  (use-package rg
+    :defer t)
 #+END_SRC
 * vertico consult embark marginalia orderless
 
@@ -1304,17 +1334,26 @@ Auto save when compile
 
   (use-package consult-projectile
     :ensure t
-    )
+    :after (consult projectile)
+    :commands (consult-projectile projectile-switch-project))
 
   (use-package consult-yasnippet
-    :ensure t)
+    :ensure t
+    :after consult
+    :commands consult-yasnippet)
 
   (use-package consult-company
-    :ensure t)
+    :ensure t
+    :after (consult company)
+    :commands consult-company)
 
-  (use-package consult-ag)
+  (use-package consult-ag
+    :after consult
+    :commands consult-ag)
 
-  (use-package consult-lsp)
+  (use-package consult-lsp
+    :after (consult lsp-mode)
+    :commands (consult-lsp-symbols consult-lsp-file-symbols))
 #+END_SRC
 * Self-defined Commands
 
@@ -1369,7 +1408,8 @@ Auto save when compile
 * Emacs server
 #+begin_src emacs-lisp :tangle yes
   (load "server")
-  (unless (server-running-p) (server-start))
+  (unless (or noninteractive (server-running-p))
+    (server-start))
 #+end_src
 
 
