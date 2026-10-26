@@ -9,6 +9,7 @@ Found this code via stack overflow, comment out the set buffer read only part.
 Notice this is setting the =fundamental-mode=, so later on I can manually set to any mode so that the syntax highlighting will be enabled, e.g., =asm-mode= for lst files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; -*- lexical-binding: t; -*-
   (defun my-find-file-check-make-large-file-read-only-hook ()
     "If a file is over a given size, make the buffer read only."
 
@@ -949,6 +950,10 @@ Auto save when compile
   ;;     :config
   ;;     (which-key-mode))
 
+  (let ((node-bin "/pkg/qct/software/nodejs/v22.14.0/bin"))
+    (add-to-list 'exec-path node-bin)
+    (setenv "PATH" (concat node-bin ":" (getenv "PATH"))))
+  (setq lsp-enable-file-watchers nil)
   ;; python-lsp, need to
   ;; pip install debugpy
   (use-package lsp-pyright

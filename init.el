@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; melpa (from melpa.org get started)
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
