@@ -436,7 +436,7 @@ Use different font size for different level of headings. However, for code and o
       (set-face-attribute (car face) nil :family "Segoe UI" :foundry "MS " :height (cdr face)))
 
     ;; ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block nil    :foreground 'unspecified :inherit 'fixed-pitch)
     (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
     (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
     (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
@@ -1021,7 +1021,8 @@ Auto save when compile
           (t                              ; non-Windows
            (setq projectile-indexing-method 'hybrid)))
     (setq projectile-project-root-files '(".envrc" ".projectile" "project.clj" "deps.edn"))
-    (setq projectile-switch-project-action 'projectile-commander)
+    ;; Projectile replaced the old Commander API with this Transient menu.
+    (setq projectile-switch-project-action #'projectile-dispatch)
     ;; Do not include straight repos (emacs packages) to project list
     (setq projectile-ignored-project-function
           (lambda (project-root)
@@ -1033,38 +1034,7 @@ Auto save when compile
     :config
     (defadvice projectile-project-root (around ignore-remote first activate)
       (unless (file-remote-p default-directory) ad-do-it))
-    (projectile-mode)
-    ;; projectile commander methods
-    (setq projectile-commander-methods nil)
-    (def-projectile-commander-method ?? "Commander help buffer."
-      (ignore-errors (kill-buffer projectile-commander-help-buffer))
-      (with-current-buffer (get-buffer-create projectile-commander-help-buffer)
-        (insert "Projectile Commander Methods:\n\n")
-        (dolist (met projectile-commander-methods)
-          (insert (format "%c:\t%s\n" (car met) (cadr met))))
-        (goto-char (point-min))
-        (help-mode)
-        (display-buffer (current-buffer) t))
-      (projectile-commander))
-    (def-projectile-commander-method ?t
-      "Open a *shell* buffer for the project."
-      (projectile-run-vterm))
-    (def-projectile-commander-method ?\C-? ;; backspace
-      "Go back to project selection."
-      (projectile-switch-project))
-    (def-projectile-commander-method ?d
-      "Open project root in dired."
-      (projectile-dired))
-    (def-projectile-commander-method ?f
-      "Find file in project."
-      (projectile-find-file))
-    (def-projectile-commander-method ?s
-      "Ripgrep in project."
-      (consult-ripgrep))
-    (def-projectile-commander-method ?g
-      "Git status in project."
-      (projectile-vc))
-    )
+    (projectile-mode))
 
 #+END_SRC
 * ag
@@ -1309,8 +1279,8 @@ Auto save when compile
      consult-theme :preview-key '(:debounce 0.2 any)
      consult-ripgrep consult-git-grep consult-grep
      consult-bookmark consult-recent-file consult-xref
-     consult--source-bookmark consult--source-file-register
-     consult--source-recent-file consult--source-project-recent-file
+     consult-source-bookmark consult-source-file-register
+     consult-source-recent-file consult-source-project-recent-file
      ;; :preview-key "M-."
      :preview-key '(:debounce 0.4 any))
 
