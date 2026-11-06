@@ -374,8 +374,7 @@ Emacs 25 add new variable package-selected-packages, every time you open package
   ;;                (setq org-agenda-path "~/Documents/org/")) ; this is Windows map of /usr2/xni
                   (setq org-agenda-path "y:/xni/org/")) ; company machine share win mount of DevCompute
                (t
-  ;;                (setq org-agenda-path "~/Documents/org/")))
-                  (setq org-agenda-path "/local/mnt/workspace/xni/org/"))) ;company DecCompute linux
+                 (setq org-agenda-path "~/Documents/org/")))
               (setq org-todo-file (concat org-agenda-path "todo.org"))
               ;; (setq org-notes-file (concat org-agenda-path "notes.org"))
               (setq org-log-file (concat org-agenda-path "log.org"))
