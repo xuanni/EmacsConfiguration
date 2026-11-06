@@ -320,6 +320,7 @@ Emacs 25 add new variable package-selected-packages, every time you open package
     :config (progn
               (setq org-startup-truncated nil)
               (setq org-startup-folded t) ; show overview rather than `showeverything'
+              (setq org-startup-with-latex-preview t) ; render LaTeX fragments on open (same as #+STARTUP: latexpreview)
               (setq org-use-speed-commands t) ; n and p at the 0 position each heading
               ;; refile across files, otherwise can only refile within the same file
               (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
@@ -409,6 +410,7 @@ Emacs 25 add new variable package-selected-packages, every time you open package
                             ;; ("n" "Notes" entry (file org-notes-file)
                             ;;  "* %^{Title} %^G\n:PROPERTIES:\n:CUSTOM_ID id-%(number-to-string (random))\n:INCEPTION: %U\n:END:\n%?")
                             )))
+              (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
               ))
 #+END_SRC
 ** org appear
@@ -417,6 +419,14 @@ Emacs 25 add new variable package-selected-packages, every time you open package
   ;; This solves the problem when editing markers (emphasis), I cannot exit it
   (use-package org-appear
     :hook (org-mode . org-appear-mode))
+#+END_SRC
+** org fragtog
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Live LaTeX preview: show source when cursor enters a fragment,
+  ;; re-render it when the cursor leaves. Initial rendering on open comes from
+  ;; `org-startup-with-latex-preview' set in the org behavior section.
+  (use-package org-fragtog
+    :hook (org-mode . org-fragtog-mode))
 #+END_SRC
 
 ** org variable pitch fonts
